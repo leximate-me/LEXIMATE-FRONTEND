@@ -3,6 +3,13 @@
 @import 'tailwindcss/utilities';
 
 body {
-  background-color: #202020;
-  color: #fff;
+  background-color: #ffffff;
+  /* Fondo negro */
+  color: #ffc107;
+  /* Texto de color warning */
+  font-family: Lexend, "Noto Sans", sans-serif;
+}
+
+div {
+  scroll-behavior: smooth;
 }
