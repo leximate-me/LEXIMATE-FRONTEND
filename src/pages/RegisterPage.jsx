@@ -64,14 +64,17 @@ function RegisterPage() {
           {errors.lastname && (
             <span className="text-red-500">This field is required</span>
           )}
-          <input
+          <select
             className="w-full bg-zinc-700 text-white px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
-            type="text"
             {...register('gender', { required: true })}
-            placeholder="Gender"
-          />
+          >
+            <option value="">Selecciona tu género</option>
+            <option value="masculino">Masculino</option>
+            <option value="femenino">Femenino</option>
+            <option value="otro">Otro</option>
+          </select>
           {errors.gender && (
-            <span className="text-red-500">This field is required</span>
+            <span className="text-red-500">Please select a valid gender</span>
           )}
           <input
             className="w-full bg-zinc-700 text-white px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
@@ -110,15 +113,14 @@ function RegisterPage() {
           {errors.password && (
             <span className="text-red-500">This field is required</span>
           )}
-          <input
+          <select
             className="w-full bg-zinc-700 text-white px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
-            type="text"
-            {...register('role')}
-            placeholder="Role"
-          />
-          {errors.role && (
-            <span className="text-red-500">This field is required</span>
-          )}
+            {...register('role', { required: false })}
+          >
+            <option value="">Usuario</option>
+            <option value="student">Alumno</option>
+            <option value="teacher">Profesor</option>
+          </select>
           <button
             type="submit"
             className="w-full bg-blue-600 text-white px-4 py-2 rounded-lg"
