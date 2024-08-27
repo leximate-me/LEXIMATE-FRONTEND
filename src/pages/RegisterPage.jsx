@@ -30,7 +30,7 @@ function RegisterPage() {
   return (
     <div
       className="
-      flex h-[calc(100vh-4rem)] flex-col justify-center
+      flex h-[calc(100vh-4rem)] flex-col justify-center mt-80
       "
     >
       <div className="bg-zinc-900 max-w-md mx-auto p-10 rounded-lg shadow-lg">
@@ -53,7 +53,7 @@ function RegisterPage() {
             placeholder="Name"
           />
           {errors.name && (
-            <span className="text-red-500">This field is required</span>
+            <span className="text-red-500">Este campo es requerido</span>
           )}
           <input
             className="w-full bg-zinc-700 text-white px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
@@ -62,7 +62,7 @@ function RegisterPage() {
             placeholder="Lastname"
           />
           {errors.lastname && (
-            <span className="text-red-500">This field is required</span>
+            <span className="text-red-500">Este campo es requerido</span>
           )}
           <select
             className="w-full bg-zinc-700 text-white px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
@@ -74,7 +74,7 @@ function RegisterPage() {
             <option value="otro">Otro</option>
           </select>
           {errors.gender && (
-            <span className="text-red-500">Please select a valid gender</span>
+            <span className="text-red-500">Selecciona un genero</span>
           )}
           <input
             className="w-full bg-zinc-700 text-white px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
@@ -83,7 +83,7 @@ function RegisterPage() {
             placeholder="Birthdate"
           />
           {errors.birthdate && (
-            <span className="text-red-500">This field is required</span>
+            <span className="text-red-500">Este campo es requerido</span>
           )}
           <input
             className="w-full bg-zinc-700 text-white px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
@@ -92,7 +92,7 @@ function RegisterPage() {
             placeholder="Country"
           />
           {errors.country && (
-            <span className="text-red-500">This field is required</span>
+            <span className="text-red-500">Este campo es requerido</span>
           )}
           <input
             className="w-full bg-zinc-700 text-white px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
@@ -101,7 +101,7 @@ function RegisterPage() {
             placeholder="Email"
           />
           {errors.email && (
-            <span className="text-red-500">This field is required</span>
+            <span className="text-red-500">Este campo es requerido</span>
           )}
 
           <input
@@ -111,7 +111,7 @@ function RegisterPage() {
             placeholder="Password"
           />
           {errors.password && (
-            <span className="text-red-500">This field is required</span>
+            <span className="text-red-500">Este campo es requerido</span>
           )}
           <select
             className="w-full bg-zinc-700 text-white px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
