@@ -3,8 +3,6 @@ import { useAuth } from '../context/AuthContext';
 
 function ProtetedRoutes() {
   const { loading, isAuthenticated } = useAuth();
-  console.log(loading, isAuthenticated);
-
   if (loading) {
     return (
       <div className="flex items-center justify-center h-screen">

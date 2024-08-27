@@ -2,16 +2,16 @@ import React from 'react';
 
 function HomePage() {
   return (
-    <div className="px-40 flex flex-1 justify-center py-5">
+    <div className="px-40 flex flex-1 justify-center py-5 mt-20">
       <div className="layout-content-container flex flex-col max-w-[960px] flex-1">
         {/* SECCIÓN DE BÚSQUEDA */}
         <div id="home" className="@container">
           <div className="@[480px]:p-4">
             <div
-              className="flex min-h-[480px] flex-col gap-6 bg-cover bg-center bg-no-repeat @[480px]:gap-8 @[480px]:rounded-xl items-start justify-end px-4 pb-10 @[480px]:px-10"
+              className="flex min-h-[480px] flex-col gap-6 bg-cover bg-center bg-no-repeat @[480px]:gap-8 @[480px]:rounded-xl items-start justify-end px-4 pb-10 @[480px]:px-10 rounded-md"
               style={{
                 backgroundImage:
-                  'linear-gradient(rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.4) 100%), url("../assets/niño-estudiando.png")',
+                  'linear-gradient(rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.4) 100%), url({})',
               }}
             >
               <div className="flex flex-col gap-2 text-left">
