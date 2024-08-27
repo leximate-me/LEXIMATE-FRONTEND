@@ -30,11 +30,11 @@ function RegisterPage() {
   return (
     <div
       className="
-      flex h-[calc(100vh-4rem)] flex-col justify-center mt-80
+      flex h-[calc(100vh-4rem)] flex-col justify-center
       "
     >
-      <div className="bg-zinc-900 max-w-md mx-auto p-10 rounded-lg shadow-lg">
-        <h1 className="text-3xl font-semibold text-center py-5">Register</h1>
+      <div className="bg-white max-w-md mx-auto p-10 mt-20">
+        <h1 className="text-3xl font-semibold text-center py-5">Registrarse</h1>
         {error && (
           <div className="bg-red-900 text-white p-2 rounded-lg font-mono animate-fade-in-out">
             {error.error.map((err, index) => (
@@ -47,7 +47,7 @@ function RegisterPage() {
         )}
         <form className="space-y-4" onSubmit={onSubmit}>
           <input
-            className="w-full bg-zinc-700 text-white px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
+            className="w-full bg-[#e5e5e5] text-black px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-800"
             type="text"
             {...register('name', { required: true, type: 'string' })}
             placeholder="Name"
@@ -56,7 +56,7 @@ function RegisterPage() {
             <span className="text-red-500">Este campo es requerido</span>
           )}
           <input
-            className="w-full bg-zinc-700 text-white px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
+            className="w-full bg-[#e5e5e5] text-black px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-800"
             type="text"
             {...register('lastname', { required: true })}
             placeholder="Lastname"
@@ -65,7 +65,7 @@ function RegisterPage() {
             <span className="text-red-500">Este campo es requerido</span>
           )}
           <select
-            className="w-full bg-zinc-700 text-white px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
+            className="w-full bg-[#e5e5e5] text-black px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-800"
             {...register('gender', { required: true })}
           >
             <option value="">Selecciona tu género</option>
@@ -77,7 +77,7 @@ function RegisterPage() {
             <span className="text-red-500">Selecciona un genero</span>
           )}
           <input
-            className="w-full bg-zinc-700 text-white px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
+            className="w-full bg-[#e5e5e5] text-black px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-800"
             type="date"
             {...register('birthdate', { required: true })}
             placeholder="Birthdate"
@@ -86,8 +86,7 @@ function RegisterPage() {
             <span className="text-red-500">Este campo es requerido</span>
           )}
           <input
-            className="w-full bg-zinc-700 text-white px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
-            type="text"
+            className="w-full bg-[#e5e5e5] text-black px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-800"
             {...register('country', { required: true })}
             placeholder="Country"
           />
@@ -95,7 +94,7 @@ function RegisterPage() {
             <span className="text-red-500">Este campo es requerido</span>
           )}
           <input
-            className="w-full bg-zinc-700 text-white px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
+            className="w-full bg-[#e5e5e5] text-black px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-800"
             type="email"
             {...register('email', { required: true })}
             placeholder="Email"
@@ -105,7 +104,7 @@ function RegisterPage() {
           )}
 
           <input
-            className="w-full bg-zinc-700 text-white px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
+            className="w-full bg-[#e5e5e5] text-black px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-800"
             type="password"
             {...register('password', { required: true })}
             placeholder="Password"
@@ -114,7 +113,7 @@ function RegisterPage() {
             <span className="text-red-500">Este campo es requerido</span>
           )}
           <select
-            className="w-full bg-zinc-700 text-white px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
+            className="w-full bg-[#e5e5e5] text-black px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-800"
             {...register('role', { required: false })}
           >
             <option value="">Usuario</option>
@@ -123,7 +122,7 @@ function RegisterPage() {
           </select>
           <button
             type="submit"
-            className="w-full bg-blue-600 text-white px-4 py-2 rounded-lg"
+            className="w-full bg-[#f2f20d] text-slate-900 hover:bg-[#cccc03] transition-colors px-4 py-2 rounded-lg"
           >
             Done
           </button>
