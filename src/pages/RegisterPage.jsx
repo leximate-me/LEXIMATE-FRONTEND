@@ -122,7 +122,7 @@ function RegisterPage() {
           </select>
           <button
             type="submit"
-            className="w-full bg-[#f2f20d] text-slate-900 hover:bg-[#cccc03] transition-colors px-4 py-2 rounded-lg"
+            className="btn w-full bg-[#f2f20d] text-slate-900 hover:bg-[#cccc03] transition-colors px-4 py-2 rounded-lg"
           >
             Done
           </button>
