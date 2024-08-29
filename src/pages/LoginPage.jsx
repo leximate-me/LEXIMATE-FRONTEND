@@ -24,28 +24,8 @@ function LoginPage() {
 
   return (
     <div
-      className="
-    flex h-[calc(100vh-4rem)] flex-col justify-center
-    "
-    >
-      {/* The button to open modal */}
-      <a href="#my_modal_8" className="btn">
-        open modal
-      </a>
-
-      {/* Put this part before </body> tag */}
-      <div className="modal" role="dialog" id="my_modal_8">
-        <div className="modal-box">
-          <h3 className="text-lg font-bold">Hello!</h3>
-          <p className="py-4">This modal works with anchor links</p>
-          <div className="modal-action">
-            <a href="#" className="btn">
-              Yay!
-            </a>
-          </div>
-        </div>
-      </div>
-      <div className="bg-white max-w-md mx-auto p-10 rounded-lg">
+      className="flex h-[calc(100vh-4rem)] flex-col justify-center">
+      <div className="bg-white max-w-md mx-auto p-10 rounded-lg border border-gray-400 shadow-lg">
         <form className="space-y-4" onSubmit={onSubmit}>
           <h1 className="text-3xl font-bold text-center py-5">Inicia sesión</h1>
           {error && (
@@ -80,18 +60,18 @@ function LoginPage() {
 
           <button
             type="submit"
-            className="btn w-full bg-[#f2f20d] text-slate-900 hover:bg-[#cccc03] transition-colors px-4 py-2 rounded-lg"
+            className="btn w-full bg-[#ffff13] text-slate-900 hover:bg-[#ebeb3b] transition-colors px-4 py-2 rounded-lg"
           >
             Done
           </button>
         </form>
         <p className="text-center py-4">
-          No tienes una?{' '}
+          No tienes una cuenta?
           <Link
-            className=" text-[#f2f20d]  hover:text-[#b4b402] transition-colors"
+            className="bg-[#ffff13] p-1 rounded-md hover:bg-[#ebeb3b] transition-colors m-2"
             to="/register"
           >
-            Sign Up
+            Registrate
           </Link>
         </p>
       </div>

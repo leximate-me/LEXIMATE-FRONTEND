@@ -1,10 +1,17 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import logo from '../assets/logo-leximate.png';
 
 function NavBar() {
   const { isAuthenticated, logOut } = useAuth();
+
+  const location = useLocation();
+
+  const isLoginPage = () => {
+    return location.pathname === '/login';
+  };
+
   return (
     <header
       id="navbar"
@@ -12,18 +19,20 @@ function NavBar() {
       style={{ backgroundColor: '#f8f40c' }}
     >
       {/* LOGO Y TITULO DE LA NAVBAR */}
-      <div className="flex items-center gap-4 text-[#181811]">
-        <div className="size-4 w-10 h-10">
-          <img
-            src={logo}
-            alt="Descripción de la imagen"
-            className="w-full h-full object-cover"
-          />
+      <Link to='/'>
+        <div className="flex items-center gap-4 text-[#181811]">
+          <div className="size-4 w-10 h-10">
+            <img
+              src={logo}
+              alt="Descripción de la imagen"
+              className="w-full h-full object-cover"
+            />
+          </div>
+          <h2 className="text-[#181811] text-lg font-bold leading-tight tracking-[-0.015em]">
+            LexiMate
+          </h2>
         </div>
-        <h2 className="text-[#181811] text-lg font-bold leading-tight tracking-[-0.015em]">
-          LexiMate
-        </h2>
-      </div>
+      </Link>
 
       {isAuthenticated ? (
         <>
@@ -143,20 +152,26 @@ function NavBar() {
         </>
       ) : (
         <>
-          <Link
-            className="text-[#181811] text-sm font-bold leading-normal"
-            to="/login"
-          >
-            login
-          </Link>
-          <Link
-            className="text-[#181811] text-sm font-bold leading-normal"
-            to="/register"
-          >
-            Register
-          </Link>
+          {location.pathname !== '/login' && (
+            <Link
+              className="text-[#181811] text-sm font-bold leading-normal"
+              to="/login"
+            >
+              Login
+            </Link>
+          )}
+          {location.pathname !== '/register' && (
+            <Link
+              className="text-[#181811] text-sm font-bold leading-normal"
+              to="/register"
+            >
+              Register
+            </Link>
+          )}
         </>
       )}
+
+
     </header>
   );
 }
