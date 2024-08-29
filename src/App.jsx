@@ -16,7 +16,7 @@ function App() {
     <AuthProvider>
       <TaskProvider>
         <BrowserRouter>
-          <main className="container mx-auto p-5">
+          <main className="container min-w-full">
             <NavBar />
             <Routes>
               <Route path="/" element={<LandingPage />} />

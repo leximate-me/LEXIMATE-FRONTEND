@@ -1,5 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 import daisyui from 'daisyui';
+export const darkMode = 'class';
 export const content = ['./src/**/*.{js,jsx,ts,tsx}'];
 export const theme = {
   extend: {

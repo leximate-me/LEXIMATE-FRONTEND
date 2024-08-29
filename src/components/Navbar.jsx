@@ -1,16 +1,13 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import ToggleTheme from './ToggleTheme';
 import logo from '../assets/logo-leximate.png';
 
 function NavBar() {
   const { isAuthenticated, logOut } = useAuth();
 
   const location = useLocation();
-
-  const isLoginPage = () => {
-    return location.pathname === '/login';
-  };
 
   return (
     <header
@@ -171,6 +168,7 @@ function NavBar() {
         </>
       )}
 
+      {ToggleTheme()}
 
     </header>
   );

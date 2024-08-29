@@ -1,6 +1,6 @@
 function LandingPage() {
   return (
-    <div className="relative flex flex-col min-h-screen bg-[#fcfcf8] overflow-x-hidden">
+    <div className="relative flex flex-col min-h-screen min-w-full bg-[#ffffff] dark:bg-slate-500 overflow-x-hidden">
       <div className="flex flex-col h-full mt-16">
         {' '}
         {/* Ajusta el margen superior según la altura de tu NavBar */}
