@@ -1,5 +1,5 @@
 import { useForm } from 'react-hook-form';
-import { useAuth } from '../context/AuthContext';
+import { useAuth } from '../context/TeacherAuthContext';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import logo from '../assets/logo-leximate.png';
@@ -8,18 +8,23 @@ import dayjs from 'dayjs';
 dayjs.extend(utc);
 
 function RegisterPage() {
+
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
+
   const { signUp, isAuthenticated, error } = useAuth();
+
   const navigate = useNavigate();
+  
   const onSubmit = handleSubmit(async (values) => {
-    await signUp({
-      ...values,
-      birthdate: dayjs.utc(values.birthdate).format(),
-    });
+
+    await signUp(values);
+
+    console.log(values);
+
   });
 
   useEffect(() => {
@@ -50,7 +55,7 @@ function RegisterPage() {
             <input
               className="w-full bg-[#e5e5e5] text-black px-4 placeholder-black py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-400"
               type="text"
-              {...register('name', { required: true, type: 'string' })}
+              {...register('firstName', { required: true, type: 'string' })}
               placeholder="Nombre"
             />
             {errors.name && (
@@ -59,23 +64,20 @@ function RegisterPage() {
             <input
               className="w-full bg-[#e5e5e5] text-black px-4 placeholder-black py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-400"
               type="text"
-              {...register('lastname', { required: true })}
+              {...register('lastName', { required: true })}
               placeholder="Apellido"
             />
             {errors.lastname && (
               <span className="text-red-500">Este campo es requerido</span>
             )}
-            <select
-              className="w-full bg-[#e5e5e5] text-black px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-400"
-              {...register('gender', { required: true })}
-            >
-              <option value="">Selecciona tu género</option>
-              <option value="masculino">Masculino</option>
-              <option value="femenino">Femenino</option>
-              <option value="otro">Otro</option>
-            </select>
-            {errors.gender && (
-              <span className="text-red-500">Selecciona un genero</span>
+            <input
+              className="w-full bg-[#e5e5e5] text-black px-4 placeholder-black py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-400"
+              type="text"
+              {...register('dni', { required: true })}
+              placeholder="DNI"
+            />
+            {errors.lastname && (
+              <span className="text-red-500">Este campo es requerido</span>
             )}
             <input
               className="w-full bg-[#e5e5e5] text-black px-4 placeholder-black py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-400"
@@ -88,14 +90,6 @@ function RegisterPage() {
             )}
             <input
               className="w-full bg-[#e5e5e5] text-black px-4 placeholder-black py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-400"
-              {...register('country', { required: true })}
-              placeholder="País"
-            />
-            {errors.country && (
-              <span className="text-red-500">Este campo es requerido</span>
-            )}
-            <input
-              className="w-full bg-[#e5e5e5] text-black px-4 placeholder-black py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-400"
               type="email"
               {...register('email', { required: true })}
               placeholder="Correo electrónico"
@@ -103,7 +97,24 @@ function RegisterPage() {
             {errors.email && (
               <span className="text-red-500">Este campo es requerido</span>
             )}
-
+            <input
+              className="w-full bg-[#e5e5e5] text-black px-4 placeholder-black py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-400"
+              type="text"
+              {...register('phone', { required: true })}
+              placeholder="Teléfono"
+            />
+            {errors.email && (
+              <span className="text-red-500">Este campo es requerido</span>
+            )}
+            <input
+              className="w-full bg-[#e5e5e5] text-black px-4 placeholder-black py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-400"
+              type="text"
+              {...register('institution', { required: true })}
+              placeholder="Institución"
+            />
+            {errors.email && (
+              <span className="text-red-500">Este campo es requerido</span>
+            )}
             <input
               className="w-full bg-[#e5e5e5] text-black px-4 placeholder-black py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-400"
               type="password"
@@ -113,14 +124,6 @@ function RegisterPage() {
             {errors.password && (
               <span className="text-red-500">Este campo es requerido</span>
             )}
-            <select
-              className="w-full bg-[#e5e5e5] text-black px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-400"
-              {...register('role', { required: false })}
-            >
-              <option value="">Usuario</option>
-              <option value="student">Alumno</option>
-              <option value="teacher">Profesor</option>
-            </select>
             <button
               type="submit"
               className="btn w-full bg-[#f2f20d] text-slate-900 hover:bg-[#cccc03] transition-colors px-4 py-2 rounded-lg"
