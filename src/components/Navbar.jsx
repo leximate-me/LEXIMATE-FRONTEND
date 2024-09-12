@@ -19,7 +19,7 @@ function NavBar() {
       id="navbar"
       className="relative top-0 left-0 right-0 z-50 flex flex-col md:flex-row items-center justify-between whitespace-nowrap border-b border-solid border-b-[#f5f5f0] px-10 py-3"
       style={{ backgroundColor: '#f8f40c' }}>
-      
+
       {/* LOGO Y TITULO DE LA NAVBAR */}
       <Link to="/">
         <div className="flex items-center gap-4 text-[#181811]">
@@ -36,45 +36,45 @@ function NavBar() {
         </div>
       </Link>
 
-      {/* Botón hamburguesa para pantallas pequeñas */}
-      <div className="md:hidden">
-        <button
-          onClick={toggleDropdown}
-          className="flex items-center px-3 py-2 text-[#181811] border-[#181811]">
-          <svg className="fill-current h-7 w-7" viewBox="0 0 100 80" width="30" height="30">
-            <rect width="100" height="20"></rect>
-            <rect y="30" width="100" height="20"></rect>
-            <rect y="60" width="100" height="20"></rect>
-          </svg>
-        </button>
-      </div>
 
       {/* NAVBAR CON SESIÓN INICIADA */}
       {isAuthenticated ? (
-        <div className="flex flex-col md:flex-row flex-1">
+        <div className="flex flex-col items-center md:flex-row flex-1">
+          {/* Botón hamburguesa para pantallas pequeñas */}
+          <div className="md:hidden">
+            <button
+              onClick={toggleDropdown}
+              className="flex items-center px-3 py-2 text-[#181811] border-[#181811]">
+              <svg className="fill-current h-7 w-7" viewBox="0 0 100 80" width="30" height="30">
+                <rect width="100" height="20"></rect>
+                <rect y="30" width="100" height="20"></rect>
+                <rect y="60" width="100" height="20"></rect>
+              </svg>
+            </button>
+          </div>
 
           {/* OPCIONES DE LA NAVBAR */}
           <div className={`w-full flex flex-col justify-center gap-8 md:gap-20 md:flex-row items-center order-2 md:order-1 ${isOpen ? 'flex' : 'hidden'} md:flex`}>
-            <Link className="text-[#181811] text-sm font-bold leading-normal" to="/home">
+            <Link className="text-[#181811] text-md font-bold leading-normal hover:border-b-2 border-black" to="/home">
               Inicio
             </Link>
-            <Link className="text-[#181811] text-sm font-bold leading-normal" to="/featured">
+            <Link className="text-[#181811] text-md font-bold leading-normal hover:border-b-2 border-black" to="/featured">
               Más destacados
             </Link>
-            <Link className="text-[#181811] text-sm font-bold leading-normal" to="/tasks">
+            <Link className="text-[#181811] text-md font-bold leading-normal hover:border-b-2 border-black" to="/tasks">
               Clases
             </Link>
-            <Link className="text-[#181811] text-sm font-bold leading-normal" to="/games">
+            <Link className="text-[#181811] text-md font-bold leading-normal hover:border-b-2 border-black" to="/games">
               Juegos interactivos
             </Link>
-            <Link className="text-[#181811] text-sm font-bold leading-normal" to="/tasks">
+            <Link className="text-[#181811] text-md font-bold leading-normal hover:border-b-2 border-black" to="/tasks">
               Tareas
             </Link>
-            <Link className="text-[#181811] text-sm font-bold leading-normal" to="/tasks/new">
+            <Link className="text-[#181811] text-md font-bold leading-normal hover:border-b-2 border-black" to="/tasks/new">
               Agregar Tarea
             </Link>
             <Link
-              className="text-[#181811] text-sm font-bold leading-normal"
+              className="text-[#181811] text-md font-bold leading-normal hover:border-b-2 border-black"
               to="/"
               onClick={() => {
                 logOut();
@@ -85,7 +85,7 @@ function NavBar() {
 
           {/* BOTONES DE LA NAVBAR */}
           <div className={`flex items-center gap-2 order-1 md:order-2 mb-4 md:mb-0 ${isOpen ? 'flex' : 'hidden'} md:flex`}>
-            <button className="flex max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-10 bg-[#f5f5f0] text-[#181811] gap-2 text-sm font-bold leading-normal tracking-[0.015em] min-w-0 px-2.5">
+            <button className="flex max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-10 bg-[#f5f5f0] text-[#181811] gap-2 text-md font-bold leading-normal tracking-[0.015em] min-w-0 px-2.5">
               <div
                 className="text-[#181811]"
                 data-icon="Bookmark"
@@ -101,7 +101,7 @@ function NavBar() {
                 </svg>
               </div>
             </button>
-            <button className="flex max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-10 bg-[#f5f5f0] text-[#181811] gap-2 text-sm font-bold leading-normal tracking-[0.015em] min-w-0 px-2.5">
+            <button className="flex max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-10 bg-[#f5f5f0] text-[#181811] gap-2 text-md font-bold leading-normal tracking-[0.015em] min-w-0 px-2.5">
               <div
                 className="text-[#181811]"
                 data-icon="Chat"
@@ -117,7 +117,7 @@ function NavBar() {
                 </svg>
               </div>
             </button>
-            <button className="flex max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-10 bg-[#f5f5f0] text-[#181811] gap-2 text-sm font-bold leading-normal tracking-[0.015em] min-w-0 px-2.5">
+            <button className="flex max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-10 bg-[#f5f5f0] text-[#181811] gap-2 text-md font-bold leading-normal tracking-[0.015em] min-w-0 px-2.5">
               <div
                 className="text-[#181811]"
                 data-icon="Bell"
@@ -141,12 +141,12 @@ function NavBar() {
       ) : (
         <>
           {location.pathname !== '/login' && (
-            <Link className="text-[#181811] text-sm font-bold leading-normal" to="/login">
+            <Link className="text-[#181811] text-md font-bold leading-normal hover:border-b-2 border-black" to="/login">
               Login
             </Link>
           )}
           {location.pathname !== '/register' && (
-            <Link className="text-[#181811] text-sm font-bold leading-normal" to="/register">
+            <Link className="text-[#181811] text-md font-bold leading-normal hover:border-b-2 border-black" to="/register">
               Register
             </Link>
           )}
@@ -154,7 +154,7 @@ function NavBar() {
       )}
 
       {/* Botón de alternar tema */}
-      <div className="m-5 order-3">
+      <div className="m-5">
         {ToggleTheme()}
       </div>
     </header>

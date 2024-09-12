@@ -17,7 +17,7 @@ function LandingPage() {
               ), url('./assets/LEXIMATE.jpg')`,
                 }}
               >
-                <div className="flex flex-col gap-2 text-left shadow-lg">
+                <div className="flex flex-col gap-2 text-left">
                   <h1 className="text-white text-4xl lg:text-5xl font-black leading-tight">
                     Bienvenido a LexiMate
                   </h1>

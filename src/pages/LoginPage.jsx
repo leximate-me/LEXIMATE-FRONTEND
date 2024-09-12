@@ -24,7 +24,7 @@ function LoginPage() {
 
   return (
     <div
-      className="flex h-[calc(100vh-4rem)] flex-col justify-center">
+      className="flex h-[calc(100vh-4rem)] flex-col mt-5">
       <div className="bg-white max-w-md mx-auto p-10 rounded-lg border border-gray-400 shadow-lg">
         <form className="space-y-4" onSubmit={onSubmit}>
           <h1 className="text-3xl font-bold text-center py-5">Inicia sesión</h1>
@@ -39,20 +39,20 @@ function LoginPage() {
             </div>
           )}
           <input
-            className="w-full bg-[#e5e5e5] text-black px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-800"
+            className="w-full bg-[#e5e5e5] text-black px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-400"
             type="email"
             {...register('email', { required: true })}
-            placeholder="Email"
+            placeholder="Correo electrónico"
           />
           {errors.email && (
             <span className="text-red-500">* Este campo es requerido</span>
           )}
 
           <input
-            className="w-full bg-[#e5e5e5] text-black px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-800"
+            className="w-full bg-[#e5e5e5] text-black px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-400"
             type="password"
             {...register('password', { required: true })}
-            placeholder="Password"
+            placeholder="Contraseña"
           />
           {errors.password && (
             <span className="text-red-500">* Este campo es requerido</span>
@@ -60,15 +60,15 @@ function LoginPage() {
 
           <button
             type="submit"
-            className="btn w-full bg-[#ffff13] text-slate-900 hover:bg-[#ebeb3b] transition-colors px-4 py-2 rounded-lg"
+            className="btn w-full bg-[#ffff13] text-slate-900 hover:bg-[#e9e91b] transition-colors px-4 py-2 rounded-lg"
           >
-            Done
+            Ingresar
           </button>
         </form>
         <p className="text-center py-4">
           No tienes una cuenta?
           <Link
-            className="bg-[#ffff13] p-1 rounded-md hover:bg-[#ebeb3b] transition-colors m-2"
+            className="mx-2 text-blue-600"
             to="/register"
           >
             Registrate
