@@ -2,7 +2,7 @@ import React from 'react';
 
 function HomePage() {
   return (
-    <div className="px-40 flex flex-1 justify-center py-5 mt-20">
+    <div className="px-40 flex flex-1 justify-center py-5">
       <div className="layout-content-container flex flex-col max-w-[960px] flex-1">
         {/* SECCIÓN DE BÚSQUEDA */}
         <div id="home" className="@container">
@@ -14,7 +14,7 @@ function HomePage() {
                   'linear-gradient(rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.4) 100%), url({})',
               }}
             >
-              <div className="flex flex-col gap-2 text-left">
+              <div className="flex flex-col gap-2 text-left shadow-lg">
                 <h1 className="text-white text-4xl font-black leading-tight tracking-[-0.033em] @[480px]:text-5xl @[480px]:font-black @[480px]:leading-tight @[480px]:tracking-[-0.033em]">
                   Bienvenido a LexiMate! 👋
                 </h1>
