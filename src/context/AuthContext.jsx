@@ -60,14 +60,14 @@ const AuthProvider = ({ children }) => {
     }
   };
 
-  useEffect(() => {
-    if (error !== null) {
-      const timer = setTimeout(() => {
-        setError(null);
-      }, 5000);
-      return () => clearTimeout(timer);
-    }
-  }, [error]);
+  // useEffect(() => {
+  //   if (error !== null) {
+  //     const timer = setTimeout(() => {
+  //       setError(null);
+  //     }, 5000);
+  //     return () => clearTimeout(timer);
+  //   }
+  // }, [error]);
 
   useEffect(() => {
     async function checkLogin() {

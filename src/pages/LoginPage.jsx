@@ -34,7 +34,7 @@ function LoginPage() {
   }, [error]);
 
   return (
-    <div className="flex items-center justify-center min-h-screen">
+    <div className="flex justify-center mt-5 overflow-hidden">
       <Card>
         <form className="space-y-4" onSubmit={onSubmit}>
           <h1 className="text-3xl font-bold text-center py-5">Inicia sesión</h1>
