@@ -18,8 +18,7 @@ function NavBar() {
   return (
     <header
       id="navbar"
-      className="relative top-0 left-0 right-0 z-50 flex flex-col md:flex-row items-center justify-between whitespace-nowrap border-b border-solid border-b-[#f5f5f0] px-10 py-3"
-      style={{ backgroundColor: '#f8f40c' }}
+      className="relative top-0 left-0 right-0 z-50 flex flex-col md:flex-row items-center justify-between whitespace-nowrap border-b border-solid transition duration-300 dark:border-b-[#fffd92] px-10 py-3 bg-[#f8f40c] dark:bg-[#1a1a1a]"
     >
       {/* LOGO Y TITULO DE LA NAVBAR */}
       <Link to="/">
@@ -31,7 +30,7 @@ function NavBar() {
               className="w-full h-full object-cover"
             />
           </div>
-          <h2 className="text-[#181811] text-lg font-bold leading-tight tracking-[-0.015em]">
+          <h2 className="text-[#181811] text-lg font-bold leading-tight tracking-[-0.015em] dark:text-[#fffd92]">
             LexiMate
           </h2>
         </div>
@@ -189,7 +188,7 @@ function NavBar() {
             flex flex-col md:flex-row items-center gap-4 md:gap-8 order-2 md:order-1
             "
             >
-              <ButtonLink to="/login">Iniciar Sesion</ButtonLink>
+              <ButtonLink to="/login" className='dark:bg-[#1a1a1a] dark:text-[#fffd92]'>Iniciar Sesion</ButtonLink>
             </div>
           )}
         </>

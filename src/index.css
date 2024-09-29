@@ -11,3 +11,14 @@ body {
 div {
   scroll-behavior: smooth;
 }
+
+
+/* Modo oscuro */
+.dark {
+  --icon-color: #fffd92; /* Color de los íconos en modo oscuro */
+}
+
+/* Asegurarse de que los SVGs utilicen currentColor */
+svg {
+  color: var(--icon-color);
+}

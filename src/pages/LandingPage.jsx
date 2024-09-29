@@ -6,7 +6,7 @@ import leximate from '../assets/LEXIMATE.jpg';
 
 function LandingPage() {
   return (
-    <div className="relative flex flex-col min-h-screen min-w-full ">
+    <div className="relative flex flex-col min-h-screen min-w-full transition duration-300 dark:bg-[#1a1a1a]">
       <div className="flex flex-col h-full mt-16">
         {' '}
         {/* Ajusta el margen superior según la altura de tu NavBar */}
@@ -34,7 +34,7 @@ function LandingPage() {
 
                 <ButtonLink
                   to="/register"
-                  className="bg-primary hover:bg-secondary"
+                  className="bg-primary hover:bg-secondary border-none dark:hover:bg-slate-800 dark:hover:text-white"
                 >
                   Empieza ahora!
                 </ButtonLink>
@@ -43,7 +43,7 @@ function LandingPage() {
 
             {/* Sección de Qué ofrecemos */}
             <div className="flex flex-col gap-10 px-4 py-10 container mx-auto">
-              <h1 className="text-[#1c1c0d] text-[32px] lg:text-4xl font-bold max-w-[720px]">
+              <h1 className="text-[#1c1c0d] text-[32px] lg:text-4xl font-bold max-w-[720px] dark:text-[#fffd92]">
                 Qué ofrecemos?
               </h1>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
@@ -56,10 +56,10 @@ function LandingPage() {
                     }}
                   ></div>
                   <div>
-                    <p className="text-[#1c1c0d] text-base font-medium">
+                    <p className="text-black text-base font-medium dark:text-[#fffd92]">
                       Conexión educativa
                     </p>
-                    <p className="text-[#9c9c49] text-sm">
+                    <p className="text-black text-sm dark:text-[#fffd92]">
                       Mantenemos a los estudiantes en contacto con sus
                       profesores y compañeros de clase, permitiendo recibir
                       tareas, compartir recursos y facilitar una comunicación
@@ -76,10 +76,10 @@ function LandingPage() {
                     }}
                   ></div>
                   <div>
-                    <p className="text-[#1c1c0d] text-base font-medium">
+                    <p className="text-black text-base font-medium dark:text-[#fffd92]">
                       Juegos interactivos
                     </p>
-                    <p className="text-[#9c9c49] text-sm">
+                    <p className="text-black text-sm dark:text-[#fffd92]">
                       Proponemos una serie de juegos diseñados específicamente
                       para ejercitar la comprensión lectora, la memoria y otras
                       habilidades clave.
@@ -95,10 +95,10 @@ function LandingPage() {
                     }}
                   ></div>
                   <div>
-                    <p className="text-[#1c1c0d] text-base font-medium">
+                    <p className="text-black text-base font-medium dark:text-[#fffd92]">
                       Red de apoyo global
                     </p>
-                    <p className="text-[#9c9c49] text-sm">
+                    <p className="text-black text-sm dark:text-[#fffd92]">
                       Fomentamos la creación de una comunidad global donde
                       personas con dislexia puedan conectarse, compartir
                       experiencias y apoyarse mutuamente.
@@ -111,13 +111,13 @@ function LandingPage() {
             {/* Sección de Registrarse */}
             <div className="container mx-auto">
               <div className="flex flex-col justify-end gap-6 px-4 py-10 lg:px-10 lg:py-20">
-                <h1 className="text-center text-[#1c1c0d] text-[32px] lg:text-4xl font-bold max-w-[720px] mx-auto">
+                <h1 className="text-center text-black text-[32px] lg:text-4xl font-bold max-w-[720px] mx-auto dark:text-[#fffd92]">
                   Listo para empezar? 🚀
                 </h1>
                 <div className="flex justify-center">
                   <ButtonLink
                     to="/register"
-                    className="bg-primary hover:bg-secondary"
+                    className="dark:bg-[#1a1a1a] dark:text-[#fffd92]"
                   >
                     Registrarse
                   </ButtonLink>
@@ -127,10 +127,10 @@ function LandingPage() {
 
             {/* Sección Acerca de nosotros */}
             <div className="px-4 py-5 lg:px-0">
-              <h2 className="text-[#1c1c0d] text-[22px] font-bold pb-3">
+              <h2 className="text-black text-[22px] font-bold pb-3 dark:text-[#fffd92]">
                 Acerca de nosotros
               </h2>
-              <p className="text-[#1c1c0d] text-base font-normal pb-3">
+              <p className="text-black text-base font-normal pb-3 dark:text-[#fffd92]">
                 Nacimos con el objetivo de romper barreras y crear un entorno
                 accesible para todas las personas con dislexia. Entendemos los
                 desafíos diarios que enfrentan tanto en el ámbito académico como
