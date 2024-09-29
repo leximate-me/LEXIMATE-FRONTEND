@@ -1,13 +1,11 @@
-@import 'tailwindcss/base';
-@import 'tailwindcss/components';
-@import 'tailwindcss/utilities';
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 body {
-  background-color: #ffffff;
   /* Fondo negro */
   /* Texto de color warning */
-  font-family: Lexend, "Noto Sans", sans-serif;
-
+  font-family: Lexend, 'Noto Sans', sans-serif;
 }
 
 div {

@@ -2,7 +2,7 @@ import axios from './axios';
 
 const registerRequest = async (user) => {
   try {
-    const response = await axios.post(`/teacher/auth/register`, user);
+    const response = await axios.post(`/auth/register`, user);
     return response;
   } catch (error) {
     console.error('Error during register request:', error);
@@ -12,7 +12,7 @@ const registerRequest = async (user) => {
 
 const loginRequest = async (user) => {
   try {
-    const response = await axios.post(`/teacher/auth/login`, user);
+    const response = await axios.post(`/auth/login`, user);
     return response;
   } catch (error) {
     console.error('Error during login request:', error);
@@ -22,7 +22,7 @@ const loginRequest = async (user) => {
 
 const logoutRequest = async () => {
   try {
-    const response = await axios.post(`/teacher/auth/logout`);
+    const response = await axios.post(`/auth/logout`);
     return response;
   } catch (error) {
     console.error('Error during logaut request:', error);
@@ -32,7 +32,7 @@ const logoutRequest = async () => {
 
 const verifyToken = async () => {
   try {
-    const response = await axios.get(`/teacher/auth/verify-token`);
+    const response = await axios.get(`/auth/verify-token`);
     return response;
   } catch (error) {
     console.error('Error during token verification:', error);

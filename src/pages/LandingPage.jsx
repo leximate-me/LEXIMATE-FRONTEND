@@ -1,6 +1,11 @@
+import { ButtonLink } from '../components/ui/ButtonLink';
+import apoyo from '../assets/apoyo-global.jpg';
+import conexion from '../assets/conexion-educativa.jpeg';
+import juegos from '../assets/juegos-interactivos.jpg';
+
 function LandingPage() {
   return (
-    <div className="relative flex flex-col min-h-screen min-w-full bg-[#ffffff] dark:bg-slate-500 overflow-x-hidden">
+    <div className="relative flex flex-col min-h-screen min-w-full ">
       <div className="flex flex-col h-full mt-16">
         {' '}
         {/* Ajusta el margen superior según la altura de tu NavBar */}
@@ -44,8 +49,7 @@ function LandingPage() {
                   <div
                     className="aspect-video bg-cover bg-center rounded-xl"
                     style={{
-                      backgroundImage:
-                        "url('./assets/conexion-educativa.jpeg')",
+                      backgroundImage: `url(${conexion})`,
                     }}
                   ></div>
                   <div>
@@ -65,8 +69,7 @@ function LandingPage() {
                   <div
                     className="aspect-video bg-cover bg-center rounded-xl"
                     style={{
-                      backgroundImage:
-                        "url('./assets/juegos-interactivos.jpg')",
+                      backgroundImage: `url(${juegos})`,
                     }}
                   ></div>
                   <div>
@@ -85,7 +88,7 @@ function LandingPage() {
                   <div
                     className="aspect-video bg-cover bg-center rounded-xl"
                     style={{
-                      backgroundImage: "url('./assets/apoyo-global.jpg')",
+                      backgroundImage: `url(${apoyo})`,
                     }}
                   ></div>
                   <div>
@@ -109,11 +112,12 @@ function LandingPage() {
                   Listo para empezar? 🚀
                 </h1>
                 <div className="flex justify-center">
-                  <a href="./Componentes/register.html">
-                    <button className="bg-[#f2f20d] text-[#1c1c0d] text-sm lg:text-base font-bold rounded-full h-10 lg:h-12 px-4 lg:px-5">
-                      Registrarse
-                    </button>
-                  </a>
+                  <ButtonLink
+                    to="/register"
+                    className="bg-primary hover:bg-secondary"
+                  >
+                    Registrarse
+                  </ButtonLink>
                 </div>
               </div>
             </div>

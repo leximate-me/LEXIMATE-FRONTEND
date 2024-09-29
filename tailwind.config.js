@@ -1,26 +1,34 @@
 /** @type {import('tailwindcss').Config} */
 import daisyui from 'daisyui';
-export const darkMode = 'class';
-export const content = ['./src/**/*.{js,jsx,ts,tsx}'];
-export const theme = {
-  extend: {
-    extend: {
-      keyframes: {
-        'fade-in': {
-          '0%': { opacity: 0 },
-          '100%': { opacity: 1 },
-        },
-        'fade-out': {
-          '0%': { opacity: 1 },
-          '100%': { opacity: 0 },
-        },
-      },
-      animation: {
-        'fade-in': 'fade-in 0.5s ease-out',
-        'fade-out': 'fade-out 0.5s ease-out',
-        'fade-in-out': 'fade-in 0.5s ease-out, fade-out 0.5s ease-out 4.5s',
-      },
-    },
+export default {
+  content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
+  theme: {
+    extend: {},
   },
+  daisyui: {
+    themes: [
+      {
+        mytheme: {
+          primary: '#F8F40C',
+
+          secondary: '#DCB80F',
+
+          accent: '#00c700',
+
+          neutral: '#020f02',
+
+          'base-100': '#FCFCF8',
+
+          info: '#00fdff',
+
+          success: '#36ba00',
+
+          warning: '#d37700',
+
+          error: '#ff3249',
+        },
+      },
+    ],
+  },
+  plugins: [daisyui],
 };
-export const plugins = [daisyui];

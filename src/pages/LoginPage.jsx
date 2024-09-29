@@ -23,8 +23,7 @@ function LoginPage() {
   }, [isAuthenticated, navigate]);
 
   return (
-    <div
-      className="flex h-[calc(100vh-4rem)] flex-col mt-5">
+    <div className="flex h-[calc(100vh-4rem)] flex-col mt-5">
       <div className="bg-white max-w-md mx-auto p-10 rounded-lg border border-gray-400 shadow-lg">
         <form className="space-y-4" onSubmit={onSubmit}>
           <h1 className="text-3xl font-bold text-center py-5">Inicia sesión</h1>
@@ -67,10 +66,7 @@ function LoginPage() {
         </form>
         <p className="text-center py-4">
           No tienes una cuenta?
-          <Link
-            className="mx-2 text-blue-600"
-            to="/register"
-          >
+          <Link className="mx-2 text-blue-600" to="/register">
             Registrate
           </Link>
         </p>
