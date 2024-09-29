@@ -2,6 +2,7 @@ import { ButtonLink } from '../components/ui/ButtonLink';
 import apoyo from '../assets/apoyo-global.jpg';
 import conexion from '../assets/conexion-educativa.jpeg';
 import juegos from '../assets/juegos-interactivos.jpg';
+import leximate from '../assets/LEXIMATE.jpg';
 
 function LandingPage() {
   return (
@@ -19,7 +20,7 @@ function LandingPage() {
                   backgroundImage: `linear-gradient(
                 rgba(0, 0, 0, 0.1) 0%,
                 rgba(0, 0, 0, 0.4) 100%
-              ), url('./assets/LEXIMATE.jpg')`,
+              ), url(${leximate})`,
                 }}
               >
                 <div className="flex flex-col gap-2 text-left">
@@ -30,11 +31,13 @@ function LandingPage() {
                     En cada obstáculo, encuentra una oportunidad.
                   </h2>
                 </div>
-                <a href="./Componentes/register.html">
-                  <button className="bg-[#f2f20d] text-[#1c1c0d] text-sm lg:text-base font-bold rounded-full h-10 lg:h-12 px-4 lg:px-5">
-                    Empieza ahora!
-                  </button>
-                </a>
+
+                <ButtonLink
+                  to="/register"
+                  className="bg-primary hover:bg-secondary"
+                >
+                  Empieza ahora!
+                </ButtonLink>
               </div>
             </div>
 

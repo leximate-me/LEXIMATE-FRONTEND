@@ -1,14 +1,17 @@
 import { useForm } from 'react-hook-form';
-import { useAuth } from '../context/TeacherAuthContext';
-import { useEffect } from 'react';
+import { useAuth } from '../context/AuthContext';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Button } from '../components/ui/Button';
+import { Input } from '../components/ui/Input';
+import { ErrorModal } from '../components/ErrorModal';
+import { Card } from '../components/ui/Card';
 import logo from '../assets/logo-leximate.png';
 import utc from 'dayjs/plugin/utc';
 import dayjs from 'dayjs';
 dayjs.extend(utc);
 
 function RegisterPage() {
-
   const {
     register,
     handleSubmit,
@@ -16,123 +19,156 @@ function RegisterPage() {
   } = useForm();
 
   const { signUp, isAuthenticated, error } = useAuth();
-
   const navigate = useNavigate();
-  
+  const [showErrorModal, setShowErrorModal] = useState(false);
+
   const onSubmit = handleSubmit(async (values) => {
-
-    await signUp(values);
-
-    console.log(values);
-
+    const user = {
+      first_name: values.first_name,
+      last_name: values.last_name,
+      dni: values.dni,
+      institute: values.institute,
+      phone_number: values.phone_number,
+      birth_date: dayjs(values.birth_date).utc().format(),
+      user_name: values.user_name,
+      email: values.email,
+      password: values.password,
+      role: values.role,
+    };
+    signUp(user);
   });
 
   useEffect(() => {
     if (isAuthenticated) {
-      navigate('/tasks');
+      navigate('/home');
     }
-  }, [isAuthenticated]);
+  }, [isAuthenticated, navigate]);
+
+  useEffect(() => {
+    if (error) {
+      setShowErrorModal(true);
+    }
+  }, [error]);
 
   return (
-    <div>
-      <div className="p-5 mt-14 md:mt-28 max-w-md mx-auto border border-gray-400 shadow-xl rounded-md min-w-[50%] flex flex-col md:flex-row items-center">
+    <div className="flex items-center justify-center min-h-screen">
+      <Card className="md:mt-28 min-w-[50%] flex flex-col md:flex-row items-center">
         <div>
-          <img className='h-10 md:h-auto' src={logo} alt="" />
+          <img className="h-10 md:h-auto" src={logo} alt="" />
         </div>
         <div>
-          <h1 className="text-3xl font-semibold text-center py-5">Registrarse</h1>
-          {error && (
-            <div className="bg-red-900 text-white p-2 rounded-lg font-mono animate-fade-in-out">
-              {error.error.map((err, index) => (
-                <div className="py-2" key={index}>
-                  <span className="font-bold text-red-500">ERROR : </span>
-                  <span className="text-slate-200">{err}</span>
-                </div>
-              ))}
-            </div>
-          )}
+          <h1 className="text-3xl font-semibold text-center py-5">
+            Registrarse
+          </h1>
           <form className="space-y-4" onSubmit={onSubmit}>
-            <input
-              className="w-full bg-[#e5e5e5] text-black px-4 placeholder-black py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-400"
+            <Input
               type="text"
-              {...register('firstName', { required: true, type: 'string' })}
+              register={register}
+              name="first_name"
+              rules={{ required: true }}
               placeholder="Nombre"
             />
-            {errors.name && (
+            {errors.first_name && (
               <span className="text-red-500">Este campo es requerido</span>
             )}
-            <input
-              className="w-full bg-[#e5e5e5] text-black px-4 placeholder-black py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-400"
+            <Input
               type="text"
-              {...register('lastName', { required: true })}
+              register={register}
+              name="last_name"
+              rules={{ required: true }}
               placeholder="Apellido"
             />
-            {errors.lastname && (
+            {errors.last_name && (
               <span className="text-red-500">Este campo es requerido</span>
             )}
-            <input
-              className="w-full bg-[#e5e5e5] text-black px-4 placeholder-black py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-400"
+            <Input
               type="text"
-              {...register('dni', { required: true })}
+              register={register}
+              name="dni"
+              rules={{ required: true }}
               placeholder="DNI"
             />
-            {errors.lastname && (
+            {errors.dni && (
               <span className="text-red-500">Este campo es requerido</span>
             )}
-            <input
-              className="w-full bg-[#e5e5e5] text-black px-4 placeholder-black py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-400"
+            <Input
+              type="text"
+              register={register}
+              name="institute"
+              rules={{ required: true }}
+              placeholder="Institución"
+            />
+            {errors.institute && (
+              <span className="text-red-500">Este campo es requerido</span>
+            )}
+            <Input
+              type="text"
+              register={register}
+              name="phone_number"
+              rules={{ required: true }}
+              placeholder="Teléfono"
+            />
+            {errors.phone_number && (
+              <span className="text-red-500">Este campo es requerido</span>
+            )}
+            <Input
               type="date"
-              {...register('birthdate', { required: true })}
+              register={register}
+              name="birth_date"
+              rules={{ required: true }}
               placeholder="Fecha de nacimiento"
             />
-            {errors.birthdate && (
+            {errors.birth_date && (
               <span className="text-red-500">Este campo es requerido</span>
             )}
-            <input
-              className="w-full bg-[#e5e5e5] text-black px-4 placeholder-black py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-400"
+            <Input
+              type="text"
+              register={register}
+              name="user_name"
+              rules={{ required: true }}
+              placeholder="Nombre de usuario"
+            />
+            {errors.user_name && (
+              <span className="text-red-500">Este campo es requerido</span>
+            )}
+            <Input
               type="email"
-              {...register('email', { required: true })}
+              register={register}
+              name="email"
+              rules={{ required: true }}
               placeholder="Correo electrónico"
             />
             {errors.email && (
               <span className="text-red-500">Este campo es requerido</span>
             )}
-            <input
-              className="w-full bg-[#e5e5e5] text-black px-4 placeholder-black py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-400"
-              type="text"
-              {...register('phone', { required: true })}
-              placeholder="Teléfono"
-            />
-            {errors.email && (
-              <span className="text-red-500">Este campo es requerido</span>
-            )}
-            <input
-              className="w-full bg-[#e5e5e5] text-black px-4 placeholder-black py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-400"
-              type="text"
-              {...register('institution', { required: true })}
-              placeholder="Institución"
-            />
-            {errors.email && (
-              <span className="text-red-500">Este campo es requerido</span>
-            )}
-            <input
-              className="w-full bg-[#e5e5e5] text-black px-4 placeholder-black py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-400"
+            <Input
               type="password"
-              {...register('password', { required: true })}
+              register={register}
+              name="password"
+              rules={{ required: true }}
               placeholder="Contraseña"
             />
             {errors.password && (
               <span className="text-red-500">Este campo es requerido</span>
             )}
-            <button
-              type="submit"
-              className="btn w-full bg-[#f2f20d] text-slate-900 hover:bg-[#cccc03] transition-colors px-4 py-2 rounded-lg"
+            <select
+              className="w-full bg-[#e5e5e5] text-black px-4 placeholder-black
+              py-2 rounded-lg focus:outline-none focus:ring-2
+              focus:ring-slate-400"
+              {...register('role', { required: true })}
+              defaultValue="4"
             >
-              Hecho
-            </button>
+              <option value="4" disabled hidden>
+                Selecciona tu rol
+              </option>
+              <option value="2">Estudiante</option>
+              <option value="3">Profesor</option>
+            </select>
+            <Button type="submit">Hecho</Button>
           </form>
         </div>
-      </div>
+      </Card>
+      <ErrorModal error={error} onClose={() => setShowErrorModal(false)} />
     </div>
   );
 }

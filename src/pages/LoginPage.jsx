@@ -1,7 +1,11 @@
 import { useForm } from 'react-hook-form';
-import { useAuth } from '../context/TeacherAuthContext';
+import { useAuth } from '../context/AuthContext';
 import { useNavigate, Link } from 'react-router-dom';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { Card } from '../components/ui/Card';
+import { Input } from '../components/ui/Input';
+import { Button } from '../components/ui/Button';
+import { ErrorModal } from '../components/ErrorModal';
 
 function LoginPage() {
   const {
@@ -11,6 +15,7 @@ function LoginPage() {
   } = useForm();
   const { signIn, isAuthenticated, error } = useAuth();
   const navigate = useNavigate();
+  const [showErrorModal, setShowErrorModal] = useState(false);
 
   const onSubmit = handleSubmit(async (values) => {
     await signIn(values);
@@ -22,47 +27,45 @@ function LoginPage() {
     }
   }, [isAuthenticated, navigate]);
 
+  useEffect(() => {
+    if (error) {
+      setShowErrorModal(true);
+    }
+  }, [error]);
+
   return (
-    <div className="flex h-[calc(100vh-4rem)] flex-col mt-5">
-      <div className="bg-white max-w-md mx-auto p-10 rounded-lg border border-gray-400 shadow-lg">
+    <div className="flex items-center justify-center min-h-screen">
+      <Card>
         <form className="space-y-4" onSubmit={onSubmit}>
           <h1 className="text-3xl font-bold text-center py-5">Inicia sesión</h1>
-          {error && (
-            <div className="bg-red-900 text-white p-2 rounded-lg font-mono animate-fade-in-out ">
-              {error.error.map((err, index) => (
-                <div className="py-2" key={index}>
-                  <span className="font-bold text-red-500">ERROR : </span>
-                  <span className="text-slate-200">{err}</span>
-                </div>
-              ))}
-            </div>
-          )}
-          <input
-            className="w-full bg-[#e5e5e5] text-black px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-400"
+          <Input
             type="email"
-            {...register('email', { required: true })}
+            register={register}
+            name="email"
+            rules={{ required: 'Este campo es requerido' }}
             placeholder="Correo electrónico"
           />
           {errors.email && (
-            <span className="text-red-500">* Este campo es requerido</span>
+            <span className="text-red-500">{errors.email.message}</span>
           )}
 
-          <input
-            className="w-full bg-[#e5e5e5] text-black px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-400"
+          <Input
             type="password"
-            {...register('password', { required: true })}
+            register={register}
+            name="password"
+            rules={{ required: 'Este campo es requerido' }}
             placeholder="Contraseña"
           />
           {errors.password && (
-            <span className="text-red-500">* Este campo es requerido</span>
+            <span className="text-red-500">{errors.password.message}</span>
           )}
 
-          <button
+          <Button
             type="submit"
             className="btn w-full bg-[#ffff13] text-slate-900 hover:bg-[#e9e91b] transition-colors px-4 py-2 rounded-lg"
           >
             Ingresar
-          </button>
+          </Button>
         </form>
         <p className="text-center py-4">
           No tienes una cuenta?
@@ -70,7 +73,8 @@ function LoginPage() {
             Registrate
           </Link>
         </p>
-      </div>
+      </Card>
+      <ErrorModal error={error} onClose={() => setShowErrorModal(false)} />
     </div>
   );
 }
