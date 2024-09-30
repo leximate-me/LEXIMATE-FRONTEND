@@ -4,11 +4,11 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '../components/ui/Button';
 import { Input } from '../components/ui/Input';
-import { ErrorModal } from '../components/ErrorModal';
 import { Card } from '../components/ui/Card';
 import logo from '../assets/logo-leximate.png';
 import utc from 'dayjs/plugin/utc';
 import dayjs from 'dayjs';
+import swal from 'sweetalert';
 dayjs.extend(utc);
 
 function RegisterPage() {
@@ -49,6 +49,29 @@ function RegisterPage() {
       setShowErrorModal(true);
     }
   }, [error]);
+
+  const handleCloseModal = () => {
+    setShowErrorModal(false);
+    clearError();
+  };
+
+  const showSwal = () => {
+    if (error) {
+      const errCont = [];
+
+      error.error.map((err) => {
+        errCont.push(err);
+      });
+      const errors = errCont.join('\n');
+      swal({
+        title: 'ERROR!',
+        text: errors,
+        icon: 'error',
+        buttons: handleCloseModal,
+        dangerMode: true,
+      });
+    }
+  };
 
   return (
     <div className="flex items-center justify-center min-h-screen">
@@ -164,11 +187,12 @@ function RegisterPage() {
               <option value="Student">Estudiante</option>
               <option value="Teacher">Profesor</option>
             </select>
-            <Button type="submit">Hecho</Button>
+            <Button type="submit" onClick={showSwal}>
+              Hecho
+            </Button>
           </form>
         </div>
       </Card>
-      <ErrorModal error={error} onClose={() => setShowErrorModal(false)} />
     </div>
   );
 }
