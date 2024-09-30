@@ -18,7 +18,7 @@ function RegisterPage() {
     formState: { errors },
   } = useForm();
 
-  const { signUp, isAuthenticated, error } = useAuth();
+  const { signUp, isAuthenticated, error, clearError } = useAuth();
   const navigate = useNavigate();
   const [showErrorModal, setShowErrorModal] = useState(false);
 
@@ -49,6 +49,11 @@ function RegisterPage() {
       setShowErrorModal(true);
     }
   }, [error]);
+
+  const handleCloseModal = () => {
+    setShowErrorModal(false);
+    clearError();
+  };
 
   return (
     <div className="flex items-center justify-center min-h-screen">
@@ -168,7 +173,7 @@ function RegisterPage() {
           </form>
         </div>
       </Card>
-      <ErrorModal error={error} onClose={() => setShowErrorModal(false)} />
+      <ErrorModal error={error} onClose={handleCloseModal} />
     </div>
   );
 }

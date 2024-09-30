@@ -60,6 +60,10 @@ const AuthProvider = ({ children }) => {
     }
   };
 
+  const clearError = () => {
+    setError(null);
+  };
+
   // useEffect(() => {
   //   if (error !== null) {
   //     const timer = setTimeout(() => {
@@ -110,6 +114,7 @@ const AuthProvider = ({ children }) => {
         signIn,
         loading,
         logOut,
+        clearError,
       }}
     >
       {children}

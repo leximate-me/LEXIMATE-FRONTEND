@@ -13,7 +13,7 @@ function LoginPage() {
     handleSubmit,
     formState: { errors },
   } = useForm();
-  const { signIn, isAuthenticated, error } = useAuth();
+  const { signIn, isAuthenticated, error, clearError} = useAuth();
   const navigate = useNavigate();
   const [showErrorModal, setShowErrorModal] = useState(false);
 
@@ -32,6 +32,11 @@ function LoginPage() {
       setShowErrorModal(true);
     }
   }, [error]);
+
+  const handleCloseModal = () => {
+    setShowErrorModal(false);
+    clearError();
+  };
 
   return (
     <div className="flex justify-center mt-5 overflow-hidden">
@@ -74,7 +79,7 @@ function LoginPage() {
           </Link>
         </p>
       </Card>
-      <ErrorModal error={error} onClose={() => setShowErrorModal(false)} />
+      <ErrorModal error={error} onClose={handleCloseModal} />
     </div>
   );
 }
