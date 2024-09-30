@@ -1,6 +1,6 @@
 import { useForm } from 'react-hook-form';
 import { useAuth } from '../context/AuthContext';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '../components/ui/Button';
 import { Input } from '../components/ui/Input';
@@ -8,7 +8,7 @@ import { Card } from '../components/ui/Card';
 import logo from '../assets/logo-leximate.png';
 import utc from 'dayjs/plugin/utc';
 import dayjs from 'dayjs';
-import swal from 'sweetalert';
+import { ErrorModal } from '../components/ui/ErrorModal';
 dayjs.extend(utc);
 
 function RegisterPage() {
@@ -18,9 +18,8 @@ function RegisterPage() {
     formState: { errors },
   } = useForm();
 
-  const { signUp, isAuthenticated, error } = useAuth();
+  const { signUp, isAuthenticated, error, clearError } = useAuth();
   const navigate = useNavigate();
-  const [showErrorModal, setShowErrorModal] = useState(false);
 
   const onSubmit = handleSubmit(async (values) => {
     const user = {
@@ -44,39 +43,11 @@ function RegisterPage() {
     }
   }, [isAuthenticated, navigate]);
 
-  useEffect(() => {
-    if (error) {
-      setShowErrorModal(true);
-    }
-  }, [error]);
-
-  const handleCloseModal = () => {
-    setShowErrorModal(false);
-    clearError();
-  };
-
-  const showSwal = () => {
-    if (error) {
-      const errCont = [];
-
-      error.error.map((err) => {
-        errCont.push(err);
-      });
-      const errors = errCont.join('\n');
-      swal({
-        title: 'ERROR!',
-        text: errors,
-        icon: 'error',
-        buttons: handleCloseModal,
-        dangerMode: true,
-      });
-    }
-  };
-
   return (
     <div className="flex justify-center">
+      <ErrorModal error={error} clearError={clearError} />
       <Card className="min-w-[50%] m-7 flex flex-col md:flex-row items-center">
-        <div className='flex justify-center md:items-center'>
+        <div className="flex justify-center md:items-center">
           <img className="h-10 md:h-auto" src={logo} alt="" />
         </div>
         <div>
@@ -187,9 +158,7 @@ function RegisterPage() {
               <option value="Student">Estudiante</option>
               <option value="Teacher">Profesor</option>
             </select>
-            <Button type="submit" onClick={showSwal}>
-              Hecho
-            </Button>
+            <Button type="submit">Hecho</Button>
           </form>
         </div>
       </Card>
