@@ -18,7 +18,7 @@ function RegisterPage() {
     formState: { errors },
   } = useForm();
 
-  const { signUp, isAuthenticated, error, clearError } = useAuth();
+  const { signUp, isAuthenticated, error } = useAuth();
   const navigate = useNavigate();
   const [showErrorModal, setShowErrorModal] = useState(false);
 
@@ -49,11 +49,6 @@ function RegisterPage() {
       setShowErrorModal(true);
     }
   }, [error]);
-
-  const handleCloseModal = () => {
-    setShowErrorModal(false);
-    clearError();
-  };
 
   return (
     <div className="flex items-center justify-center min-h-screen">
@@ -163,19 +158,19 @@ function RegisterPage() {
               {...register('role', { required: true })}
               defaultValue="4"
             >
-              <option value="4" disabled hidden>
+              <option value="Guest" disabled hidden>
                 Selecciona tu rol
               </option>
-              <option value="2">Estudiante</option>
-              <option value="3">Profesor</option>
+              <option value="Student">Estudiante</option>
+              <option value="Teacher">Profesor</option>
             </select>
             <Button type="submit">Hecho</Button>
           </form>
         </div>
       </Card>
-      <ErrorModal error={error} onClose={handleCloseModal} />
+      <ErrorModal error={error} onClose={() => setShowErrorModal(false)} />
     </div>
   );
 }
 
-export default RegisterPage;  
+export default RegisterPage;
