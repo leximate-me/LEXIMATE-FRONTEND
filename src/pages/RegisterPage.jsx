@@ -156,7 +156,7 @@ function RegisterPage() {
               py-2 rounded-lg focus:outline-none focus:ring-2
               focus:ring-slate-400"
               {...register('role', { required: true })}
-              defaultValue="4"
+              defaultValue="Guest"
             >
               <option value="Guest" disabled hidden>
                 Selecciona tu rol
