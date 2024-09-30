@@ -74,9 +74,9 @@ function RegisterPage() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen">
-      <Card className="md:mt-28 min-w-[50%] flex flex-col md:flex-row items-center">
-        <div>
+    <div className="flex justify-center">
+      <Card className="min-w-[50%] m-7 flex flex-col md:flex-row items-center">
+        <div className='flex justify-center md:items-center'>
           <img className="h-10 md:h-auto" src={logo} alt="" />
         </div>
         <div>
