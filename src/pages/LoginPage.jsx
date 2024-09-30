@@ -41,10 +41,15 @@ function LoginPage() {
   const showSwal = () => {
 
     if (error) {
-      console.log(error);
+      const errCont = []
+
+      error.error.map((err) => {
+        errCont.push(err)
+      })
+      const errors = errCont.join('\n')
       swal({
         title: 'ERROR!',
-        text: error.error[0],
+        text: errors,
         icon: "error",
         buttons: handleCloseModal,
         dangerMode: true,
