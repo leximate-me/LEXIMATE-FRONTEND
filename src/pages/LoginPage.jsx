@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import { Card } from '../components/ui/Card';
 import { Input } from '../components/ui/Input';
 import { Button } from '../components/ui/Button';
-import { ErrorModal } from '../components/ErrorModal';
+import swal from 'sweetalert';
 
 function LoginPage() {
   const {
@@ -13,7 +13,7 @@ function LoginPage() {
     handleSubmit,
     formState: { errors },
   } = useForm();
-  const { signIn, isAuthenticated, error, clearError} = useAuth();
+  const { signIn, isAuthenticated, error, clearError } = useAuth();
   const navigate = useNavigate();
   const [showErrorModal, setShowErrorModal] = useState(false);
 
@@ -38,49 +38,65 @@ function LoginPage() {
     clearError();
   };
 
+  const showSwal = () => {
+
+    if (error) {
+      console.log(error);
+      swal({
+        title: 'ERROR!',
+        text: error.error[0],
+        icon: "error",
+        buttons: handleCloseModal,
+        dangerMode: true,
+      })
+    }
+  }
+
   return (
-    <div className="flex justify-center mt-5 overflow-hidden">
-      <Card>
-        <form className="space-y-4" onSubmit={onSubmit}>
-          <h1 className="text-3xl font-bold text-center py-5">Inicia sesión</h1>
-          <Input
-            type="email"
-            register={register}
-            name="email"
-            rules={{ required: 'Este campo es requerido' }}
-            placeholder="Correo electrónico"
-          />
-          {errors.email && (
-            <span className="text-red-500">{errors.email.message}</span>
-          )}
+    <>
+      <div className="flex justify-center mt-5 overflow-hidden">
+        <Card>
+          <form className="space-y-4" onSubmit={onSubmit}>
+            <h1 className="text-3xl font-bold text-center py-5">Inicia sesión</h1>
+            <Input
+              type="email"
+              register={register}
+              name="email"
+              rules={{ required: 'Este campo es requerido' }}
+              placeholder="Correo electrónico"
+            />
+            {errors.email && (
+              <span className="text-red-500">{errors.email.message}</span>
+            )}
 
-          <Input
-            type="password"
-            register={register}
-            name="password"
-            rules={{ required: 'Este campo es requerido' }}
-            placeholder="Contraseña"
-          />
-          {errors.password && (
-            <span className="text-red-500">{errors.password.message}</span>
-          )}
+            <Input
+              type="password"
+              register={register}
+              name="password"
+              rules={{ required: 'Este campo es requerido' }}
+              placeholder="Contraseña"
+            />
+            {errors.password && (
+              <span className="text-red-500">{errors.password.message}</span>
+            )}
 
-          <Button
-            type="submit"
-            className="btn w-full bg-[#ffff13] text-slate-900 hover:bg-[#e9e91b] transition-colors px-4 py-2 rounded-lg"
-          >
-            Ingresar
-          </Button>
-        </form>
-        <p className="text-center py-4">
-          No tienes una cuenta?
-          <Link className="mx-2 text-blue-600" to="/register">
-            Registrate
-          </Link>
-        </p>
-      </Card>
-      <ErrorModal error={error} onClose={handleCloseModal} />
-    </div>
+            <Button
+              type="submit"
+              className="btn w-full bg-[#ffff13] text-slate-900 hover:bg-[#e9e91b] transition-colors px-4 py-2 rounded-lg"
+              onClick={showSwal}
+            >
+              Ingresar
+            </Button>
+          </form>
+          <p className="text-center py-4">
+            No tienes una cuenta?
+            <Link className="mx-2 text-blue-600" to="/register">
+              Registrate
+            </Link>
+          </p>
+        </Card>
+      </div>
+    </>
   );
 }
 
