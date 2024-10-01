@@ -27,6 +27,7 @@ const TaskProvider = ({ children }) => {
     try {
       const res = await getTasksRequest();
       setTasks(res.data);
+      console.log(res.data);
     } catch (error) {
       console.error('Error during get tasks request:', error);
       throw error;
