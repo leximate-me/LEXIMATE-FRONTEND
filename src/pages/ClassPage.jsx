@@ -7,15 +7,21 @@ import CreateClassModal from '../components/ClassForm'; // Importar el component
 import JoinClassModal from '../components/JoinClass';
 
 function ClassPage() {
-  const { getClasses, classes } = useClass();
+  const { getClasses, classes, error, clearError } = useClass();
   const [showModal, setShowModal] = useState(false);  // Controla si el modal está visible o no
+  const [showJoinModal, setShowJoinModal] = useState(false);  // Controla si el modal de unirse a una clase está visible o no
 
   const { user } = useAuth();
 
   useEffect(() => {
     getClasses();
-    console.log(user.rol);
   }, []);
+
+  // useEffect(() => {
+  //   if (error && error.error) {
+  //     console.log(error.error);
+  //   }
+  // }, [error]);
 
   return (
     <>
@@ -45,7 +51,7 @@ function ClassPage() {
         <>
           <div className="fixed bottom-8 right-8">
             <button
-              onClick={() => setShowModal(true)}  // Mostrar el modal al hacer clic
+              onClick={() => setShowJoinModal(true)}  // Mostrar el modal al hacer clic
               className="relative w-14 h-14 bg-blue-600 text-white rounded-full p-4 hover:bg-blue-700 transition duration-200 group"
             >
               <FaPlus className="absolute left-5 bottom-5" />
@@ -55,8 +61,8 @@ function ClassPage() {
             </button>
           </div>
 
-          {/* Renderizar el modal de creación de clase */}
-          <JoinClassModal isOpen={showModal} onClose={() => setShowModal(false)} />
+          {/* Renderizar el modal de unirse a una clase */}
+          <JoinClassModal isOpen={showJoinModal} onClose={() => setShowJoinModal(false)} />
         </>
       ) :
         null}

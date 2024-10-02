@@ -9,9 +9,8 @@ function JoinClassModal({ isOpen, onClose }) {
 
     // Función para manejar el envío del formulario
     const onSubmit = handleSubmit(async (data) => {
-        console.log(data);
         try {
-            // Llamada a la función createClass para hacer el POST al backend
+            // Llamada a la función joinClass para hacer el POST al backend
             await joinClass(data);
             
             // Recargar las clases desde el backend después de crear una nueva clase

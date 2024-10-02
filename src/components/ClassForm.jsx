@@ -9,7 +9,6 @@ function CreateClassModal({ isOpen, onClose }) {
 
     // Función para manejar el envío del formulario
     const onSubmit = handleSubmit(async (data) => {
-        console.log(data);
         try {
             // Llamada a la función createClass para hacer el POST al backend
             await createClass(data);

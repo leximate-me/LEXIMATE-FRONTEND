@@ -44,7 +44,7 @@ const AuthProvider = ({ children }) => {
       setUser(res.data);
       console.log(res.data);
     } catch (error) {
-      console.log(error.response.data);
+      console.log('context', error);
       setError(error.response.data);
     }
   };

@@ -16,6 +16,11 @@ const useClass = () => {
 const ClassProvider = ({ children }) => {
 
   const [classes, setClasses] = useState([]);
+  const [error, setError] = useState(null);
+
+  const clearError = () => {
+    setError(null);
+  };
 
   const getClasses = async () => {
 
@@ -23,7 +28,8 @@ const ClassProvider = ({ children }) => {
       const res = await getClassesRequest();
       setClasses(res.data);
     } catch (error) {
-      console.log('Error during get classes request:', error);
+      console.log('Error during get classes request:', error.response.data.error);
+      setError(error.response.data);
       throw error;
     }
 
@@ -35,39 +41,42 @@ const ClassProvider = ({ children }) => {
       const res = await createClassesRequest(newClass);
       return res.data;
     } catch (error) {
-      console.log('Error during create class request:', error);
+      console.log('Error during create class request:', error.response.data);
+      setError(error.response.data);
       throw error;
     }
-  
+
   }
   const joinClass = async (classCode) => {
 
     try {
       const res = await joinClassRequest(classCode);
-      console.log('context', res.data);
       return res.data;
     } catch (error) {
       console.log('Error during create class request:', error);
+      setError(error.response.data);
       throw error;
     }
-  
-  }
-
-
-
-    return (
-      <ClassContext.Provider
-        value={{
-          classes,
-          getClasses,
-          createClass,
-          joinClass,
-        }}
-      >
-        {children}
-      </ClassContext.Provider>
-    );
 
   }
 
-  export { ClassProvider, useClass };
+
+
+  return (
+    <ClassContext.Provider
+      value={{
+        clearError,
+        classes,
+        getClasses,
+        createClass,
+        joinClass,
+        error,
+      }}
+    >
+      {children}
+    </ClassContext.Provider>
+  );
+
+}
+
+export { ClassProvider, useClass };
