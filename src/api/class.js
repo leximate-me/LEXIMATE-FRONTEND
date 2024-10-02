@@ -20,4 +20,16 @@ const createClassesRequest = async (newClass) => {
   }
 };
 
-export { getClassesRequest, createClassesRequest };
+const joinClassRequest = async (classCode) => {
+
+  try {
+    const response = await axios.post(`/class/join`, classCode);
+    return response;
+  } catch (error) {
+    console.log('Error during joinClass request:', error);
+    throw error;
+  }
+
+}
+
+export { getClassesRequest, createClassesRequest, joinClassRequest };

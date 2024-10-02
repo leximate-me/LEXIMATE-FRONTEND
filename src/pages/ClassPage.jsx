@@ -4,8 +4,9 @@ import { useClass } from '../context/ClassContext';
 import { FaPlus } from 'react-icons/fa';
 import { useAuth } from '../context/AuthContext';
 import CreateClassModal from '../components/ClassForm'; // Importar el componente del formulario
+import JoinClassModal from '../components/JoinClass';
 
-function TaskPage() {
+function ClassPage() {
   const { getClasses, classes } = useClass();
   const [showModal, setShowModal] = useState(false);  // Controla si el modal está visible o no
 
@@ -13,7 +14,7 @@ function TaskPage() {
 
   useEffect(() => {
     getClasses();
-    console.log('user rol',user.roles_fk);
+    console.log(user.rol);
   }, []);
 
   return (
@@ -23,7 +24,7 @@ function TaskPage() {
       </div>
 
       {/* Botón flotante para crear clase */}
-      {user.roles_fk === 3 ? (
+      {user.rol === 3 ? (
         <>
           <div className="fixed bottom-8 right-8">
             <button
@@ -40,11 +41,27 @@ function TaskPage() {
           {/* Renderizar el modal de creación de clase */}
           <CreateClassModal isOpen={showModal} onClose={() => setShowModal(false)} />
         </>
+      ) : user.rol === 2 ? (
+        <>
+          <div className="fixed bottom-8 right-8">
+            <button
+              onClick={() => setShowModal(true)}  // Mostrar el modal al hacer clic
+              className="relative w-14 h-14 bg-blue-600 text-white rounded-full p-4 hover:bg-blue-700 transition duration-200 group"
+            >
+              <FaPlus className="absolute left-5 bottom-5" />
+              <span className="absolute bottom-full mb-2 w-20 left-1/2 -translate-x-1/2 bg-gray-800 text-white text-xs rounded py-1 px-2 opacity-0 transition-opacity duration-200 pointer-events-none group-hover:opacity-100">
+                Unirse a una clase
+              </span>
+            </button>
+          </div>
+
+          {/* Renderizar el modal de creación de clase */}
+          <JoinClassModal isOpen={showModal} onClose={() => setShowModal(false)} />
+        </>
       ) :
-        null
-      }
+        null}
     </>
   );
 }
 
-export default TaskPage;
+export default ClassPage;

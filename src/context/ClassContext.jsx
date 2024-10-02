@@ -1,59 +1,73 @@
 import { createContext, useState, useContext } from 'react';
-import { getClassesRequest, createClassesRequest } from '../api/class';
+import { getClassesRequest, createClassesRequest, joinClassRequest } from '../api/class';
 
 const ClassContext = createContext();
 
 const useClass = () => {
-    const context = useContext(ClassContext);
+  const context = useContext(ClassContext);
 
-    if (!context) {
-        throw new Error('useAuth must be used within an AuthProvider');
-    }
+  if (!context) {
+    throw new Error('useAuth must be used within an AuthProvider');
+  }
 
-    return context;
+  return context;
 };
 
 const ClassProvider = ({ children }) => {
 
-    const [classes, setClasses] = useState([]);
+  const [classes, setClasses] = useState([]);
 
-    const getClasses = async () => {
+  const getClasses = async () => {
 
-        try {
-            const res = await getClassesRequest();
-            setClasses(res.data);
-        } catch (error) {
-            console.log('Error during get classes request:', error);
-            throw error;    
-        }
-
+    try {
+      const res = await getClassesRequest();
+      setClasses(res.data);
+    } catch (error) {
+      console.log('Error during get classes request:', error);
+      throw error;
     }
 
-    const createClass = async (newClass) => {
+  }
 
-      try {
-        const res = await createClassesRequest(newClass);
-        return res.data;
-      } catch (error) {
-        console.log('Error during create class request:', error);
-        throw error;
-      }
+  const createClass = async (newClass) => {
 
-
+    try {
+      const res = await createClassesRequest(newClass);
+      return res.data;
+    } catch (error) {
+      console.log('Error during create class request:', error);
+      throw error;
     }
+  
+  }
+  const joinClass = async (classCode) => {
+
+    try {
+      const res = await joinClassRequest(classCode);
+      console.log('context', res.data);
+      return res.data;
+    } catch (error) {
+      console.log('Error during create class request:', error);
+      throw error;
+    }
+  
+  }
+
+
 
     return (
-        <ClassContext.Provider
-          value={{
-            classes,
-            getClasses,
-            createClass,
-          }}
-        >
-          {children}
-        </ClassContext.Provider>
-      );
+      <ClassContext.Provider
+        value={{
+          classes,
+          getClasses,
+          createClass,
+          joinClass,
+        }}
+      >
+        {children}
+      </ClassContext.Provider>
+    );
 
-}
+  }
 
-export { ClassProvider, useClass };
+  export { ClassProvider, useClass };
