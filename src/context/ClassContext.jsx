@@ -1,5 +1,5 @@
 import { createContext, useState, useContext } from 'react';
-import { getClassesRequest } from '../api/class';
+import { getClassesRequest, createClassesRequest } from '../api/class';
 
 const ClassContext = createContext();
 
@@ -29,11 +29,25 @@ const ClassProvider = ({ children }) => {
 
     }
 
+    const createClass = async (newClass) => {
+
+      try {
+        const res = await createClassesRequest(newClass);
+        return res.data;
+      } catch (error) {
+        console.log('Error during create class request:', error);
+        throw error;
+      }
+
+
+    }
+
     return (
         <ClassContext.Provider
           value={{
             classes,
             getClasses,
+            createClass,
           }}
         >
           {children}

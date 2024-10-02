@@ -40,6 +40,7 @@ const AuthProvider = ({ children }) => {
   const signIn = async (user) => {
     try {
       const res = await loginRequest(user);
+      console.log('login',res);
       setIsAuthenticated(true);
       setUser(res.data);
       console.log(res.data);
