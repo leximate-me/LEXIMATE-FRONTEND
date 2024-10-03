@@ -1,8 +1,20 @@
 import React from 'react';
+import ModalVerification from '../components/ui/ModalVerification';
+import { useAuth } from '../context/AuthContext';
 
 function HomePage() {
+
+  const { user } = useAuth();
+
+  // primero se verifica si el usuario existe y si no ha sido verificado
+  console.log('user',user?.verify);
+
+
   return (
     <div className="px-40 flex flex-1 justify-center py-5">
+      {user && !user.verify &&(
+        <ModalVerification /> 
+      )}
       <div className="layout-content-container flex flex-col max-w-[960px] flex-1">
         {/* SECCIÓN DE BÚSQUEDA */}
         <div id="home" className="@container">

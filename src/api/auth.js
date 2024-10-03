@@ -42,4 +42,14 @@ const verifyToken = async () => {
   }
 };
 
-export { registerRequest, loginRequest, verifyToken, logoutRequest };
+const verifyEmailRequest = async () => {
+  try {
+    const response = await axios.post(`/auth/send-email-verification`);
+    return response;
+  } catch (error) {
+    console.error('Error during token email verification:', error);
+    throw error;
+  }
+};
+
+export { registerRequest, loginRequest, verifyToken, logoutRequest, verifyEmailRequest };

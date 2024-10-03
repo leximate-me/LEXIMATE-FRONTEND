@@ -4,8 +4,10 @@ import {
   loginRequest,
   verifyToken,
   logoutRequest,
+  verifyEmailRequest
 } from '../api/auth';
 import Cookies from 'js-cookie';
+import { set } from 'react-hook-form';
 
 const AuthContext = createContext();
 
@@ -57,6 +59,15 @@ const AuthProvider = ({ children }) => {
       console.log(error);
     }
   };
+  
+  const verifyEmail = async () => {
+    try {
+      await verifyEmailRequest();
+      await updateUserFromToken();
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const clearError = () => {
     setError(null);
@@ -104,6 +115,7 @@ const AuthProvider = ({ children }) => {
         loading,
         logOut,
         clearError,
+        verifyEmail,
       }}
     >
       {children}
