@@ -3,7 +3,7 @@ import { useClass } from '../context/ClassContext';
 import notFound from '../assets/not-found.svg';
 
 export default function ClassCard({ classes }) {
-  const { classes, error } = useClass();
+  const { getClasses, error } = useClass();
 
   return (
     <>
