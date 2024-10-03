@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
-import ClassCard from '../components/ClassCard';
+import ClassCardTeacher from '../components/ClassCardTeacher';
+import ClassCardStudent from '../components/ClassCardStudent';
 import { useClass } from '../context/ClassContext';
 import { FaPlus } from 'react-icons/fa';
 import { useAuth } from '../context/AuthContext';
@@ -21,13 +22,13 @@ function ClassPage() {
 
   return (
     <>
-      <div className="flex justify-center">
-        <ClassCard classes={classes} />
-      </div>
 
       {/* Botón flotante para crear clase */}
       {user && user.rol === 3 ? (
         <>
+          <div className="flex justify-center">
+            <ClassCardTeacher classes={classes} />
+          </div>
           <div className="fixed bottom-8 right-8">
             <button
               onClick={() => setShowModal(true)} // Mostrar el modal al hacer clic
@@ -48,6 +49,9 @@ function ClassPage() {
         </>
       ) : user && user.rol === 2 ? (
         <>
+          <div className="flex justify-center">
+            <ClassCardStudent classes={classes} />
+          </div>
           <div className="fixed bottom-8 right-8">
             <button
               onClick={() => setShowJoinModal(true)} // Mostrar el modal al hacer clic
