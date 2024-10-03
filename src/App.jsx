@@ -12,6 +12,8 @@ import { TaskProvider } from './context/TasksContext';
 import { ClassProvider } from './context/ClassContext';
 import NavBar from './components/Navbar';
 import LandingPage from './pages/LandingPage';
+import GamesPage from './pages/GamesPage';
+import MemoryGame from './games/MemoryGame';
 
 function App() {
   return (
@@ -22,6 +24,8 @@ function App() {
             <main className="container min-w-full">
               <NavBar />
               <Routes>
+                <Route path="/games" element={<GamesPage />} />
+                <Route path="/games/memory" element={<MemoryGame />} />
                 <Route path="/" element={<LandingPage />} />
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="/register" element={<RegisterPage />} />
