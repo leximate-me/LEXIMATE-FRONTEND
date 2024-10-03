@@ -64,6 +64,7 @@ const AuthProvider = ({ children }) => {
     try {
       await verifyEmailRequest();
       await updateUserFromToken();
+      console.log('estoy en el try de context');
     } catch (error) {
       console.log(error);
     }
