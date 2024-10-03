@@ -64,36 +64,36 @@ const AuthProvider = ({ children }) => {
     setError(null);
   };
 
-  useEffect(() => {
-    async function checkLogin() {
-      const cookies = Cookies.get();
-
-      if (!cookies.token) {
-        setIsAuthenticated(false);
-        setUser(null);
-        setLoading(false);
-        return;
-      }
-      try {
-        const res = await verifyToken(cookies.token);
-        if (!res.data) {
+    useEffect(() => {
+      async function checkLogin() {
+        const cookies = Cookies.get();
+        
+        if (!cookies.token) {
           setIsAuthenticated(false);
-          setLoading(false);
           setUser(null);
+          setLoading(false);
           return;
         }
-        setIsAuthenticated(true);
-        setUser(res.data);
-        setLoading(false);
-      } catch (error) {
-        console.log(error);
-        setIsAuthenticated(false);
-        setUser(null);
-        setLoading(false);
+        try {
+          const res = await verifyToken(cookies.token);
+          if (!res.data) {
+            setIsAuthenticated(false);
+            setLoading(false);
+            setUser(null);
+            return;
+          }
+          setIsAuthenticated(true);
+          setUser(res.data);
+          setLoading(false);
+        } catch (error) {
+          console.log(error);
+          setIsAuthenticated(false);
+          setUser(null);
+          setLoading(false);
+        }
       }
-    }
-    checkLogin();
-  }, []);
+      checkLogin();
+    }, []);
 
   return (
     <AuthContext.Provider
