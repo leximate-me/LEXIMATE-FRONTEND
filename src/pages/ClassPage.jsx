@@ -22,7 +22,6 @@ function ClassPage() {
 
   return (
     <>
-
       {/* Botón flotante para crear clase */}
       {user && user.rol === 3 ? (
         <>
