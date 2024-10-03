@@ -1,11 +1,10 @@
-import { createContext, useState, useContext } from 'react';
+import { createContext, useState, useContext, useEffect } from 'react';
 import {
   registerRequest,
   loginRequest,
   verifyToken,
   logoutRequest,
 } from '../api/auth';
-import { useEffect } from 'react';
 import Cookies from 'js-cookie';
 
 const AuthContext = createContext();
@@ -28,9 +27,9 @@ const AuthProvider = ({ children }) => {
 
   const signUp = async (user) => {
     try {
-      const res = await registerRequest(user);
+      await registerRequest(user);
       setIsAuthenticated(true);
-      setUser(res.data);
+      await updateUserFromToken();
     } catch (error) {
       console.log(error.response.data);
       setError(error.response.data);
@@ -39,10 +38,9 @@ const AuthProvider = ({ children }) => {
 
   const signIn = async (user) => {
     try {
-      const res = await loginRequest(user);
+      await loginRequest(user);
       setIsAuthenticated(true);
-      setUser(res.data);
-      console.log(res.data);
+      await updateUserFromToken();
     } catch (error) {
       console.log('context', error);
       setError(error.response.data);
@@ -64,36 +62,36 @@ const AuthProvider = ({ children }) => {
     setError(null);
   };
 
-    useEffect(() => {
-      async function checkLogin() {
-        const cookies = Cookies.get();
-        
-        if (!cookies.token) {
-          setIsAuthenticated(false);
-          setUser(null);
-          setLoading(false);
-          return;
-        }
-        try {
-          const res = await verifyToken(cookies.token);
-          if (!res.data) {
-            setIsAuthenticated(false);
-            setLoading(false);
-            setUser(null);
-            return;
-          }
-          setIsAuthenticated(true);
-          setUser(res.data);
-          setLoading(false);
-        } catch (error) {
-          console.log(error);
-          setIsAuthenticated(false);
-          setUser(null);
-          setLoading(false);
-        }
+  const updateUserFromToken = async () => {
+    const cookies = Cookies.get();
+    if (!cookies.token) {
+      setIsAuthenticated(false);
+      setUser(null);
+      setLoading(false);
+      return;
+    }
+    try {
+      const res = await verifyToken(cookies.token);
+      if (!res.data) {
+        setIsAuthenticated(false);
+        setLoading(false);
+        setUser(null);
+        return;
       }
-      checkLogin();
-    }, []);
+      setIsAuthenticated(true);
+      setUser(res.data);
+      setLoading(false);
+    } catch (error) {
+      console.log(error);
+      setIsAuthenticated(false);
+      setUser(null);
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    updateUserFromToken();
+  }, []);
 
   return (
     <AuthContext.Provider
