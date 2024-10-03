@@ -1,21 +1,17 @@
 import React from 'react';
 import ModalVerification from '../components/ui/ModalVerification';
 import { useAuth } from '../context/AuthContext';
-import leximate from '../assets/LEXIMATE.JPG';
+import leximate from '../assets/niño-estudiando.png';
 
 function HomePage() {
-
   const { user } = useAuth();
 
   // primero se verifica si el usuario existe y si no ha sido verificado
-  console.log('user',user?.verify);
-
+  console.log('user', user?.verify);
 
   return (
     <div className="px-40 flex flex-1 justify-center py-5">
-      {user && !user.verify &&(
-        <ModalVerification /> 
-      )}
+      {user && !user.verify && <ModalVerification />}
       <div className="layout-content-container flex flex-col max-w-[960px] flex-1">
         {/* SECCIÓN DE BÚSQUEDA */}
         <div id="home" className="@container">
@@ -23,8 +19,7 @@ function HomePage() {
             <div
               className="flex min-h-[480px] flex-col gap-6 bg-cover bg-center bg-no-repeat @[480px]:gap-8 @[480px]:rounded-xl items-start justify-end px-4 pb-10 @[480px]:px-10 rounded-md"
               style={{
-                backgroundImage:
-                  `linear-gradient(rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.4) 100%), url(${leximate})`,
+                backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.4) 100%), url(${leximate})`,
               }}
             >
               <div className="flex flex-col gap-2 text-left">
