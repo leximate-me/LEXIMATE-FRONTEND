@@ -123,7 +123,7 @@ const MemoryGame = () => {
     <div className="bg-dark text-warning flex flex-col items-center justify-center space-y-20">
       <nav className="mb-4 navbar navbar-expand-lg text-uppercase bg-black p-4 shadow-lg ">
         <div className="container mx-auto flex justify-between items-center">
-          <h1 className="text-white text-3xl font-bold">Memory Game</h1>
+          <h1 className="text-white text-3xl font-bold">Memorama</h1>
           <div className="text-white text-xl">
             <span>Puntos: {puntos}</span> | <span>Tiempo: {time}s</span> |{' '}
             <span>Errores: {errores}</span>
@@ -164,7 +164,7 @@ const MemoryGame = () => {
           )}
         </div>
         <div className="w-full md:w-1/4 lg:w-1/4 bg-gray-800 p-4 rounded-lg shadow-lg text-white">
-          <h2 className="text-2xl font-bold mb-4">Ranking</h2>
+          <h2 className="text-2xl font-bold mb-4">Top Ranking</h2>
           <ul>
             {ranking.map((entry, index) => (
               <li key={index}>
