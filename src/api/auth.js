@@ -3,7 +3,6 @@ import axios from './axios';
 const registerRequest = async (user) => {
   try {
     const response = await axios.post(`/auth/register`, user);
-    console.log('auth.njs',response)
     return response;
   } catch (error) {
     console.error('Error during register request:', error);
@@ -14,7 +13,6 @@ const registerRequest = async (user) => {
 const loginRequest = async (user) => {
   try {
     const response = await axios.post(`/auth/login`, user);
-    console.log('auth.njs',response)
     return response;
   } catch (error) {
     console.error('Error during login request:', error);
@@ -45,7 +43,6 @@ const verifyToken = async () => {
 const verifyEmailRequest = async () => {
   try {
     const response = await axios.post(`/auth/send-email-verification`);
-    console.log('estoy en try',response);
     return response;
   } catch (error) {
     console.error('Error during email verification:', error);
@@ -53,4 +50,10 @@ const verifyEmailRequest = async () => {
   }
 };
 
-export { registerRequest, loginRequest, verifyToken, logoutRequest, verifyEmailRequest };
+export {
+  registerRequest,
+  loginRequest,
+  verifyToken,
+  logoutRequest,
+  verifyEmailRequest,
+};

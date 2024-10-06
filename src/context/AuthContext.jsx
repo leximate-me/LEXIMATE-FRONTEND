@@ -4,10 +4,8 @@ import {
   loginRequest,
   verifyToken,
   logoutRequest,
-  verifyEmailRequest
+  verifyEmailRequest,
 } from '../api/auth';
-import Cookies from 'js-cookie';
-import { set } from 'react-hook-form';
 
 const AuthContext = createContext();
 
@@ -30,7 +28,6 @@ const AuthProvider = ({ children }) => {
   const signUp = async (user) => {
     try {
       await registerRequest(user);
-      setIsAuthenticated(true);
       await updateUserFromToken();
     } catch (error) {
       console.log(error.response.data);
@@ -41,7 +38,6 @@ const AuthProvider = ({ children }) => {
   const signIn = async (user) => {
     try {
       await loginRequest(user);
-      setIsAuthenticated(true);
       await updateUserFromToken();
     } catch (error) {
       console.log('context', error);
@@ -52,14 +48,14 @@ const AuthProvider = ({ children }) => {
   const logOut = async () => {
     try {
       await logoutRequest();
-      Cookies.remove('token');
-      setIsAuthenticated(false);
       setUser(null);
+      setIsAuthenticated(false);
     } catch (error) {
       console.log(error);
+      setError(error.response.data);
     }
   };
-  
+
   const verifyEmail = async () => {
     try {
       await verifyEmailRequest();
@@ -75,15 +71,8 @@ const AuthProvider = ({ children }) => {
   };
 
   const updateUserFromToken = async () => {
-    const cookies = Cookies.get();
-    if (!cookies.token) {
-      setIsAuthenticated(false);
-      setUser(null);
-      setLoading(false);
-      return;
-    }
     try {
-      const res = await verifyToken(cookies.token);
+      const res = await verifyToken();
       if (!res.data) {
         setIsAuthenticated(false);
         setLoading(false);
@@ -94,7 +83,6 @@ const AuthProvider = ({ children }) => {
       setUser(res.data);
       setLoading(false);
     } catch (error) {
-      console.log(error);
       setIsAuthenticated(false);
       setUser(null);
       setLoading(false);
