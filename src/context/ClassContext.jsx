@@ -1,5 +1,9 @@
 import { createContext, useState, useContext } from 'react';
-import { getClassesRequest, createClassesRequest, joinClassRequest } from '../api/class';
+import {
+  getClassesRequest,
+  createClassesRequest,
+  joinClassRequest,
+} from '../api/class';
 import { set } from 'react-hook-form';
 
 const ClassContext = createContext();
@@ -15,7 +19,6 @@ const useClass = () => {
 };
 
 const ClassProvider = ({ children }) => {
-
   const [classes, setClasses] = useState([]);
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -25,22 +28,23 @@ const ClassProvider = ({ children }) => {
   };
 
   const getClasses = async () => {
-
+    setIsLoading(true); // Indicar que se está cargando
     try {
       const res = await getClassesRequest();
       setClasses(res.data);
-      setIsLoading(false);
+      setIsLoading(false); // Indicar que se ha terminado de cargar
     } catch (error) {
-      console.log('Error during get classes request:', error.response.data.error);
+      console.log(
+        'Error during get classes request:',
+        error.response.data.error
+      );
       setError(error.response.data);
       setIsLoading(false);
       throw error;
     }
-
-  }
+  };
 
   const createClass = async (newClass) => {
-
     try {
       const res = await createClassesRequest(newClass);
       return res.data;
@@ -49,10 +53,8 @@ const ClassProvider = ({ children }) => {
       setError(error.response.data);
       throw error;
     }
-
-  }
+  };
   const joinClass = async (classCode) => {
-
     try {
       const res = await joinClassRequest(classCode);
       return res.data;
@@ -61,10 +63,7 @@ const ClassProvider = ({ children }) => {
       setError(error.response.data);
       throw error;
     }
-
-  }
-
-
+  };
 
   return (
     <ClassContext.Provider
@@ -76,12 +75,12 @@ const ClassProvider = ({ children }) => {
         joinClass,
         error,
         isLoading,
+        setClasses,
       }}
     >
       {children}
     </ClassContext.Provider>
   );
-
-}
+};
 
 export { ClassProvider, useClass };

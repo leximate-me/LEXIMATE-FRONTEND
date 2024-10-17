@@ -9,24 +9,25 @@ import JoinClassModal from '../components/JoinClass';
 import Loading from '../components/ui/Loading';
 
 function ClassPage() {
-  const { getClasses, classes, isLoading } = useClass();
+  const { getClasses, classes, isLoading, setClasses } = useClass();
   const [showModal, setShowModal] = useState(false); // Controla si el modal está visible o no
   const [showJoinModal, setShowJoinModal] = useState(false); // Controla si el modal de unirse a una clase está visible o no
 
   const { user } = useAuth();
 
   useEffect(() => {
-    getClasses();
-  }, []);
+    setClasses([]); // Limpiar las clases al montar el componente
+    getClasses(); // Obtener las clases al montar el componente
+  }, [user]); //  Volver a obtener las clases si el usuario cambia
 
-
+  console.log(classes);
   console.log(isLoading);
 
   return (
     <>
       {/* Botón flotante para crear clase */}
       {isLoading ? (
-        <div className='flex justify-center'>
+        <div className="flex justify-center">
           {Loading('Cargando clases...')}
         </div>
       ) : (
