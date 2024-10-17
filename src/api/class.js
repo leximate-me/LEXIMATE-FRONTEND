@@ -1,8 +1,8 @@
-import axios from "./axios";
+import axios from './axios';
 
 const getClassesRequest = async () => {
   try {
-    const response = await axios.get(`/class`);
+    const response = await axios.get(`/class/`);
     return response;
   } catch (error) {
     console.error('Error during getClasses request:', error);
@@ -21,7 +21,6 @@ const createClassesRequest = async (newClass) => {
 };
 
 const joinClassRequest = async (classCode) => {
-
   try {
     const response = await axios.post(`/class/join`, classCode);
     return response;
@@ -29,7 +28,6 @@ const joinClassRequest = async (classCode) => {
     console.log('Error during joinClass request:', error);
     throw error;
   }
-
-}
+};
 
 export { getClassesRequest, createClassesRequest, joinClassRequest };
