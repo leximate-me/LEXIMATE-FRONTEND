@@ -2,7 +2,7 @@ import axios from './axios';
 
 const getClassesRequest = async () => {
   try {
-    const response = await axios.get(`/class/`);
+    const response = await axios.get(`/class/user`);
     return response;
   } catch (error) {
     console.error('Error during getClasses request:', error);
