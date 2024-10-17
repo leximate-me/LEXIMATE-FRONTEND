@@ -90,18 +90,6 @@ function NavBar() {
             </Link>
             <Link
               className="text-[#181811] text-md font-bold leading-normal hover:border-b-2 border-black"
-              to="/tasks"
-            >
-              Tareas
-            </Link>
-            <Link
-              className="text-[#181811] text-md font-bold leading-normal hover:border-b-2 border-black"
-              to="/tasks/new"
-            >
-              Agregar Tarea
-            </Link>
-            <Link
-              className="text-[#181811] text-md font-bold leading-normal hover:border-b-2 border-black"
               to="/"
               onClick={() => {
                 logOut();
