@@ -1,5 +1,6 @@
 import { createContext, useState, useContext } from 'react';
 import { getClassesRequest, createClassesRequest, joinClassRequest } from '../api/class';
+import { set } from 'react-hook-form';
 
 const ClassContext = createContext();
 
@@ -17,6 +18,7 @@ const ClassProvider = ({ children }) => {
 
   const [classes, setClasses] = useState([]);
   const [error, setError] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   const clearError = () => {
     setError(null);
@@ -27,9 +29,11 @@ const ClassProvider = ({ children }) => {
     try {
       const res = await getClassesRequest();
       setClasses(res.data);
+      setIsLoading(false);
     } catch (error) {
       console.log('Error during get classes request:', error.response.data.error);
       setError(error.response.data);
+      setIsLoading(false);
       throw error;
     }
 
@@ -71,6 +75,7 @@ const ClassProvider = ({ children }) => {
         createClass,
         joinClass,
         error,
+        isLoading,
       }}
     >
       {children}
