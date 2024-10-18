@@ -20,8 +20,6 @@ function ClassPage() {
     getClasses(); // Obtener las clases al montar el componente
   }, [user]); //  Volver a obtener las clases si el usuario cambia
 
-  console.log(classes);
-  console.log(isLoading);
 
   return (
     <>

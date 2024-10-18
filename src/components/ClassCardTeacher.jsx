@@ -13,11 +13,14 @@ export default function ClassCardTeacher({ classes }) {
 
   const { error } = useClass();
 
+  const handleAbandonClass = (classCode) => {
+    console.log("Clase abandonada:", classCode);
+  };
+
   const handleOpenModal = (classItem) => {
     setSelectedClass(classItem); // Guardar la clase seleccionada
     setShowModal(true); // Abrir el modal
   };
-  console.log(classes.length === 0);
 
   return (
     <>
@@ -44,14 +47,10 @@ export default function ClassCardTeacher({ classes }) {
                   <div className='grid grid-cols-6'>
                     <h2 className="col-start-1 col-end-7 row-start-1 text-xl font-semibold text-center">{classItem.name}</h2>
 
-
-
-                    <div className='col-start-6 row-start-1' >
-                      <Dropdown />
+                    <div className='col-start-6 row-start-1' key={index}>
+                      <Dropdown code={classItem.class_code} onAbandonClass={handleAbandonClass} />
                     </div>
-
                   </div>
-
 
                   <p className="text-gray-500">{classItem.description}</p>
                   <button
