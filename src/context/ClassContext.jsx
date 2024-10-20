@@ -24,6 +24,7 @@ const ClassProvider = ({ children }) => {
   const [classes, setClasses] = useState([]);
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const clearError = () => {
     setError(null);
@@ -80,11 +81,17 @@ const ClassProvider = ({ children }) => {
   
   const deleteClass = async (classCode) => {
     try {
+      setIsDeleting(true);
+      console.log(isDeleting)
       const res = await deleteClassRequest(classCode);
+      setIsLoading(false);
+      console.log(isLoading)
       return res.data;
     } catch (error) {
       console.log('Error during delete class request:', error);
       setError(error.response.data);
+      setIsDeleting(false);
+      console.log(isDeleting)
       throw error;
     }
   };
@@ -101,6 +108,7 @@ const ClassProvider = ({ children }) => {
         isLoading,
         setClasses,
         leaveClass,
+        deleteClass,
       }}
     >
       {children}

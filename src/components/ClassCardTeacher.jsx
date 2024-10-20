@@ -3,6 +3,7 @@ import { useClass } from '../context/ClassContext';
 import notFound from '../assets/not-found.svg';
 import CodeModal from './ui/CodeModal';
 import Dropdown from './ui/DropDownButton';
+import { get } from 'react-hook-form';
 
 export default function ClassCardTeacher({ classes }) {
   // Estado para controlar la visibilidad del modal
@@ -11,10 +12,15 @@ export default function ClassCardTeacher({ classes }) {
   // Estado para almacenar la clase seleccionada
   const [selectedClass, setSelectedClass] = useState(null);
 
-  const { error } = useClass();
+  const { deleteClass, getClasses } = useClass();
 
-  const handleAbandonClass = (classCode) => {
-    console.log("Clase abandonada:", classCode);
+  const handleAbandonClass = async (classCode) => {
+    try {
+      console.log("Clase abandonada:", classCode);
+      await deleteClass(classCode);
+    } catch (error) {
+      console.log("Error al abandonar la clase:", error);
+    }
   };
 
   const handleOpenModal = (classItem) => {
