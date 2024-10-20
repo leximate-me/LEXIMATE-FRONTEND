@@ -1,18 +1,18 @@
-import { useForm } from 'react-hook-form';
+import { useState } from 'react';
+import { set, useForm } from 'react-hook-form';
 import { useClass } from '../context/ClassContext';
 
 function CreateClassModal({ isOpen, onClose }) {
     const { register, handleSubmit, formState:{ errors } } = useForm();
 
     // Accedemos a las funciones createClass y getClasses desde el contexto
-    const { createClass, getClasses } = useClass();
-
+    const { createClass, getClasses, isCreating } = useClass();
+ 
     // Función para manejar el envío del formulario
     const onSubmit = handleSubmit(async (data) => {
         try {
             // Llamada a la función createClass para hacer el POST al backend
             await createClass(data);
-            
             // Recargar las clases desde el backend después de crear una nueva clase
             await getClasses();
 
@@ -21,6 +21,7 @@ function CreateClassModal({ isOpen, onClose }) {
         } catch (error) {
             console.error("Error al crear la clase:", error);
         }
+        
     });
 
     // Si el modal no está abierto, no se renderiza nada

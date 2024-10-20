@@ -1,4 +1,4 @@
-import { createContext, useState, useContext } from 'react';
+import { createContext, useState, useContext, useEffect } from 'react';
 import {
   getClassesRequest,
   createClassesRequest,
@@ -6,7 +6,6 @@ import {
   leaveClassRequest,
   deleteClassRequest,
 } from '../api/class';
-import { set } from 'react-hook-form';
 
 const ClassContext = createContext();
 
@@ -25,6 +24,7 @@ const ClassProvider = ({ children }) => {
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [isCreating, setIsCreating] = useState(false);
 
   const clearError = () => {
     setError(null);
@@ -49,14 +49,18 @@ const ClassProvider = ({ children }) => {
 
   const createClass = async (newClass) => {
     try {
+      setIsCreating(true);
       const res = await createClassesRequest(newClass);
       return res.data;
     } catch (error) {
       console.log('Error during create class request:', error.response.data);
       setError(error.response.data);
       throw error;
+    } finally {
+      setIsCreating(false);
     }
   };
+
   const joinClass = async (classCode) => {
     try {
       const res = await joinClassRequest(classCode);
@@ -96,6 +100,7 @@ const ClassProvider = ({ children }) => {
     }
   };
 
+
   return (
     <ClassContext.Provider
       value={{
@@ -109,6 +114,7 @@ const ClassProvider = ({ children }) => {
         setClasses,
         leaveClass,
         deleteClass,
+        isCreating,
       }}
     >
       {children}
