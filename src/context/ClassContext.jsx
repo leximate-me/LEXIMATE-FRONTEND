@@ -3,6 +3,8 @@ import {
   getClassesRequest,
   createClassesRequest,
   joinClassRequest,
+  leaveClassRequest,
+  deleteClassRequest,
 } from '../api/class';
 import { set } from 'react-hook-form';
 
@@ -64,6 +66,28 @@ const ClassProvider = ({ children }) => {
       throw error;
     }
   };
+  
+  const leaveClass = async (classCode) => {
+    try {
+      const res = await leaveClassRequest(classCode);
+      return res.data;
+    } catch (error) {
+      console.log('Error during leave class request:', error);
+      setError(error.response.data);
+      throw error;
+    }
+  };
+  
+  const deleteClass = async (classCode) => {
+    try {
+      const res = await deleteClassRequest(classCode);
+      return res.data;
+    } catch (error) {
+      console.log('Error during delete class request:', error);
+      setError(error.response.data);
+      throw error;
+    }
+  };
 
   return (
     <ClassContext.Provider
@@ -76,6 +100,7 @@ const ClassProvider = ({ children }) => {
         error,
         isLoading,
         setClasses,
+        leaveClass,
       }}
     >
       {children}

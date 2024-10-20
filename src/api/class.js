@@ -30,4 +30,24 @@ const joinClassRequest = async (classCode) => {
   }
 };
 
-export { getClassesRequest, createClassesRequest, joinClassRequest };
+const leaveClassRequest = async (classCode) => {
+  try {
+    const response = await axios.post(`/class/leave/`, classCode);
+    return response;
+  } catch (error) {
+    console.log('Error during leaveClass request:', error);
+    throw error;
+  }
+};
+
+const deleteClassRequest = async (classCode) => {
+  try {
+    const response = await axios.post(`/class/`, classCode);
+    return response;
+  } catch (error) {
+    console.log('Error during deleteClass request:', error);
+    throw error;
+  }
+};
+
+export { getClassesRequest, createClassesRequest, joinClassRequest, leaveClassRequest };
