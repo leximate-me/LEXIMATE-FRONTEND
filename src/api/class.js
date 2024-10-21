@@ -1,3 +1,4 @@
+import { code } from 'framer-motion/client';
 import axios from './axios';
 
 const getClassesRequest = async () => {
@@ -42,7 +43,7 @@ const leaveClassRequest = async (classCode) => {
 
 const deleteClassRequest = async (classCode) => {
   try {
-    const response = await axios.post(`/class/`, classCode);
+    const response = await axios.delete(`/class/` + classCode);
     return response;
   } catch (error) {
     console.log('Error during deleteClass request:', error);
@@ -50,4 +51,4 @@ const deleteClassRequest = async (classCode) => {
   }
 };
 
-export { getClassesRequest, createClassesRequest, joinClassRequest, leaveClassRequest };
+export { getClassesRequest, createClassesRequest, joinClassRequest, leaveClassRequest, deleteClassRequest };
