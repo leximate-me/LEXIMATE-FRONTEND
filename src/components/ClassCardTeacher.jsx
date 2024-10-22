@@ -68,7 +68,7 @@ export default function ClassCardTeacher({ classes: initialClasses }) {
                   classes.map((classItem, index) => (
                     <div
                       key={index}
-                      onClick={() => window.location.href = '/tasks'}  /* Redirigir al hacer clic en la carta */
+                      onClick={() => window.location.href = `/${classItem.class_code}/tasks`}  /* Redirigir al hacer clic en la carta */
                       className="bg-white shadow-[0px_9px_15px_-7px_rgba(0,0,0,0.75)] rounded border p-4 m-5  h-fit flex flex-col items-center gap-3 hover:scale-105 transition duration-500 cursor-pointer"
                     >
                       <div className="grid grid-cols-6">
@@ -107,7 +107,6 @@ export default function ClassCardTeacher({ classes: initialClasses }) {
                 selectedClass={selectedClass} // Pasar la clase seleccionada al modal
               />
             </>
-
           )}
         </>
       )}

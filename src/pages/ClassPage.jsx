@@ -22,7 +22,7 @@ function ClassPage() {
 
 
     return (
-        <div className='flex justify-center  h-[500px] m-5'>
+        <div className='flex justify-center h-[500px] m-5'>
             {isLoading  || isCreating ? (
                 <>
                     {Loading(isLoading ? 'Cargando clases...' : 'Creando clase...')}
@@ -31,7 +31,7 @@ function ClassPage() {
                 <>
                     {user && user.rol === 3 ? (
                         <>
-                            <div className="w-[90%] h-[100%]">
+                            <div className="w-[90%] h-[100%] ">
                                 <ClassCardTeacher classes={classes} />
                             </div>
                             <div className="fixed bottom-8 right-8">

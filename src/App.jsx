@@ -31,7 +31,7 @@ function App() {
                 <Route path="/register" element={<RegisterPage />} />
                 <Route element={<ProtetedRoutes />}>
                   <Route path="/home" element={<HomePage />} />
-                  <Route path="/tasks" element={<TaskPage />} />
+                  <Route path="/:classCode/tasks" element={<TaskPage />} />
                   <Route path="/classes" element={<ClassPage />} />
                   <Route path="/tasks/new" element={<TaskFormPage />} />
                   <Route path="/tasks/:id" element={<TaskFormPage />} />

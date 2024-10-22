@@ -7,6 +7,7 @@ import {
   getTaskRequest,
   updateTaskRequest,
 } from '../api/tasks';
+import { set } from 'react-hook-form';
 
 const TaskContext = createContext();
 
@@ -22,14 +23,17 @@ const useTask = () => {
 
 const TaskProvider = ({ children }) => {
   const [tasks, setTasks] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const getTasks = async () => {
+  const getTasks = async (classCode) => {
+    setIsLoading(true);
     try {
-      const res = await getTasksRequest();
+      const res = await getTasksRequest(classCode);
       setTasks(res.data);
-      console.log(res.data);
+      setIsLoading(false);
     } catch (error) {
       console.error('Error during get tasks request:', error);
+      setIsLoading(false);
       throw error;
     }
   };
@@ -48,9 +52,9 @@ const TaskProvider = ({ children }) => {
     }
   };
 
-  const deleteTask = async (id) => {
+  const deleteTask = async (classCode, id) => {
     try {
-      const res = await deleteTaskRequest(id);
+      const res = await deleteTaskRequest(classCode, id);
       if (res.status === 204) {
         setTasks(tasks.filter((task) => task._id !== id));
       }
@@ -79,6 +83,7 @@ const TaskProvider = ({ children }) => {
         getTask,
         updateTask,
         deleteTask,
+        isLoading
       }}
     >
       {children}
