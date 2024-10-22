@@ -28,7 +28,7 @@ export default function ClassCardTeacher({ classes: initialClasses }) {
 
       // Filtrar la clase eliminada del estado
       setClasses((prevClasses) => prevClasses.filter((c) => c.class_code !== classCode));
-      
+
     } catch (error) {
       console.log("Error al abandonar la clase:", error);
     } finally {
@@ -42,15 +42,15 @@ export default function ClassCardTeacher({ classes: initialClasses }) {
   };
 
   return (
-    <>
+    <div className='h-[100%] flex justify-center'>
       {isDeleting ? (
-        <div className="flex justify-center">
+        <div className="flex justify-center h-[100%]">
           {Loading('Eliminando clase...')}
         </div>
       ) : (
         <>
           {classes.length === 0 ? (
-            <div className="w-80 h-52 flex flex-col justify-center items-center m-5 border border-gray-300 rounded-md shadow-[0px_9px_15px_-7px_rgba(0,0,0,0.75)]">
+            <div className="w-80 h-52 flex flex-col justify-center items-center border border-gray-300 rounded-md shadow-[0px_9px_15px_-7px_rgba(0,0,0,0.75)]">
               <div className="flex flex-wrap justify-center items-center w-[90%] h-[90%] m-5">
                 <img src={notFound} alt="No existen clases" />
               </div>
@@ -61,27 +61,37 @@ export default function ClassCardTeacher({ classes: initialClasses }) {
               </div>
             </div>
           ) : (
+
             <>
-              <div className="flex flex-wrap justify-center items-center w-[90%] m-5">
+              <div className="flex flex-wrap h-fit">
                 {classes &&
                   classes.map((classItem, index) => (
                     <div
                       key={index}
-                      className="bg-white shadow-[0px_9px_15px_-7px_rgba(0,0,0,0.75)] rounded border p-4 m-5 w-[300px] flex flex-col items-center gap-3 hover:scale-105 transition duration-500"
+                      onClick={() => window.location.href = '/tasks'}  /* Redirigir al hacer clic en la carta */
+                      className="bg-white shadow-[0px_9px_15px_-7px_rgba(0,0,0,0.75)] rounded border p-4 m-5  h-fit flex flex-col items-center gap-3 hover:scale-105 transition duration-500 cursor-pointer"
                     >
                       <div className="grid grid-cols-6">
                         <h2 className="col-start-1 col-end-7 row-start-1 text-xl font-semibold text-center">
                           {classItem.name}
                         </h2>
 
-                        <div className="col-start-6 row-start-1" key={index}>
+                        <div
+                          className="col-start-6 row-start-1"
+                          key={index}
+                          onClick={(e) => {
+                            e.stopPropagation();  // Prevenir que el clic en el botón redirija
+                          }}>
                           <Dropdown code={classItem.class_code} onAbandonClass={handleAbandonClass} />
                         </div>
                       </div>
 
                       <p className="text-gray-500">{classItem.description}</p>
                       <button
-                        onClick={() => handleOpenModal(classItem)} // Llamar al abrir modal con la clase seleccionada
+                        onClick={(e) => {
+                          e.stopPropagation();  // Prevenir que el clic en el botón redirija
+                          handleOpenModal(classItem);  // Llamar al abrir modal con la clase seleccionada
+                        }}
                         className="w-[100%] bg-blue-600 text-white rounded-md p-2 hover:bg-blue-700 transition duration-200"
                       >
                         Ver código de clase
@@ -97,9 +107,10 @@ export default function ClassCardTeacher({ classes: initialClasses }) {
                 selectedClass={selectedClass} // Pasar la clase seleccionada al modal
               />
             </>
+
           )}
         </>
       )}
-    </>
+    </div>
   );
 }
