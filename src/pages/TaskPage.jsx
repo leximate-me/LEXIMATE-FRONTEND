@@ -6,6 +6,7 @@ import TaskCard from '../components/TaskCard';
 import { useAuth } from '../context/AuthContext';
 import bgImg from '../assets/bg-taskPage.jpg';
 import Loading from '../components/ui/Loading';
+import { map } from 'framer-motion/client';
 
 
 function TaskPage() {
@@ -29,6 +30,17 @@ function TaskPage() {
     setCurrentClass(foundClass);
   }, [classes, classCode]);
 
+  useEffect(() => {
+    
+    tasks.forEach(task => {
+      if (task.files && task.files.length > 0) {
+        task.files.forEach(file => {
+          console.log('files',file.file_url);
+        });
+      }
+    });
+    console.log('tasks',tasks);
+  }, [tasks]);
 
   return (
     <div className='h-[500px]'>
