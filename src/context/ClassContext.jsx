@@ -71,7 +71,7 @@ const ClassProvider = ({ children }) => {
       throw error;
     }
   };
-  
+
   const leaveClass = async (classCode) => {
     try {
       const res = await leaveClassRequest(classCode);
@@ -82,24 +82,23 @@ const ClassProvider = ({ children }) => {
       throw error;
     }
   };
-  
+
   const deleteClass = async (classCode) => {
     try {
       setIsDeleting(true);
-      console.log(isDeleting)
+      console.log(isDeleting);
       const res = await deleteClassRequest(classCode);
       setIsLoading(false);
-      console.log(isLoading)
+      console.log(isLoading);
       return res.data;
     } catch (error) {
       console.log('Error during delete class request:', error);
       setError(error.response.data);
       setIsDeleting(false);
-      console.log(isDeleting)
+      console.log(isDeleting);
       throw error;
     }
   };
-
 
   return (
     <ClassContext.Provider
