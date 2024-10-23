@@ -8,6 +8,7 @@ import CreateClassModal from '../components/ClassForm';
 import JoinClassModal from '../components/JoinClass';
 import Loading from '../components/ui/Loading';
 
+
 function ClassPage() {
     const { getClasses, classes, isLoading, setClasses, isCreating } = useClass();
     const [showModal, setShowModal] = useState(false);
@@ -21,8 +22,7 @@ function ClassPage() {
 
 
     return (
-        <div className='flex justify-center  h-[500px]'>
-            {/* Mostrar el loading si estamos cargando las clases o creando una nueva clase */}
+        <div className='flex justify-center h-[500px] m-5'>
             {isLoading  || isCreating ? (
                 <>
                     {Loading(isLoading ? 'Cargando clases...' : 'Creando clase...')}
@@ -31,7 +31,7 @@ function ClassPage() {
                 <>
                     {user && user.rol === 3 ? (
                         <>
-                            <div className="flex justify-center">
+                            <div className="w-[90%] h-[100%] ">
                                 <ClassCardTeacher classes={classes} />
                             </div>
                             <div className="fixed bottom-8 right-8">
@@ -52,7 +52,7 @@ function ClassPage() {
                         </>
                     ) : user && user.rol === 2 ? (
                         <>
-                            <div className="flex justify-center">
+                            <div className="w-[90%] h-fit">
                                 <ClassCardStudent classes={classes} />
                             </div>
                             <div className="fixed bottom-8 right-8">
