@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { useTask } from '../context/TasksContext';
-import { Link, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import notFound from '../assets/not-found.svg';
 import Loading from './ui/Loading';
+import Dropdown from './ui/DropDownButton';
 
 function TaskCard({ tasks: initialTasks }) {
   const { updateTask, deleteTask } = useTask();
@@ -28,10 +29,10 @@ function TaskCard({ tasks: initialTasks }) {
     task.date = joinDate;
   })
 
-  const handleAbandonClass = async (classCode, id) => {
+  const handleDeleteTask = async (classCode, id) => {
     setIsDeleting(true); // Mostrar loading al iniciar la eliminación
     try {
-      console.log("Tarea abandonada:", classCode);
+      console.log("Tarea abandonada:", id);
       await deleteTask(classCode, id);
 
       // Filtrar la clase eliminada del estado
@@ -45,7 +46,7 @@ function TaskCard({ tasks: initialTasks }) {
   };
 
   return (
-    <div className='flex justify-center m-5'>
+    <div className='m-5'>
       {isDeleting ? (
         <div className="flex justify-center h-[100%]">
           {Loading('Eliminando clase...')}
@@ -65,8 +66,8 @@ function TaskCard({ tasks: initialTasks }) {
             </div>
           ) : (
             <>
-              <div className="h-[100%] w-[100%] rounded-md">
-                <ul className="space-y-4">
+              <div className="grid grid-cols-6">
+                <ul className="col-start-3 col-end-7 space-y-4 m-2">
                   {tasks.map((task) => (
                     <li className="bg-white p-4 rounded-lg shadow-[0px_8px_12px_-6px] border-2 border-gray-300" key={task._id}>
                       <header className="flex justify-between">
@@ -74,22 +75,27 @@ function TaskCard({ tasks: initialTasks }) {
                           {task.title}
                         </h2>
                         <div className="flex gap-x-2 items-center ">
-                          <Link
-                            to={`/tasks/${task._id}`}
-                            className="bg-blue-600 text-white rounded-md p-2 hover:bg-blue-700 transition duration-200"
-                          >
-                            Editar
-                          </Link>
-                          <button
-                            className="bg-red-600 text-white rounded-md p-2 hover:bg-red-700 transition duration-200"
-                            onClick={() => handleAbandonClass(classCode, task.id)}
-                          >
-                            Eliminar
-                          </button>
+                          <Dropdown onAbandonClass={handleDeleteTask} code={task.id} additionalParam={classCode} />
                         </div>
                       </header>
                       <p className="break-words">{task.description}</p>
                       <p className='mt-2'>{task.date}</p>
+
+
+                      {task.files && task.files.length > 0 && (
+                        <div className="mt-4">
+                          <h3 className="text-lg font-semibold">Archivos adjuntos:</h3>
+                          <ul className="space-y-2">
+                            {task.files.map((file) => (
+                              <li className='max-w-[50%] md:max-w-[20%]' key={file._id}>
+                                <img className='rounded-lg' src={file.file_url} alt="" />
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
+
+
                     </li>
                   ))}
                 </ul>

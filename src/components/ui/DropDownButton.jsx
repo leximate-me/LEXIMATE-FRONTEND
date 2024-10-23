@@ -2,7 +2,7 @@ import { FiMoreVertical } from "react-icons/fi";
 import { motion } from "framer-motion";
 import { useState, useEffect, useRef } from "react";
 
-const StaggeredDropDown = ({ code, onAbandonClass }) => {
+const StaggeredDropDown = ({ code, onAbandonClass, additionalParam }) => {
     const [open, setOpen] = useState(false);
     const dropdownRef = useRef(null);
 
@@ -19,9 +19,14 @@ const StaggeredDropDown = ({ code, onAbandonClass }) => {
         };
     }, []);
 
+    // Adapt the function to handle one or two parameters
     const handleAbandonClick = () => {
-        onAbandonClass(code);
-        setOpen(false); 
+        if (additionalParam) {
+            onAbandonClass(additionalParam, code); // Pass both parameters if needed
+        } else {
+            onAbandonClass(code); // Only pass one parameter
+        }
+        setOpen(false);
     };
 
     return (
@@ -48,6 +53,7 @@ const StaggeredDropDown = ({ code, onAbandonClass }) => {
         </div>
     );
 };
+
 
 const Option = ({ text, onClick }) => {
     return (
