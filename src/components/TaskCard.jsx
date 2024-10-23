@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { useTask } from '../context/TasksContext';
-import { Link, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import notFound from '../assets/not-found.svg';
 import Loading from './ui/Loading';
+import Dropdown from './ui/DropDownButton';
 
 function TaskCard({ tasks: initialTasks }) {
   const { updateTask, deleteTask } = useTask();
@@ -28,10 +29,10 @@ function TaskCard({ tasks: initialTasks }) {
     task.date = joinDate;
   })
 
-  const handleAbandonClass = async (classCode, id) => {
+  const handleDeleteTask = async (classCode, id) => {
     setIsDeleting(true); // Mostrar loading al iniciar la eliminación
     try {
-      console.log("Tarea abandonada:", classCode);
+      console.log("Tarea abandonada:", id);
       await deleteTask(classCode, id);
 
       // Filtrar la clase eliminada del estado
@@ -65,7 +66,7 @@ function TaskCard({ tasks: initialTasks }) {
             </div>
           ) : (
             <>
-              <div className="grid grid-cols-6 bg-red-400 rounded-md">
+              <div className="grid grid-cols-6">
                 <ul className="col-start-3 col-end-7 space-y-4 m-2">
                   {tasks.map((task) => (
                     <li className="bg-white p-4 rounded-lg shadow-[0px_8px_12px_-6px] border-2 border-gray-300" key={task._id}>
@@ -74,23 +75,12 @@ function TaskCard({ tasks: initialTasks }) {
                           {task.title}
                         </h2>
                         <div className="flex gap-x-2 items-center ">
-                          <Link
-                            to={`/tasks/${task._id}`}
-                            className="bg-blue-600 text-white rounded-md p-2 hover:bg-blue-700 transition duration-200"
-                          >
-                            Editar
-                          </Link>
-                          <button
-                            className="bg-red-600 text-white rounded-md p-2 hover:bg-red-700 transition duration-200"
-                            onClick={() => handleAbandonClass(classCode, task.id)}
-                          >
-                            Eliminar
-                          </button>
+                          <Dropdown onAbandonClass={handleDeleteTask} code={task.id} additionalParam={classCode} />
                         </div>
                       </header>
                       <p className="break-words">{task.description}</p>
                       <p className='mt-2'>{task.date}</p>
-                      
+
 
                       {task.files && task.files.length > 0 && (
                         <div className="mt-4">
