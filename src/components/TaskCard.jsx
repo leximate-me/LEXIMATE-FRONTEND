@@ -8,14 +8,13 @@ import Dropdown from './ui/DropDownButton';
 function TaskCard({ tasks: initialTasks }) {
   const { updateTask, deleteTask } = useTask();
 
-  const { classCode } = useParams();
+  const { classId } = useParams();
 
   const [tasks, setTasks] = useState(initialTasks);
 
   const [isDeleting, setIsDeleting] = useState(false);
 
   const date = tasks.map((task) => {
-
     let dateCont = [];
 
     let dateSplit = task.due_date.split('');
@@ -27,26 +26,25 @@ function TaskCard({ tasks: initialTasks }) {
     let joinDate = dateCont.join('');
 
     task.date = joinDate;
-  })
+  });
 
-  const handleDeleteTask = async (classCode, id) => {
+  const handleDeleteTask = async (classId, taskId) => {
     setIsDeleting(true); // Mostrar loading al iniciar la eliminación
     try {
-      console.log("Tarea abandonada:", id);
-      await deleteTask(classCode, id);
+      console.log('Tarea abandonada:', taskId);
+      await deleteTask(classId, taskId);
 
       // Filtrar la clase eliminada del estado
-      setTasks((prevTasks) => prevTasks.filter((t) => t.id !== id));
-
+      setTasks((prevTasks) => prevTasks.filter((t) => t.id !== taskId));
     } catch (error) {
-      console.log("Error al abandonar la clase:", error);
+      console.log('Error al abandonar la clase:', error);
     } finally {
       setIsDeleting(false); // Ocultar loading cuando termine
     }
   };
 
   return (
-    <div className='m-5'>
+    <div className="m-5">
       {isDeleting ? (
         <div className="flex justify-center h-[100%]">
           {Loading('Eliminando clase...')}
@@ -69,33 +67,46 @@ function TaskCard({ tasks: initialTasks }) {
               <div className="grid grid-cols-6">
                 <ul className="col-start-3 col-end-7 space-y-4 m-2">
                   {tasks.map((task) => (
-                    <li className="bg-white p-4 rounded-lg shadow-[0px_8px_12px_-6px] border-2 border-gray-300" key={task._id}>
+                    <li
+                      className="bg-white p-4 rounded-lg shadow-[0px_8px_12px_-6px] border-2 border-gray-300"
+                      key={task.id}
+                    >
                       <header className="flex justify-between">
                         <h2 className="text-2xl  font-semibold break-words">
                           {task.title}
                         </h2>
                         <div className="flex gap-x-2 items-center ">
-                          <Dropdown onAbandonClass={handleDeleteTask} code={task.id} additionalParam={classCode} />
+                          <Dropdown
+                            onAbandonClass={handleDeleteTask}
+                            classId={classId}
+                            additionalParam={task.id}
+                          />
                         </div>
                       </header>
                       <p className="break-words">{task.description}</p>
-                      <p className='mt-2'>{task.date}</p>
-
+                      <p className="mt-2">{task.date}</p>
 
                       {task.files && task.files.length > 0 && (
                         <div className="mt-4">
-                          <h3 className="text-lg font-semibold">Archivos adjuntos:</h3>
+                          <h3 className="text-lg font-semibold">
+                            Archivos adjuntos:
+                          </h3>
                           <ul className="space-y-2">
                             {task.files.map((file) => (
-                              <li className='max-w-[50%] md:max-w-[20%]' key={file._id}>
-                                <img className='rounded-lg' src={file.file_url} alt="" />
+                              <li
+                                className="max-w-[50%] md:max-w-[20%]"
+                                key={file._id}
+                              >
+                                <img
+                                  className="rounded-lg"
+                                  src={file.file_url}
+                                  alt=""
+                                />
                               </li>
                             ))}
                           </ul>
                         </div>
                       )}
-
-
                     </li>
                   ))}
                 </ul>
@@ -104,7 +115,6 @@ function TaskCard({ tasks: initialTasks }) {
           )}
         </>
       )}
-
     </div>
   );
 }

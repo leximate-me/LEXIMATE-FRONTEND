@@ -1,8 +1,8 @@
 import axios from './axios';
 
-const getTasksRequest = async (classCode) => {
+const getTasksRequest = async (classId) => {
   try {
-    const response = await axios.get(`/class/${classCode}/tasks/`);
+    const response = await axios.get(`/class/${classId}/task`);
     return response;
   } catch (error) {
     console.error('Error during get tasks request:', error);
@@ -12,7 +12,7 @@ const getTasksRequest = async (classCode) => {
 
 const getTaskRequest = async (id) => {
   try {
-    const response = await axios.get(`/tasks/${id}`);
+    const response = await axios.get(`/task/${id}`);
     return response;
   } catch (error) {
     console.error('Error during get task request:', error);
@@ -42,7 +42,7 @@ const updateTaskRequest = async (id, task) => {
 
 const deleteTaskRequest = async (classCode, id) => {
   try {
-    const response = await axios.delete(`/class/${classCode}/tasks/${id}`);
+    const response = await axios.delete(`/class/${classCode}/task/${id}`);
     return response;
   } catch (error) {
     console.error('Error during delete task request:', error);

@@ -8,9 +8,8 @@ import bgImg from '../assets/bg-taskPage.jpg';
 import Loading from '../components/ui/Loading';
 import { map } from 'framer-motion/client';
 
-
 function TaskPage() {
-  const { classCode } = useParams();
+  const { classId } = useParams();
   const [currentClass, setCurrentClass] = useState(null);
 
   const { getTasks, tasks, isLoading } = useTask();
@@ -18,7 +17,7 @@ function TaskPage() {
   const { user } = useAuth();
 
   useEffect(() => {
-    getTasks(classCode);
+    getTasks(classId);
   }, []);
 
   useEffect(() => {
@@ -26,24 +25,23 @@ function TaskPage() {
   }, [user]);
 
   useEffect(() => {
-    const foundClass = classes.find((clase) => clase.class_code === classCode);
+    const foundClass = classes.find((clase) => clase.id === classId);
     setCurrentClass(foundClass);
-  }, [classes, classCode]);
+  }, [classes, classId]);
 
   useEffect(() => {
-    
-    tasks.forEach(task => {
+    tasks.forEach((task) => {
       if (task.files && task.files.length > 0) {
-        task.files.forEach(file => {
-          console.log('files',file.file_url);
+        task.files.forEach((file) => {
+          console.log('files', file.file_url);
         });
       }
     });
-    console.log('tasks',tasks);
+    console.log('tasks', tasks);
   }, [tasks]);
 
   return (
-    <div className='h-[500px]'>
+    <div className="h-[500px]">
       {isLoading ? (
         <>
           <div className="flex justify-center h-[100%]">
@@ -56,19 +54,23 @@ function TaskPage() {
             className="grid grid-cols-5 grid-rows-1 md:grid-rows-4 gap-4 rounded-lg m-2 md:m-5"
             style={{
               backgroundImage: `url(${bgImg})`,
-              backgroundSize: 'cover'
-            }}>
+              backgroundSize: 'cover',
+            }}
+          >
             {currentClass && (
               <>
-                <h1 className="text-3xl row-start-1 md:text-5xl md:row-start-3 text-white m-2"><b>{currentClass.name}</b></h1>
-                <p className="text-1xl row-start-2 md:text-3xl md:row-start-4 text-white m-2">{currentClass.description}</p>
+                <h1 className="text-3xl row-start-1 md:text-5xl md:row-start-3 text-white m-2">
+                  <b>{currentClass.name}</b>
+                </h1>
+                <p className="text-1xl row-start-2 md:text-3xl md:row-start-4 text-white m-2">
+                  {currentClass.description}
+                </p>
               </>
             )}
           </div>
-            <TaskCard tasks={tasks} key={tasks._id} />
+          <TaskCard tasks={tasks} key={tasks.id} />
         </>
       )}
-
     </div>
   );
 }

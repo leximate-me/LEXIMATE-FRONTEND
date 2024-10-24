@@ -25,10 +25,10 @@ const TaskProvider = ({ children }) => {
   const [tasks, setTasks] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
-  const getTasks = async (classCode) => {
+  const getTasks = async (classId) => {
     setIsLoading(true);
     try {
-      const res = await getTasksRequest(classCode);
+      const res = await getTasksRequest(classId);
       setTasks(res.data);
       setIsLoading(false);
     } catch (error) {
@@ -83,7 +83,7 @@ const TaskProvider = ({ children }) => {
         getTask,
         updateTask,
         deleteTask,
-        isLoading
+        isLoading,
       }}
     >
       {children}

@@ -13,7 +13,7 @@ const useClass = () => {
   const context = useContext(ClassContext);
 
   if (!context) {
-    throw new Error('useAuth must be used within an AuthProvider');
+    throw new Error('useClass must be used within a ClassProvider');
   }
 
   return context;
@@ -66,15 +66,15 @@ const ClassProvider = ({ children }) => {
       const res = await joinClassRequest(classCode);
       return res.data;
     } catch (error) {
-      console.log('Error during create class request:', error);
+      console.log('Error during join class request:', error);
       setError(error.response.data);
       throw error;
     }
   };
 
-  const leaveClass = async (classCode) => {
+  const leaveClass = async (classId) => {
     try {
-      const res = await leaveClassRequest(classCode);
+      const res = await leaveClassRequest(classId);
       return res.data;
     } catch (error) {
       console.log('Error during leave class request:', error);
@@ -83,19 +83,19 @@ const ClassProvider = ({ children }) => {
     }
   };
 
-  const deleteClass = async (classCode) => {
+  const deleteClass = async (classId) => {
     try {
       setIsDeleting(true);
-      console.log(isDeleting);
-      const res = await deleteClassRequest(classCode);
-      setIsLoading(false);
-      console.log(isLoading);
+      const res = await deleteClassRequest(classId);
+      setClasses((prevClasses) =>
+        prevClasses.filter((c) => c.class_id !== classId)
+      );
+      setIsDeleting(false);
       return res.data;
     } catch (error) {
       console.log('Error during delete class request:', error);
       setError(error.response.data);
       setIsDeleting(false);
-      console.log(isDeleting);
       throw error;
     }
   };
