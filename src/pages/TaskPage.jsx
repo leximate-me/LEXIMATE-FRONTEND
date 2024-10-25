@@ -74,7 +74,7 @@ function TaskPage() {
           )}
 
           {/* Sidebar para dispositivos móviles */}
-          <div className={`fixed inset-y-0 left-0 z-20 bg-blue-400 transform transition-all duration-500 md:hidden ${isSidebarOpen ? 'translate-x-0 w-4/5' : '-translate-x-full'}`}>
+          <div className={`fixed top-[68.8px] min-h-full p-2 left-0 z-20 w-4/5 bg-blue-400 transform transition-all duration-500 md:hidden ${isSidebarOpen ? 'translate-x-0 w-4/5' : '-translate-x-full'}`}>
             <SideBar onClose={toggleSidebar} />
           </div>
 
@@ -87,9 +87,9 @@ function TaskPage() {
           </button>
 
           {/* Sidebar siempre visible en desktop */}
-          {/* <div className="hidden md:block fixed  top-[89.33px] min-h-full p-2 left-0 z-20 w-1/5 bg-blue-400">
+          <div className="hidden md:block fixed top-[65px] min-h-full p-2 left-0 z-20 w-1/5 bg-blue-400">
             <SideBar />
-          </div> */}
+          </div>
         </>
       )}
     </div>
