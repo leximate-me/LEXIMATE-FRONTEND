@@ -23,21 +23,23 @@ function App() {
           <BrowserRouter>
             <main className="container min-w-full">
               <NavBar />
-              <Routes>
-                <Route path="/games" element={<GamesPage />} />
-                <Route path="/games/memory" element={<MemoryGame />} />
-                <Route path="/" element={<LandingPage />} />
-                <Route path="/login" element={<LoginPage />} />
-                <Route path="/register" element={<RegisterPage />} />
-                <Route element={<ProtetedRoutes />}>
-                  <Route path="/home" element={<HomePage />} />
-                  <Route path="/:classId/task" element={<TaskPage />} />
-                  <Route path="/classes" element={<ClassPage />} />
-                  <Route path="/tasks/new" element={<TaskFormPage />} />
-                  <Route path="/tasks/:taskId" element={<TaskFormPage />} />
-                  <Route path="/profile" element={<ProfilePage />} />
-                </Route>
-              </Routes>
+              <div>
+                <Routes>
+                  <Route path="/games" element={<GamesPage />} />
+                  <Route path="/games/memory" element={<MemoryGame />} />
+                  <Route path="/" element={<LandingPage />} />
+                  <Route path="/login" element={<LoginPage />} />
+                  <Route path="/register" element={<RegisterPage />} />
+                  <Route element={<ProtetedRoutes />}>
+                    <Route path="/home" element={<HomePage />} />
+                    <Route path="/:classId/task" element={<TaskPage />} />
+                    <Route path="/classes" element={<ClassPage />} />
+                    <Route path="/tasks/new" element={<TaskFormPage />} />
+                    <Route path="/tasks/:taskId" element={<TaskFormPage />} />
+                    <Route path="/profile" element={<ProfilePage />} />
+                  </Route>
+                </Routes>
+              </div>
             </main>
           </BrowserRouter>
         </TaskProvider>

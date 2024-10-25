@@ -6,12 +6,13 @@ import TaskCard from '../components/TaskCard';
 import { useAuth } from '../context/AuthContext';
 import bgImg from '../assets/bg-taskPage.jpg';
 import Loading from '../components/ui/Loading';
-import SideBar from '../components/SideBar'; // Si ya tienes este componente hecho
+import { SlArrowRight, SlArrowLeft } from 'react-icons/sl';
+import SideBar from '../components/SideBar';
 
 function TaskPage() {
   const { classId } = useParams();
   const [currentClass, setCurrentClass] = useState(null);
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false); // Estado para la sidebar en mobile
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const { getTasks, tasks, isLoading } = useTask();
   const { getClasses, classes } = useClass();
@@ -19,7 +20,7 @@ function TaskPage() {
 
   useEffect(() => {
     getTasks(classId);
-  }, []);
+  }, [classId]);
 
   useEffect(() => {
     getClasses();
@@ -30,16 +31,13 @@ function TaskPage() {
     setCurrentClass(foundClass);
   }, [classes, classId]);
 
-  // Toggle para abrir/cerrar la sidebar en mobile
   const toggleSidebar = () => {
-    setIsSidebarOpen(!isSidebarOpen);
+    setIsSidebarOpen((prev) => !prev);
   };
 
   return (
-    <div className="grid grid-cols-8 grid-rows-8 gap-4 p-2 h-[calc(100vh_-_89.33px)]">
-
+    <div className="grid grid-cols-8 grid-rows-8 gap-4 p-2 h-dvh">
       {isLoading ? (
-        // Centrar el componente Loading
         <div className="h-[500px] col-start-1 col-end-9 flex justify-center items-center">
           {Loading('Cargando tareas...')}
         </div>
@@ -65,14 +63,36 @@ function TaskPage() {
               )}
             </div>
           </div>
+
           <div className="col-span-8 row-span-6 col-start-1 row-start-3 md:col-span-6 md:col-start-3">
             <TaskCard tasks={tasks} key={tasks.id} />
           </div>
-          <div className="hidden md:block col-span-6 row-span-8 col-start-1 row-start-1 md:col-span-2 md:col-start-1 bg-blue-400"></div>
+
+          {/* Fondo opaco cuando la sidebar está abierta */}
+          {isSidebarOpen && (
+            <div className="fixed inset-0 z-10 bg-black opacity-50 md:hidden" onClick={toggleSidebar}></div>
+          )}
+
+          {/* Sidebar para dispositivos móviles */}
+          <div className={`fixed inset-y-0 left-0 z-20 bg-blue-400 transform transition-all duration-500 md:hidden ${isSidebarOpen ? 'translate-x-0 w-4/5' : '-translate-x-full'}`}>
+            <SideBar onClose={toggleSidebar} />
+          </div>
+
+          {/* Botón que cambia según el estado de la sidebar */}
+          <button
+            className={`md:hidden fixed top-[calc(4*100%/8)] left-2 z-30 h-fit text-black rounded transform -translate-y-1/2`}
+            onClick={toggleSidebar}
+          >
+            {isSidebarOpen ? <SlArrowLeft /> : <SlArrowRight />}
+          </button>
+
+          {/* Sidebar siempre visible en desktop */}
+          {/* <div className="hidden md:block fixed  top-[89.33px] min-h-full p-2 left-0 z-20 w-1/5 bg-blue-400">
+            <SideBar />
+          </div> */}
         </>
       )}
     </div>
-
   );
 }
 
