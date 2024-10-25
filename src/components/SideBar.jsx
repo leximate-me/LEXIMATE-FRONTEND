@@ -1,9 +1,25 @@
-import React from 'react'
+import React, { useState } from 'react'
+import { useClass } from '../context/ClassContext'
+
+
 
 export default function SideBar() {
+
+    const { getClasses, classes } = useClass();
+
     return (
-        <div className='bg-red-400'>
-            <h1>xdxd</h1>
+        <div className='border border-gray-400 shadow-[0_3px_10px_rgb(0,0,0,0.2)] p-2 rounded-lg flex flex-col gap-4 bg-white'>
+            {classes ? (
+                <>
+                <h1><b>Clases:</b></h1>
+                {classes.map((clase) => (
+                    <div key={clase.id} className='transition duration-100 rounded-md hover:bg-gray-200 p-2'>
+                        <h1>{clase.name}</h1>
+                    </div>
+                    ))}
+                </>
+            ) : console.log('no hay clases'
+            )}
         </div>
     )
 }

@@ -74,20 +74,20 @@ function TaskPage() {
           )}
 
           {/* Sidebar para dispositivos móviles */}
-          <div className={`fixed top-[68.8px] min-h-full p-2 left-0 z-20 w-4/5 bg-blue-400 transform transition-all duration-500 md:hidden ${isSidebarOpen ? 'translate-x-0 w-4/5' : '-translate-x-full'}`}>
+          <div className={`fixed top-[calc(4*100%/8)] min-h-fit p-2 left-0 z-20 w-4/5 transform transition-all duration-500 md:hidden ${isSidebarOpen ? 'translate-x-0 w-4/5' : '-translate-x-full'}`}>
             <SideBar onClose={toggleSidebar} />
           </div>
 
           {/* Botón que cambia según el estado de la sidebar */}
           <button
-            className={`md:hidden fixed top-[calc(4*100%/8)] left-2 z-30 h-fit text-black rounded transform -translate-y-1/2`}
+            className={`md:hidden fixed top-[calc(4*100%/8)] pb-5 left-2 z-30 h-fit text-black rounded transform -translate-y-1/2`}
             onClick={toggleSidebar}
           >
             {isSidebarOpen ? <SlArrowLeft /> : <SlArrowRight />}
           </button>
 
           {/* Sidebar siempre visible en desktop */}
-          <div className="hidden md:block fixed top-[65px] min-h-full p-2 left-0 z-20 w-1/5 bg-blue-400">
+          <div className="hidden md:block fixed top-[65px] min-h-fit p-2 left-0 z-20 w-1/5">
             <SideBar />
           </div>
         </>

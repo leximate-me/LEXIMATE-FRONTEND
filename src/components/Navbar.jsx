@@ -159,7 +159,11 @@ function NavBar() {
             <div className="flex flex-col md:flex-row items-center gap-4 md:gap-8 order-2 md:order-1">
               <ButtonLink to="/login" className="dark:bg-[#1a1a1a] dark:text-[#fffd92]">Iniciar Sesión</ButtonLink>
             </div>
+
           )}
+          <div className="flex items-center justify-center">
+            <ToggleTheme />
+          </div>
         </>
       )}
     </header>
