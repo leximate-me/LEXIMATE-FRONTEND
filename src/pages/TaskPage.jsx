@@ -36,36 +36,18 @@ function TaskPage() {
   };
 
   return (
-    <div className="relative h-[90vh] grid grid-cols-5 grid-rows-5">
+    <div className="grid grid-cols-8 grid-rows-8 gap-4 p-2 h-[calc(100vh_-_89.33px)]">
+
       {isLoading ? (
-        <div className="col-start-3 col-end-4 row-start-3 row-end-4">
+        // Centrar el componente Loading
+        <div className="h-[500px] col-start-1 col-end-9 flex justify-center items-center">
           {Loading('Cargando tareas...')}
         </div>
       ) : (
         <>
-          <div className='bg-red-400 col-start-1 col-end-2 row-start-1 row-end-7 p-2'>
-            {/* Botón para abrir/cerrar la sidebar en móviles */}
-            <button
-              className="md:hidden bg-blue-500 text-white p-2 m-2 row-start-3"
-              onClick={toggleSidebar}
-            >
-              {isSidebarOpen ? 'Cerrar Sidebar' : 'Abrir Sidebar'}
-            </button>
-
-            {/* SIDEBAR - Posicionada de forma fija en móviles */}
+          <div className="col-span-6 row-span-2 col-start-1 col-end-9 md:col-start-3 row-start-1">
             <div
-              className={`fixed top-0 left-0 w-64 md:w-full h-full bg-green-400 p-2 transition-transform transform ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
-                } md:relative md:translate-x-0 row-start-2 md:col-start-1 md:col-end-2 md:row-start-1 md:row-end-7`}
-            >
-              {/* Aquí puedes poner el contenido de la sidebar */}
-              <SideBar />
-            </div>
-          </div>
-
-          {/* HEADER */}
-          <div className="col-start-2 col-end-7 row-start-1 row-end-3 p-2">
-            <div
-              className="h-full grid grid-cols-6 grid-rows-6 rounded-lg"
+              className="h-full rounded-lg bg-cover bg-center bg-no-repeat flex flex-col justify-end p-4"
               style={{
                 backgroundImage: `url(${bgImg})`,
                 backgroundSize: 'cover',
@@ -73,24 +55,24 @@ function TaskPage() {
             >
               {currentClass && (
                 <>
-                  <h1 className="text-5xl text-white row-start-4 row-end-5 m-2">
+                  <h1 className="text-3xl md:text-5xl text-white">
                     <b>{currentClass.name}</b>
                   </h1>
-                  <p className="text-2xl text-white row-start-6 row-end-7 m-2">
+                  <p className="text-xl md:text-2xl text-white">
                     {currentClass.description}
                   </p>
                 </>
               )}
             </div>
           </div>
-
-          {/* CARDS */}
-          <div className="col-start-3 col-end-7 row-start-3 row-end-7 p-2">
+          <div className="col-span-8 row-span-6 col-start-1 row-start-3 md:col-span-6 md:col-start-3">
             <TaskCard tasks={tasks} key={tasks.id} />
           </div>
+          <div className="hidden md:block col-span-6 row-span-8 col-start-1 row-start-1 md:col-span-2 md:col-start-1 bg-blue-400"></div>
         </>
       )}
     </div>
+
   );
 }
 
