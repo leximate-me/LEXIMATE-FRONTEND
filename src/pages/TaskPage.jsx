@@ -43,7 +43,7 @@ function TaskPage() {
         </div>
       ) : (
         <>
-          <div className="col-span-6 col-start-1 col-end-9 md:col-start-3 row-start-1 row-end-2">
+          <div className="col-span-6 col-start-1 col-end-9 md:col-start-3 row-start-1 row-end-2 md:row-end-3">
             <div
               className="h-full rounded-lg bg-cover bg-center bg-no-repeat flex flex-col justify-end p-4"
               style={{
@@ -64,7 +64,7 @@ function TaskPage() {
             </div>
           </div>
 
-          <div className="col-span-8 row-span-6 col-start-1 row-start-2 md:col-span-6 md:col-start-3">
+          <div className="col-span-8 row-span-6 col-start-1 row-start-2 md:row-start-3 md:col-span-6 md:col-start-3">
             <TaskCard tasks={tasks} key={tasks.id} />
           </div>
 

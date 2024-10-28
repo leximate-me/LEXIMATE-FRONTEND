@@ -70,9 +70,9 @@ export default function ClassCardTeacher({ classes: initialClasses }) {
                       onClick={() =>
                         (window.location.href = `/${classItem.id}/task`)
                       } /* Redirigir al hacer clic en la carta */
-                      className="card card-compact bg-base-100 w-80 shadow-xl h-fit"
+                      className="card card-compact bg-base-100 w-80 shadow-xl h-fit cursor-pointer"
                     >
-                      <figure className='relative h-48'>
+                      <figure className='relative h-48 cursor-pointer'>
                         <img
                           className='h-80'
                           src={bgClassCard}
