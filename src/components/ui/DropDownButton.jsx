@@ -41,7 +41,7 @@ const StaggeredDropDown = ({ classId, onAbandonClass, additionalParam }) => {
           className="flex items-center gap-2 px-3 py-2 rounded-md text-indigo-50 hover:bg-gray-100 transition-colors duration-100"
         >
           <motion.span variants={iconVariants}>
-            <FiMoreVertical className="text-black text-lg" />
+            <FiMoreVertical className="text-black text-lg dark:text-white" />
           </motion.span>
         </button>
 

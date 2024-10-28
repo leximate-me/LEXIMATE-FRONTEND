@@ -21,7 +21,7 @@ function App() {
       <ClassProvider>
         <TaskProvider>
           <BrowserRouter>
-            <main className="container min-w-full">
+            <main className="container min-w-full min-h-[100vh] dark:bg-[#1a1a1a]">
               <NavBar />
               <div>
                 <Routes>

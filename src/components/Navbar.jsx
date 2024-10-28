@@ -20,7 +20,7 @@ function NavBar() {
     >
       {/* LOGO Y BOTÓN DE MENÚ */}
       <div className="flex items-center justify-between w-full md:w-fit">
-        <Link to="/">
+        <Link to="/classes">
           <div className="flex items-center gap-4 text-[#181811] dark:text-[#fffd92]">
             <div className="size-4 w-10 h-10">
               <img
@@ -36,32 +36,31 @@ function NavBar() {
         </Link>
 
         {/* Botón de menú hamburguesa */}
-        <button
-          onClick={toggleDropdown}
-          className="flex items-center px-3 py-2 text-[#181811] dark:text-[#fffd92] md:hidden"
-        >
-          <svg className="fill-current h-7 w-7" viewBox="0 0 100 80" width="30" height="30">
-            <rect width="100" height="15"></rect>
-            <rect y="30" width="100" height="15"></rect>
-            <rect y="60" width="100" height="15"></rect>
-          </svg>
-        </button>
+        {isAuthenticated && (
+          <button
+            onClick={toggleDropdown}
+            className="flex items-center px-3 py-2 text-[#181811] dark:text-[#fffd92] md:hidden"
+          >
+            <svg className="fill-current h-7 w-7" viewBox="0 0 100 80" width="30" height="30">
+              <rect width="100" height="15"></rect>
+              <rect y="30" width="100" height="15"></rect>
+              <rect y="60" width="100" height="15"></rect>
+            </svg>
+          </button>)
+        }
+
       </div>
 
       {/* NAVBAR CON SESIÓN INICIADA */}
       {isAuthenticated ? (
+
         <div className="flex flex-col-reverse items-center md:flex-row flex-1 md:justify-end">
           {/* Opciones de la Navbar */}
           <div
             className={`w-full flex flex-col justify-center gap-8 md:gap-20 md:flex-row items-center order-2 md:order-1 ${isOpen ? 'flex' : 'hidden'
               } md:flex`}
           >
-            <Link className="text-md font-bold leading-normal hover:border-b-2 border-black dark:text-[#fffd92] dark:hover:border-b-[#fffd92]" to="/home">
-              Inicio
-            </Link>
-            <Link className="text-md font-bold leading-normal hover:border-b-2 border-black dark:text-[#fffd92] dark:hover:border-b-[#fffd92]" to="/featured">
-              Más destacados
-            </Link>
+
             <Link className="text-md font-bold leading-normal hover:border-b-2 border-black dark:text-[#fffd92] dark:hover:border-b-[#fffd92]" to="/classes">
               Clases
             </Link>
@@ -158,12 +157,12 @@ function NavBar() {
           {location.pathname !== '/login' && (
             <div className="flex flex-col md:flex-row items-center gap-4 md:gap-8 order-2 md:order-1">
               <ButtonLink to="/login" className="dark:bg-[#1a1a1a] dark:text-[#fffd92]">Iniciar Sesión</ButtonLink>
+              <div className="flex items-center justify-center">
+                <ToggleTheme />
+              </div>
             </div>
 
           )}
-          <div className="flex items-center justify-center">
-            <ToggleTheme />
-          </div>
         </>
       )}
     </header>

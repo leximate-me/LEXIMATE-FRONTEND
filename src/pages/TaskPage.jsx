@@ -36,14 +36,14 @@ function TaskPage() {
   };
 
   return (
-    <div className="grid grid-cols-8 grid-rows-8 gap-4 p-2 h-dvh">
+    <div className="grid grid-cols-8 grid-rows-8 gap-4 p-2">
       {isLoading ? (
         <div className="h-[500px] col-start-1 col-end-9 flex justify-center items-center">
           {Loading('Cargando tareas...')}
         </div>
       ) : (
         <>
-          <div className="col-span-6 row-span-2 col-start-1 col-end-9 md:col-start-3 row-start-1">
+          <div className="col-span-6 col-start-1 col-end-9 md:col-start-3 row-start-1 row-end-2">
             <div
               className="h-full rounded-lg bg-cover bg-center bg-no-repeat flex flex-col justify-end p-4"
               style={{
@@ -64,7 +64,7 @@ function TaskPage() {
             </div>
           </div>
 
-          <div className="col-span-8 row-span-6 col-start-1 row-start-3 md:col-span-6 md:col-start-3">
+          <div className="col-span-8 row-span-6 col-start-1 row-start-2 md:col-span-6 md:col-start-3">
             <TaskCard tasks={tasks} key={tasks.id} />
           </div>
 

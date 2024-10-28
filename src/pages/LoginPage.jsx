@@ -27,7 +27,7 @@ function LoginPage() {
 
   useEffect(() => {
     if (isAuthenticated) {
-      navigate('/home');
+      navigate('/classes');
     }
   }, [isAuthenticated, navigate]);
 
@@ -41,9 +41,9 @@ function LoginPage() {
           </>
         ) : (
           <>
-            <Card className="m-7">
+            <Card className="m-7 dark:bg-[#1a1a1a]">
               <form className="space-y-4" onSubmit={onSubmit}>
-                <h1 className="text-3xl font-bold text-center py-5">
+                <h1 className="text-3xl font-bold text-center py-5 dark:text-white">
                   Inicia sesión
                 </h1>
                 <Input
@@ -75,7 +75,7 @@ function LoginPage() {
                   Ingresar
                 </Button>
               </form>
-              <p className="text-center py-4">
+              <p className="text-center py-4 dark:text-white">
                 No tienes una cuenta?
                 <Link className="mx-2 text-blue-600" to="/register">
                   Registrate

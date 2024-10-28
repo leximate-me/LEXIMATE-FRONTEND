@@ -69,10 +69,10 @@ export default function ClassCardTeacher({ classes: initialClasses }) {
                       onClick={() =>
                         (window.location.href = `/${classItem.id}/task`)
                       } /* Redirigir al hacer clic en la carta */
-                      className="bg-white shadow-[0px_9px_15px_-7px_rgba(0,0,0,0.75)] rounded border p-4 m-5  h-fit flex flex-col items-center gap-3 hover:scale-105 transition duration-500 cursor-pointer"
+                      className="dark:bg-[#1a1a1a] bg-white shadow-[0px_9px_15px_-7px_rgba(0,0,0,0.75)] rounded border p-4 m-5  h-fit flex flex-col items-center gap-3 hover:scale-105 transition duration-500 cursor-pointer"
                     >
                       <div className="grid grid-cols-6">
-                        <h2 className="col-start-1 col-end-7 row-start-1 text-xl font-semibold text-center">
+                        <h2 className="dark:text-white col-start-1 col-end-7 row-start-1 text-xl font-semibold text-center">
                           {classItem.name}
                         </h2>
 

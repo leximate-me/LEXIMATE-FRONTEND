@@ -52,7 +52,7 @@ function TaskCard({ tasks: initialTasks }) {
       ) : (
         <>
           {tasks.length === 0 ? (
-            <div className="w-80 h-52 flex flex-col justify-center items-center border border-gray-300 rounded-md shadow-[0px_9px_15px_-7px_rgba(0,0,0,0.75)]">
+            <div className=" w-80 h-52 flex flex-col justify-center items-center border border-gray-300 rounded-md shadow-[0px_9px_15px_-7px_rgba(0,0,0,0.75)]">
               <div className="flex flex-wrap justify-center items-center w-[90%] h-[90%] m-5">
                 <img src={notFound} alt="No existen clases" />
               </div>
@@ -68,14 +68,14 @@ function TaskCard({ tasks: initialTasks }) {
                 <ul className="col-start-1 col-end-7 space-y-4 m-2">
                   {tasks.map((task) => (
                     <li
-                      className="bg-white p-4 rounded-lg shadow-[0px_8px_12px_-6px] border-2 border-gray-300"
+                      className="dark:bg-[#1a1a1a] bg-white p-4 rounded-lg shadow-[0px_8px_12px_-6px] border-2 border-gray-300"
                       key={task.id}
                     >
                       <header className="flex justify-between">
-                        <h2 className="text-2xl  font-semibold break-words">
+                        <h2 className="text-2xl font-semibold break-words dark:text-white">
                           {task.title}
                         </h2>
-                        <div className="flex gap-x-2 items-center ">
+                        <div className="flex gap-x-2 items-center">
                           <Dropdown
                             onAbandonClass={handleDeleteTask}
                             classId={classId}
@@ -83,12 +83,12 @@ function TaskCard({ tasks: initialTasks }) {
                           />
                         </div>
                       </header>
-                      <p className="break-words">{task.description}</p>
-                      <p className="mt-2">{task.date}</p>
+                      <p className="break-words dark:text-white">{task.description}</p>
+                      <p className="mt-2 dark:text-white">{task.date}</p>
 
                       {task.files && task.files.length > 0 && (
                         <div className="mt-4">
-                          <h3 className="text-lg font-semibold">
+                          <h3 className="text-lg font-semibold dark:text-white">
                             Archivos adjuntos:
                           </h3>
                           <ul className="space-y-2">

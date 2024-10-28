@@ -46,12 +46,12 @@ function RegisterPage() {
   return (
     <div className="flex justify-center">
       <ErrorModal error={error} clearError={clearError} />
-      <Card className="min-w-[50%] m-7 flex flex-col md:flex-row items-center">
+      <Card className="min-w-[50%] m-7 flex flex-col md:flex-row items-center dark:bg-[#1a1a1a]">
         <div className="flex justify-center md:items-center">
           <img className="h-10 md:h-auto" src={logo} alt="" />
         </div>
         <div>
-          <h1 className="text-3xl font-semibold text-center py-5">
+          <h1 className="text-3xl font-semibold text-center py-5 dark:text-white">
             Registrarse
           </h1>
           <form className="space-y-4" onSubmit={onSubmit}>
