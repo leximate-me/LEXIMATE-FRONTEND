@@ -38,7 +38,7 @@ const StaggeredDropDown = ({ classId, onAbandonClass, additionalParam }) => {
       >
         <button
           onClick={() => setOpen((pv) => !pv)}
-          className="flex items-center gap-2 px-3 py-2 rounded-md text-indigo-50 hover:bg-gray-100 transition-colors duration-100"
+          className="flex items-center gap-2 px-3 py-2 rounded-md text-indigo-50 hover:bg-gray-500 hover:bg-opacity-20 transition-colors duration-300"
         >
           <motion.span variants={iconVariants}>
             <FiMoreVertical className="text-black text-lg dark:text-white" />
@@ -49,9 +49,9 @@ const StaggeredDropDown = ({ classId, onAbandonClass, additionalParam }) => {
           initial={wrapperVariants.closed}
           variants={wrapperVariants}
           style={{ originY: 'top', translateX: '-50%' }}
-          className="flex flex-col gap-2 p-2 rounded-lg bg-white shadow-xl absolute top-[120%] left-[50%] w-48 overflow-hidden border border-gray-300"
+          className="flex flex-col gap-2 p-2 rounded-lg bg-white shadow-xl absolute top-[120%] left-[-80%] w-fit overflow-hidden border border-gray-300"
         >
-          <Option text="Abandonar clase" onClick={handleAbandonClick} />
+            <Option text="Abandonar clase" onClick={handleAbandonClick} />
         </motion.ul>
       </motion.div>
     </div>
@@ -63,7 +63,7 @@ const Option = ({ text, onClick }) => {
     <motion.li
       variants={itemVariants}
       onClick={onClick}
-      className="flex items-center gap-2 w-full p-2 text-xs font-medium whitespace-nowrap rounded-md hover:bg-red-400 text-red-600 hover:text-white transition-colors duration-300 cursor-pointer"
+      className="flex items-center w-full p-2 text-xs font-medium whitespace-nowrap rounded-md hover:bg-red-400 text-red-600 hover:text-white transition-colors duration-300 cursor-pointer"
     >
       <motion.span variants={actionIconVariants}></motion.span>
       <span>{text}</span>

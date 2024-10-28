@@ -4,6 +4,7 @@ import notFound from '../assets/not-found.svg';
 import CodeModal from './ui/CodeModal';
 import Dropdown from './ui/DropDownButton';
 import Loading from './ui/Loading';
+import bgClassCard from '../assets/bg-classCard.jpg';
 
 export default function ClassCardTeacher({ classes: initialClasses }) {
   // Estado para controlar la visibilidad del modal
@@ -49,7 +50,7 @@ export default function ClassCardTeacher({ classes: initialClasses }) {
       ) : (
         <>
           {classes.length === 0 ? (
-            <div className="w-80 h-52 flex flex-col justify-center items-center border border-gray-300 rounded-md shadow-[0px_9px_15px_-7px_rgba(0,0,0,0.75)]">
+            <div className="dark:bg-white w-80 h-52 flex flex-col justify-center items-center border border-gray-300 rounded-md shadow-[0px_9px_15px_-7px_rgba(0,0,0,0.75)]">
               <div className="flex flex-wrap justify-center items-center w-[90%] h-[90%] m-5">
                 <img src={notFound} alt="No existen clases" />
               </div>
@@ -61,7 +62,7 @@ export default function ClassCardTeacher({ classes: initialClasses }) {
             </div>
           ) : (
             <>
-              <div className="flex flex-wrap h-fit">
+              <div className="flex flex-wrap h-fit gap-5">
                 {classes &&
                   classes.map((classItem, index) => (
                     <div
@@ -69,15 +70,15 @@ export default function ClassCardTeacher({ classes: initialClasses }) {
                       onClick={() =>
                         (window.location.href = `/${classItem.id}/task`)
                       } /* Redirigir al hacer clic en la carta */
-                      className="dark:bg-[#1a1a1a] bg-white shadow-[0px_9px_15px_-7px_rgba(0,0,0,0.75)] rounded border p-4 m-5  h-fit flex flex-col items-center gap-3 hover:scale-105 transition duration-500 cursor-pointer"
+                      className="card card-compact bg-base-100 w-80 shadow-xl h-fit"
                     >
-                      <div className="grid grid-cols-6">
-                        <h2 className="dark:text-white col-start-1 col-end-7 row-start-1 text-xl font-semibold text-center">
-                          {classItem.name}
-                        </h2>
-
+                      <figure className='relative h-48'>
+                        <img
+                          className='h-80'
+                          src={bgClassCard}
+                          alt="Shoes" />
                         <div
-                          className="col-start-6 row-start-1"
+                          className="absolute top-2 right-2"
                           key={index}
                           onClick={(e) => {
                             e.stopPropagation(); // Prevenir que el clic en el botón redirija
@@ -88,18 +89,25 @@ export default function ClassCardTeacher({ classes: initialClasses }) {
                             onAbandonClass={handleAbandonClass}
                           />
                         </div>
+                      </figure>
+                      <div className="card-body">
+                        <h2 className="card-title">
+                          {classItem.name}
+                        </h2>
+                        <p className="text-gray-500">{classItem.description}</p>
                       </div>
 
-                      <p className="text-gray-500">{classItem.description}</p>
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation(); // Prevenir que el clic en el botón redirija
-                          handleOpenModal(classItem); // Llamar al abrir modal con la clase seleccionada
-                        }}
-                        className="w-[100%] bg-blue-600 text-white rounded-md p-2 hover:bg-blue-700 transition duration-200"
-                      >
-                        Ver código de clase
-                      </button>
+                      <div className='card-actions justify-center'>
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation(); // Prevenir que el clic en el botón redirija
+                            handleOpenModal(classItem); // Llamar al abrir modal con la clase seleccionada
+                          }}
+                          className="w-4/5 m-2 bg-blue-600 text-white rounded-md p-2 hover:bg-blue-700 transition duration-200"
+                        >
+                          Ver código de clase
+                        </button>
+                      </div>
                     </div>
                   ))}
               </div>
