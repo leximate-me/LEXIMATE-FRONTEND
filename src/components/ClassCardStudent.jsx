@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { useClass } from '../context/ClassContext';
 import notFound from '../assets/not-found.svg';
-import CodeModal from './ui/CodeModal';
+import Dropdown from './ui/DropDownButton';
+import bgClassCard from '../assets/bg-classCard.jpg';
 
 export default function ClassCardStudent({ classes }) {
   // Estado para controlar la visibilidad del modal
@@ -16,6 +16,21 @@ export default function ClassCardStudent({ classes }) {
   //   setSelectedClass(classItem); // Guardar la clase seleccionada
   //   setShowModal(true); // Abrir el modal
   // };
+
+  const handleAbandonClass = async (classId) => {
+    setIsDeleting(true); // Mostrar loading al iniciar la eliminación
+    try {
+      console.log('Clase abandonada:', classId);
+      await deleteClass(classId);
+
+      // Filtrar la clase eliminada del estado
+      setClasses((prevClasses) => prevClasses.filter((c) => c.id !== classId));
+    } catch (error) {
+      console.log('Error al abandonar la clase:', error);
+    } finally {
+      setIsDeleting(false); // Ocultar loading cuando termine
+    }
+  };
 
   return (
     <div className='h-[100%] flex justify-center'>
@@ -32,15 +47,40 @@ export default function ClassCardStudent({ classes }) {
         </div>
       ) : (
         <>
-          <div className="flex flex-wrap h-fit">
+          <div className="flex flex-wrap h-fit gap-5">
             {classes &&
               classes.map((classItem, index) => (
                 <div
                   key={index}
-                  className="bg-white shadow-[0px_9px_15px_-7px_rgba(0,0,0,0.75)] rounded border p-4 m-5  h-fit flex flex-col items-center gap-3 hover:scale-105 transition duration-500 cursor-pointer"
+                  onClick={() =>
+                    (window.location.href = `/${classItem.id}/task`)
+                  } /* Redirigir al hacer clic en la carta */
+                  className="card card-compact bg-base-100 w-80 shadow-xl h-fit cursor-pointer"
                 >
-                  <h2 className="text-xl font-semibold">{classItem.name}</h2>
-                  <p className="text-gray-500">{classItem.description}</p>
+                  <figure className='relative h-48 cursor-pointer'>
+                    <img
+                      className='h-80'
+                      src={bgClassCard}
+                      alt="Shoes" />
+                    <div
+                      className="absolute top-2 right-2"
+                      key={index}
+                      onClick={(e) => {
+                        e.stopPropagation(); // Prevenir que el clic en el botón redirija
+                      }}
+                    >
+                      <Dropdown
+                        classId={classItem.id}
+                        onAbandonClass={handleAbandonClass}
+                      />
+                    </div>
+                  </figure>
+                  <div className="card-body">
+                    <h2 className="card-title">
+                      {classItem.name}
+                    </h2>
+                    <p className="text-gray-500">{classItem.description}</p>
+                  </div>
                 </div>
               ))}
           </div>
