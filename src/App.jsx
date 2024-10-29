@@ -6,7 +6,6 @@ import HomePage from './pages/HomePage';
 import TaskPage from './pages/TaskPage';
 import ClassPage from './pages/ClassPage';
 import TaskFormPage from './pages/TaskFormPage';
-import ProfilePage from './pages/ProfilePage';
 import ProtetedRoutes from './components/ProtetedRoutes';
 import { TaskProvider } from './context/TasksContext';
 import { ClassProvider } from './context/ClassContext';
@@ -14,6 +13,7 @@ import NavBar from './components/Navbar';
 import LandingPage from './pages/LandingPage';
 import GamesPage from './pages/GamesPage';
 import MemoryGame from './games/MemoryGame';
+import ProfilePage from './pages/AccountSettingsPage';
 
 function App() {
   return (
