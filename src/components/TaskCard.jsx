@@ -52,7 +52,7 @@ function TaskCard({ tasks: initialTasks }) {
       ) : (
         <>
           {tasks.length === 0 ? (
-            <div className=" w-80 h-52 flex flex-col justify-center items-center border border-gray-300 rounded-md shadow-[0px_9px_15px_-7px_rgba(0,0,0,0.75)]">
+            <div className="w-80 h-52 flex flex-col justify-center items-center border border-gray-300 rounded-md shadow-[0px_9px_15px_-7px_rgba(0,0,0,0.75)]">
               <div className="flex flex-wrap justify-center items-center w-[90%] h-[90%] m-5">
                 <img src={notFound} alt="No existen clases" />
               </div>
@@ -64,7 +64,7 @@ function TaskCard({ tasks: initialTasks }) {
             </div>
           ) : (
             <>
-              <div className="grid grid-cols-6">
+              <div className="grid grid-cols-6 h-52">
                 <ul className="col-start-1 col-end-7 space-y-4 m-2">
                   {tasks.map((task) => (
                     <li
