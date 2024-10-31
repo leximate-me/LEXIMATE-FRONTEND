@@ -4,8 +4,7 @@ import { useAuth } from '../context/AuthContext';
 import { ButtonLink } from './ui/ButtonLink';
 import ToggleTheme from './ToggleTheme';
 import logo from '../assets/logo-leximate.png';
-import defaultProfile from '../assets/default-profile.png';
-import { HiUser, HiAnnotation, HiBell } from "react-icons/hi";
+import { HiUser, HiBell, HiChatAlt } from "react-icons/hi";
 
 function NavBar() {
   const { isAuthenticated, logOut } = useAuth();
@@ -95,47 +94,51 @@ function NavBar() {
             className={`z-50 flex-col-reverse md:flex-row items-center gap-5 order-1 md:order-2 mt-3 md:m-0 ${isOpen ? 'flex' : 'hidden'
               } md:flex px-5`}
           >
-            <div className="flex items-center justify-center">
-              <ToggleTheme />
-            </div>
 
-            <div className='flex gap-2 items-center'>
 
-              <div>
+            <div className='flex flex-col gap-5 md:flex-row items-center'>
+
+              <div className='flex gap-2 px-3'>
+                <div>
+
+                  <div
+                    ref={dropdownRef}
+                    onClick={() => setIsProfileOpen(!isProfileOpen)}
+                    className="w-fit p-1 cursor-pointer rounded-full hover:bg-gray-300 hover:bg-opacity-60 dark:hover:bg-gray-600 transition-all duration-200">
+
+                    <HiUser className='text-3xl' />
+
+                  </div>
+
+
+                  <div
+                    className={`absolute right-48 mt-2 w-fit flex flex-col bg-white dark:bg-gray-800 rounded-lg shadow-lg p-3 transition-all duration-300 ease-out transform ${isProfileOpen ? 'opacity-100 scale-100' : 'opacity-0 scale-95 pointer-events-none'
+                      }`}>
+                    <Link to='/profile'>
+                      <p className="text-black dark:text-white dark:hover:hover:bg-gray-700 hover:bg-gray-100 p-3 rounded-lg transition-all duration-200">Configuración del perfíl</p>
+                    </Link>
+                    <button onClick={logOut} className="text-red-500 dark:hover:hover:bg-gray-700 hover:bg-gray-100 p-3 rounded-lg transition-all duration-200  ">Cerrar sesión</button>
+                  </div>
+
+                </div>
 
                 <div
-                  onClick={() => setIsProfileOpen(!isProfileOpen)}
                   className="w-fit p-1 cursor-pointer rounded-full hover:bg-gray-300 hover:bg-opacity-60 dark:hover:bg-gray-600 transition-all duration-200">
 
-                  <HiUser className='text-3xl' />
+                  <HiChatAlt className='text-3xl' />
 
                 </div>
-
 
                 <div
-                  ref={dropdownRef}
-                  className={`absolute right-10 mt-2 w-fit flex flex-col bg-white dark:bg-gray-800 rounded-lg shadow-lg p-3 transition-all duration-300 ease-out transform ${isProfileOpen ? 'opacity-100 scale-100' : 'opacity-0 scale-95 pointer-events-none'
-                    }`}>
-                  <Link to='/profile'>
-                    <p className="text-black dark:text-white dark:hover:hover:bg-gray-700 hover:bg-gray-100 p-3 rounded-lg transition-all duration-200">Configuración del perfíl</p>
-                  </Link>
-                  <button onClick={logOut} className="text-red-500 dark:hover:hover:bg-gray-700 hover:bg-gray-100 p-3 rounded-lg transition-all duration-200  ">Cerrar sesión</button>
+                  className="w-fit p-1 cursor-pointer rounded-full hover:bg-gray-300 hover:bg-opacity-60 dark:hover:bg-gray-600 transition-all duration-200">
+
+                  <HiBell className='text-3xl' />
+
                 </div>
-
               </div>
 
-              <div
-                className="w-fit p-1 cursor-pointer rounded-full hover:bg-gray-300 hover:bg-opacity-60 dark:hover:bg-gray-600 transition-all duration-200">
-
-                <HiAnnotation className='text-3xl' />
-
-              </div>
-
-              <div
-                className="w-fit p-1 cursor-pointer rounded-full hover:bg-gray-300 hover:bg-opacity-60 dark:hover:bg-gray-600 transition-all duration-200">
-
-                <HiBell className='text-3xl' />
-
+              <div className="flex items-center justify-center px-3">
+                <ToggleTheme />
               </div>
 
             </div>
