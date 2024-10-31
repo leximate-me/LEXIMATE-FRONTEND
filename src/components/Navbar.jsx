@@ -5,6 +5,7 @@ import { ButtonLink } from './ui/ButtonLink';
 import ToggleTheme from './ToggleTheme';
 import logo from '../assets/logo-leximate.png';
 import defaultProfile from '../assets/default-profile.png';
+import { HiUser, HiAnnotation, HiBell } from "react-icons/hi";
 
 function NavBar() {
   const { isAuthenticated, logOut } = useAuth();
@@ -104,9 +105,9 @@ function NavBar() {
 
                 <div
                   onClick={() => setIsProfileOpen(!isProfileOpen)}
-                  className="w-10 cursor-pointer">
+                  className="w-fit p-1 cursor-pointer rounded-full hover:bg-gray-300 hover:bg-opacity-60 dark:hover:bg-gray-600 transition-all duration-200">
 
-                  <img src={defaultProfile} alt="Avatar" className="object-cover w-full h-full" />
+                  <HiUser className='text-3xl' />
 
                 </div>
 
@@ -123,43 +124,19 @@ function NavBar() {
 
               </div>
 
-              <button className="flex max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-10 bg-[#f5f5f0] dark:bg-[#333333] text-[#181811] dark:text-[#f5f5f0] gap-2 text-md font-bold leading-normal tracking-[0.015em] min-w-0 px-2.5">
-                <div
-                  className="text-[#181811] dark:text-[#f5f5f0]"
-                  data-icon="Chat"
-                  data-size="20px"
-                  data-weight="regular"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="20px"
-                    height="20px"
-                    fill="currentColor"
-                    viewBox="0 0 256 256"
-                  >
-                    <path d="M216,48H40A16,16,0,0,0,24,64V224a15.84,15.84,0,0,0,9.25,14.5A16.05,16.05,0,0,0,40,240a15.89,15.89,0,0,0,10.25-3.78.69.69,0,0,0,.13-.11L82.5,208H216a16,16,0,0,0,16-16V64A16,16,0,0,0,216,48ZM40,224h0ZM216,192H82.5a16,16,0,0,0-10.3,3.75l-.12.11L40,224V64H216Z"></path>
-                  </svg>
-                </div>
-              </button>
+              <div
+                className="w-fit p-1 cursor-pointer rounded-full hover:bg-gray-300 hover:bg-opacity-60 dark:hover:bg-gray-600 transition-all duration-200">
 
-              <button className="flex max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-10 bg-[#f5f5f0] dark:bg-[#333333] text-[#181811] dark:text-[#f5f5f0] gap-2 text-md font-bold leading-normal tracking-[0.015em] min-w-0 px-2.5">
-                <div
-                  className="text-[#181811] dark:text-[#f5f5f0]"
-                  data-icon="Bell"
-                  data-size="20px"
-                  data-weight="regular"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="20px"
-                    height="20px"
-                    fill="currentColor"
-                    viewBox="0 0 256 256"
-                  >
-                    <path d="M221.8,175.94C216.25,166.38,208,139.33,208,104a80,80,0,1,0-160,0c0,35.34-8.26,62.38-13.81,71.94A16,16,0,0,0,48,200H88.81a40,40,0,0,0,78.38,0H208a16,16,0,0,0,13.8-24.06ZM128,216a24,24,0,0,1-22.62-16h45.24A24,24,0,0,1,128,216ZM48,184c7.7-13.24,16-43.92,16-80a64,64,0,1,1,128,0c0,36.05,8.28,66.73,16,80Z"></path>
-                  </svg>
-                </div>
-              </button>
+                <HiAnnotation className='text-3xl' />
+
+              </div>
+
+              <div
+                className="w-fit p-1 cursor-pointer rounded-full hover:bg-gray-300 hover:bg-opacity-60 dark:hover:bg-gray-600 transition-all duration-200">
+
+                <HiBell className='text-3xl' />
+
+              </div>
 
             </div>
           </div>
@@ -168,7 +145,7 @@ function NavBar() {
       ) : (
         <>
           {location.pathname !== '/login' && (
-            <div className="flex flex-col md:flex-row items-center gap-4 md:gap-8 order-2 md:order-1">
+            <div className="flex flex-col md:flex-row items-center gap-4 md:gap-8 order-2 md:order-1 px-5">
               <ButtonLink to="/login" className="dark:bg-[#1a1a1a] dark:text-[#fffd92]">Iniciar Sesión</ButtonLink>
               <div className="flex items-center justify-center">
                 <ToggleTheme />
