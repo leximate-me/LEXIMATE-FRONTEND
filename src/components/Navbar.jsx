@@ -1,25 +1,45 @@
-import React, { useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { ButtonLink } from './ui/ButtonLink';
 import ToggleTheme from './ToggleTheme';
 import logo from '../assets/logo-leximate.png';
+import defaultProfile from '../assets/default-profile.png';
 
 function NavBar() {
   const { isAuthenticated, logOut } = useAuth();
   const location = useLocation();
 
   const [isOpen, setIsOpen] = useState(false);
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
 
   const toggleDropdown = () => setIsOpen(!isOpen);
+
+  const dropdownRef = useRef(null);
+
+  const handleOutsideClick = (event) => {
+    if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+      setIsProfileOpen(false);
+    }
+  };
+
+  useEffect(() => {
+    // Agrega el evento de clic en el documento
+    document.addEventListener('mousedown', handleOutsideClick);
+
+    // Limpia el evento cuando el componente se desmonte
+    return () => {
+      document.removeEventListener('mousedown', handleOutsideClick);
+    };
+  }, []);
 
   return (
     <header
       id="navbar"
-      className="sticky top-0 left-0 right-0 z-50 flex flex-col md:flex-row items-center justify-between whitespace-nowrap border-b border-solid transition duration-300 dark:border-b-[#fffd92] px-5 py-3 bg-[#f8f40c] dark:bg-[#1a1a1a]"
+      className="sticky top-0 left-0 right-0 z-50 flex flex-col md:flex-row items-center justify-between whitespace-nowrap border-b border-solid transition duration-300 dark:border-b-[#fffd92] py-3 bg-[#f8f40c] dark:bg-[#1a1a1a]"
     >
       {/* LOGO Y BOTÓN DE MENÚ */}
-      <div className="flex items-center justify-between w-full md:w-fit">
+      <div className="flex items-center justify-between w-full md:w-fit px-5 z-50">
         <Link to="/classes">
           <div className="flex items-center gap-4 text-[#181811] dark:text-[#fffd92]">
             <div className="size-4 w-10 h-10">
@@ -57,7 +77,7 @@ function NavBar() {
         <div className="flex flex-col-reverse items-center md:flex-row flex-1 md:justify-end">
           {/* Opciones de la Navbar */}
           <div
-            className={`w-full flex flex-col justify-center gap-8 md:gap-20 md:flex-row items-center order-2 md:order-1 ${isOpen ? 'flex' : 'hidden'
+            className={`md:absolute w-full flex flex-col justify-center gap-8 md:gap-20 md:flex-row items-center order-2 md:order-1 ${isOpen ? 'flex' : 'hidden'
               } md:flex`}
           >
 
@@ -67,48 +87,41 @@ function NavBar() {
             <Link className="text-md font-bold leading-normal hover:border-b-2 border-black dark:text-[#fffd92] dark:hover:border-b-[#fffd92]" to="/games">
               Juegos interactivos
             </Link>
-            <Link
-              className="text-md font-bold leading-normal hover:border-b-2 border-black dark:text-[#fffd92] dark:hover:border-b-[#fffd92]"
-              to="/"
-              onClick={() => {
-                logOut();
-              }}
-            >
-              Cerrar Sesión
-            </Link>
-
-
           </div>
 
           {/* Botones de la Navbar */}
           <div
-            className={`flex-col-reverse md:flex-row items-center gap-5 order-1 md:order-2 mt-3 md:m-0 ${isOpen ? 'flex' : 'hidden'
-              } md:flex`}
+            className={`z-50 flex-col-reverse md:flex-row items-center gap-5 order-1 md:order-2 mt-3 md:m-0 ${isOpen ? 'flex' : 'hidden'
+              } md:flex px-5`}
           >
             <div className="flex items-center justify-center">
               <ToggleTheme />
             </div>
 
-            <div className='flex gap-2'>
+            <div className='flex gap-2 items-center'>
 
-              <button className="flex max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-10 bg-[#f5f5f0] dark:bg-[#333333] text-[#181811] dark:text-[#f5f5f0] gap-2 text-md font-bold leading-normal tracking-[0.015em] min-w-0 px-2.5">
+              <div>
+
                 <div
-                  className="text-[#181811] dark:text-[#f5f5f0]"
-                  data-icon="Bookmark"
-                  data-size="20px"
-                  data-weight="regular"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="20px"
-                    height="20px"
-                    fill="currentColor"
-                    viewBox="0 0 256 256"
-                  >
-                    <path d="M184,32H72A16,16,0,0,0,56,48V224a8,8,0,0,0,12.24,6.78L128,193.43l59.77,37.35A8,8,0,0,0,200,224V48A16,16,0,0,0,184,32Zm0,16V161.57l-51.77-32.35a8,8,0,0,0-8.48,0L72,161.56V48ZM132.23,177.22a8,8,0,0,0-8.48,0L72,209.57V180.43l56-35,56,35v29.14Z"></path>
-                  </svg>
+                  onClick={() => setIsProfileOpen(!isProfileOpen)}
+                  className="w-10 cursor-pointer">
+
+                  <img src={defaultProfile} alt="Avatar" className="object-cover w-full h-full" />
+
                 </div>
-              </button>
+
+
+                <div
+                  ref={dropdownRef}
+                  className={`absolute right-10 mt-2 w-fit flex flex-col bg-white dark:bg-gray-800 rounded-lg shadow-lg p-3 transition-all duration-300 ease-out transform ${isProfileOpen ? 'opacity-100 scale-100' : 'opacity-0 scale-95 pointer-events-none'
+                    }`}>
+                  <Link to='/profile'>
+                    <p className="text-black dark:text-white dark:hover:hover:bg-gray-700 hover:bg-gray-100 p-3 rounded-lg transition-all duration-200">Configuración del perfíl</p>
+                  </Link>
+                  <button onClick={logOut} className="text-red-500 dark:hover:hover:bg-gray-700 hover:bg-gray-100 p-3 rounded-lg transition-all duration-200  ">Cerrar sesión</button>
+                </div>
+
+              </div>
 
               <button className="flex max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-10 bg-[#f5f5f0] dark:bg-[#333333] text-[#181811] dark:text-[#f5f5f0] gap-2 text-md font-bold leading-normal tracking-[0.015em] min-w-0 px-2.5">
                 <div
