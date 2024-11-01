@@ -29,6 +29,7 @@ const TaskProvider = ({ children }) => {
     setIsLoading(true);
     try {
       const res = await getTasksRequest(classId);
+
       setTasks(res.data);
       setIsLoading(false);
     } catch (error) {
