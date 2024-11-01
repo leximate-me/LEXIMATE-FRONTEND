@@ -1,12 +1,32 @@
 import { useForm } from 'react-hook-form';
 import { useClass } from '../context/ClassContext';
+import { useRef, useEffect } from 'react';
 
-function CreateClassModal({ isOpen, onClose }) {
-    const { register, handleSubmit, formState:{ errors } } = useForm();
+function CreateTaskModal({ isOpen, onClose }) {
+    const { register, handleSubmit, formState: { errors } } = useForm();
 
     // Accedemos a las funciones createClass y getClasses desde el contexto
     const { createClass, getClasses, isCreating } = useClass();
- 
+
+
+    const dropdownRef = useRef(null);
+
+    const handleOutsideClick = (event) => {
+        if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+            onClose();
+        }
+    };
+
+    useEffect(() => {
+        // Agrega el evento de clic en el documento
+        document.addEventListener('mousedown', handleOutsideClick);
+
+        // Limpia el evento cuando el componente se desmonte
+        return () => {
+            document.removeEventListener('mousedown', handleOutsideClick);
+        };
+    }, []);
+
     // Función para manejar el envío del formulario
     const onSubmit = handleSubmit(async (data) => {
         try {
@@ -20,7 +40,7 @@ function CreateClassModal({ isOpen, onClose }) {
         } catch (error) {
             console.error("Error al crear la clase:", error);
         }
-        
+
     });
 
     // Si el modal no está abierto, no se renderiza nada
@@ -30,6 +50,7 @@ function CreateClassModal({ isOpen, onClose }) {
         <>
             {/* Fondo oscuro */}
             <div
+                ref={dropdownRef}
                 className="fixed inset-0 bg-black bg-opacity-50 z-40"
                 onClick={onClose} // Cierra el modal cuando haces clic en el fondo oscuro
             ></div>
@@ -83,4 +104,4 @@ function CreateClassModal({ isOpen, onClose }) {
     );
 }
 
-export default CreateClassModal;
+export default CreateTaskModal;
