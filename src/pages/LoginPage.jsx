@@ -36,9 +36,7 @@ function LoginPage() {
       <ErrorModal error={error} clearError={clearError} />
       <div className="flex justify-center overflow-hidden h-[500px]">
         {isLoading ? (
-          <>
-            {Loading('Iniciando sesión...')}
-          </>
+          <>{Loading('Iniciando sesión...')}</>
         ) : (
           <>
             <Card className="m-7 dark:bg-[#1a1a1a]">
@@ -53,6 +51,7 @@ function LoginPage() {
                   rules={{ required: 'Este campo es requerido' }}
                   placeholder="Correo electrónico"
                 />
+
                 {errors.email && (
                   <span className="text-red-500">{errors.email.message}</span>
                 )}
@@ -65,7 +64,9 @@ function LoginPage() {
                   placeholder="Contraseña"
                 />
                 {errors.password && (
-                  <span className="text-red-500">{errors.password.message}</span>
+                  <span className="text-red-500">
+                    {errors.password.message}
+                  </span>
                 )}
 
                 <Button
@@ -84,7 +85,6 @@ function LoginPage() {
             </Card>
           </>
         )}
-
       </div>
     </>
   );
