@@ -26,7 +26,6 @@ function TaskPage() {
 
   useEffect(() => {
     getClasses();
-    console.log('user', user);
   }, [user]);
 
   useEffect(() => {
