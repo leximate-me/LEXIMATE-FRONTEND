@@ -7,7 +7,6 @@ import {
   getTaskRequest,
   updateTaskRequest,
 } from '../api/tasks';
-import { set } from 'react-hook-form';
 
 const TaskContext = createContext();
 
@@ -39,8 +38,10 @@ const TaskProvider = ({ children }) => {
     }
   };
 
-  const createTask = async (task) => {
-    const res = await createTaskRequest(task);
+  const createTask = async (task, classId) => {
+    console.log({ classId });
+    console.log(task);
+    const res = await createTaskRequest(task, classId);
     console.log(res);
     return res;
   };

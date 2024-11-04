@@ -20,9 +20,9 @@ const getTaskRequest = async (id) => {
   }
 };
 
-const createTaskRequest = async (task) => {
+const createTaskRequest = async (task, classaId) => {
   try {
-    const response = await axios.post(`/tasks`, task);
+    const response = await axios.post(`/class/${classaId}/task`, task);
     return response;
   } catch (error) {
     console.error('Error during create task request:', error);
