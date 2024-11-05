@@ -23,7 +23,7 @@ function App() {
           <BrowserRouter>
             <main className="container min-w-full min-h-[100vh] dark:bg-[#1a1a1a]">
               <NavBar />
-              <div>
+              <div className='pt-[65px]'>
                 <Routes>
                   <Route path="/games" element={<GamesPage />} />
                   <Route path="/games/memory" element={<MemoryGame />} />

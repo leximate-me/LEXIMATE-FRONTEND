@@ -18,25 +18,26 @@ function NavBar() {
   const dropdownRef = useRef(null);
 
   const handleOutsideClick = (event) => {
-    if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+    // Verifica si el menú está abierto y el clic fue fuera del contenedor
+    if (isProfileOpen && dropdownRef.current && !dropdownRef.current.contains(event.target)) {
       setIsProfileOpen(false);
     }
   };
 
   useEffect(() => {
-    // Agrega el evento de clic en el documento
+    // Cambia a `mousedown` para capturar clics fuera del menú más rápido
     document.addEventListener('mousedown', handleOutsideClick);
 
     // Limpia el evento cuando el componente se desmonte
     return () => {
       document.removeEventListener('mousedown', handleOutsideClick);
     };
-  }, []);
+  }, [isProfileOpen]);
 
   return (
     <header
       id="navbar"
-      className="sticky top-0 left-0 right-0 z-50 flex flex-col md:flex-row items-center justify-between whitespace-nowrap border-b border-solid transition duration-300 dark:border-b-[#fffd92] py-3 bg-[#f8f40c] dark:bg-[#1a1a1a]"
+      className="fixed top-0 left-0 right-0 z-50 w-full flex flex-col md:flex-row items-center justify-between whitespace-nowrap border-b border-solid transition duration-300 dark:border-b-[#fffd92] py-3 bg-[#f8f40c] dark:bg-[#1a1a1a]"
     >
       {/* LOGO Y BOTÓN DE MENÚ */}
       <div className="flex items-center justify-between w-full md:w-fit px-5 z-50">
@@ -100,40 +101,31 @@ function NavBar() {
 
               <div className='flex gap-2 px-3'>
                 <div>
-
                   <div
-                    ref={dropdownRef}
                     onClick={() => setIsProfileOpen(!isProfileOpen)}
                     className="w-fit p-1 cursor-pointer rounded-full hover:bg-gray-300 hover:bg-opacity-60 dark:hover:bg-gray-600 transition-all duration-200">
-
                     <HiUser className='text-3xl' />
-
                   </div>
 
-
+                  {/* Contenedor de opciones de perfil */}
                   <div
+                    ref={dropdownRef}
                     className={`absolute right-48 mt-2 w-fit flex flex-col bg-white dark:bg-gray-800 rounded-lg shadow-lg p-3 transition-all duration-300 ease-out transform ${isProfileOpen ? 'opacity-100 scale-100' : 'opacity-0 scale-95 pointer-events-none'
                       }`}>
                     <Link to='/profile'>
                       <p className="text-black dark:text-white dark:hover:hover:bg-gray-700 hover:bg-gray-100 p-3 rounded-lg transition-all duration-200">Configuración del perfíl</p>
                     </Link>
-                    <button onClick={logOut} className="text-red-500 dark:hover:hover:bg-gray-700 hover:bg-gray-100 p-3 rounded-lg transition-all duration-200  ">Cerrar sesión</button>
+                    <button onClick={logOut} className="text-red-500 dark:hover:hover:bg-gray-700 hover:bg-gray-100 p-3 rounded-lg transition-all duration-200">Cerrar sesión</button>
                   </div>
 
                 </div>
 
-                <div
-                  className="w-fit p-1 cursor-pointer rounded-full hover:bg-gray-300 hover:bg-opacity-60 dark:hover:bg-gray-600 transition-all duration-200">
-
+                <div className="w-fit p-1 cursor-pointer rounded-full hover:bg-gray-300 hover:bg-opacity-60 dark:hover:bg-gray-600 transition-all duration-200">
                   <HiChatAlt className='text-3xl' />
-
                 </div>
 
-                <div
-                  className="w-fit p-1 cursor-pointer rounded-full hover:bg-gray-300 hover:bg-opacity-60 dark:hover:bg-gray-600 transition-all duration-200">
-
+                <div className="w-fit p-1 cursor-pointer rounded-full hover:bg-gray-300 hover:bg-opacity-60 dark:hover:bg-gray-600 transition-all duration-200">
                   <HiBell className='text-3xl' />
-
                 </div>
               </div>
 

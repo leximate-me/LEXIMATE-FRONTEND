@@ -84,7 +84,7 @@ function TaskCard({ tasks: initialTasks }) {
                         </div>
                       </header>
                       <p className="break-words dark:text-white">{task.description}</p>
-                      <p className="mt-2 dark:text-white">{task.date}</p>
+                      <p className="mt-2 dark:text-white"><b>Fecha de entrega:</b> {task.date}</p>
 
                       {task.files && task.files.length > 0 && (
                         <div className="mt-4">

@@ -16,7 +16,7 @@ function TaskPage() {
   const [currentClass, setCurrentClass] = useState(null);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [showModal, setShowModal] = useState(false);
-  const { getTasks, tasks, isLoading } = useTask();
+  const { getTasks, tasks, isLoading, isCreating } = useTask();
   const { getClasses, classes } = useClass();
   const { user } = useAuth();
 
@@ -39,9 +39,9 @@ function TaskPage() {
 
   return (
     <div className="grid grid-cols-8 grid-rows-8 gap-4 p-2">
-      {isLoading ? (
+      {isLoading || isCreating ? (
         <div className="h-[500px] col-start-1 col-end-9 flex justify-center items-center">
-          {Loading('Cargando tareas...')}
+          {Loading(isLoading ? 'Cargando tareas...' : 'Creando tarea...')}
         </div>
       ) : (
         <>

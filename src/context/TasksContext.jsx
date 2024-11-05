@@ -23,6 +23,7 @@ const useTask = () => {
 const TaskProvider = ({ children }) => {
   const [tasks, setTasks] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [isCreating, setIsCreating] = useState(false);
 
   const getTasks = async (classId) => {
     setIsLoading(true);
@@ -39,11 +40,16 @@ const TaskProvider = ({ children }) => {
   };
 
   const createTask = async (task, classId) => {
-    console.log({ classId });
-    console.log(task);
-    const res = await createTaskRequest(task, classId);
-    console.log(res);
-    return res;
+    try {
+      setIsCreating(true);
+      const res = await createTaskRequest(task, classId);
+      return res;
+    } catch (error) {
+      console.log('Error during create task request:', error);
+      throw error;
+    }finally {
+      setIsCreating(false);
+    }
   };
 
   const updateTask = async (id, task) => {
@@ -86,6 +92,7 @@ const TaskProvider = ({ children }) => {
         updateTask,
         deleteTask,
         isLoading,
+        isCreating,
       }}
     >
       {children}
