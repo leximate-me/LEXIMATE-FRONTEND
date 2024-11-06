@@ -2,7 +2,7 @@ import { FiMoreVertical } from 'react-icons/fi';
 import { motion } from 'framer-motion';
 import { useState, useEffect, useRef } from 'react';
 
-const StaggeredDropDown = ({ classId, onAbandonClass, additionalParam }) => {
+const StaggeredDropDown = ({ classId, onAbandonClass, additionalParam, msg }) => {
   const [open, setOpen] = useState(false);
   const dropdownRef = useRef(null);
 
@@ -51,7 +51,7 @@ const StaggeredDropDown = ({ classId, onAbandonClass, additionalParam }) => {
           style={{ originY: 'top', translateX: '-50%' }}
           className="flex flex-col gap-2 p-2 rounded-lg bg-white shadow-xl absolute top-[120%] left-[-80%] w-fit overflow-hidden border border-gray-300"
         >
-            <Option text="Abandonar clase" onClick={handleAbandonClick} />
+            <Option text={msg} onClick={handleAbandonClick} />
         </motion.ul>
       </motion.div>
     </div>

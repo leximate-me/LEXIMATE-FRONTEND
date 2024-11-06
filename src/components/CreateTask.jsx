@@ -2,6 +2,7 @@ import { useForm } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
 import { useTask } from '../context/TasksContext';
 import { useRef, useEffect } from 'react';
+import { ErrorModal } from './ui/ErrorModal';
 
 function CreateTaskModal({ isOpen, onClose }) {
   const { classId } = useParams();
@@ -13,7 +14,7 @@ function CreateTaskModal({ isOpen, onClose }) {
   } = useForm();
 
   // Accedemos a las funciones createTask y getTasks desde el contexto
-  const { createTask, getTasks } = useTask();
+  const { createTask, getTasks, error, clearError } = useTask();
 
   const modalRef = useRef(null);
 
@@ -58,6 +59,7 @@ function CreateTaskModal({ isOpen, onClose }) {
 
   return (
     <>
+      {error && <ErrorModal error={error} clearError={clearError} />}
       {/* Fondo oscuro */}
       <div
         className="fixed inset-0 bg-black bg-opacity-50 z-40 flex items-center justify-center"

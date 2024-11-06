@@ -76,19 +76,23 @@ function TaskCard({ tasks: initialTasks }) {
                 <ul className="col-start-1 col-end-7 space-y-4 m-2">
                   {tasks.map((task) => (
                     <li
-                    onClick={() => handleSelectTask(task.id)}
-                    className="dark:bg-[#1a1a1a] bg-white p-4 rounded-lg shadow-[0px_8px_12px_-6px] border-2 border-gray-300 cursor-pointer"
-                    key={task.id}
+                      onClick={() => handleSelectTask(task.id)}
+                      className="dark:bg-[#1a1a1a] bg-white p-4 rounded-lg shadow-[0px_8px_12px_-6px] border-2 border-gray-300 cursor-pointer"
+                      key={task.id}
                     >
                       <header className="flex justify-between">
                         <h2 className="text-2xl font-semibold break-words dark:text-white">
                           {task.title}
                         </h2>
-                        <div className="flex gap-x-2 items-center">
+                        <div className="flex gap-x-2 items-center"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                          }}>
                           <Dropdown
                             onAbandonClass={handleDeleteTask}
                             classId={classId}
                             additionalParam={task.id}
+                            msg={'Eliminar tarea'}
                           />
                         </div>
                       </header>

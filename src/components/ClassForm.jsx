@@ -1,17 +1,14 @@
 import { useRef, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useClass } from '../context/ClassContext';
+import { ErrorModal } from '../components/ui/ErrorModal'; // Importa el ErrorModal
 
 function CreateClassModal({ isOpen, onClose }) {
     const { register, handleSubmit, formState: { errors } } = useForm();
-
-    // Accedemos a las funciones createClass y getClasses desde el contexto
-    const { createClass, getClasses, isCreating } = useClass();
-
+    const { createClass, getClasses, error, clearError } = useClass(); // Añade clearError desde el contexto
     const modalRef = useRef(null);
 
     const handleBackgroundClick = (event) => {
-        // Cierra el modal solo si el clic ocurre fuera del contenedor del modal
         if (modalRef.current && !modalRef.current.contains(event.target)) {
             onClose();
         }
@@ -19,33 +16,32 @@ function CreateClassModal({ isOpen, onClose }) {
 
     useEffect(() => {
         document.addEventListener('mousedown', handleBackgroundClick);
-
-        // Limpia el evento cuando el componente se desmonte
         return () => {
             document.removeEventListener('mousedown', handleBackgroundClick);
         };
     }, []);
 
-    // Función para manejar el envío del formulario
     const onSubmit = handleSubmit(async (data) => {
         try {
-            await createClass(data);  // Crea la clase en el backend
-            await getClasses();       // Recarga las clases
-            onClose();                // Cierra el modal
+            await createClass(data);
+            await getClasses();
+            onClose();
         } catch (error) {
             console.error("Error al crear la clase:", error);
         }
     });
 
-    // Si el modal no está abierto, no se renderiza nada
     if (!isOpen) return null;
 
     return (
         <>
+            {/* Muestra el ErrorModal si hay un error */}
+            {error && <ErrorModal error={error} clearError={clearError} />}
+
             {/* Fondo oscuro */}
             <div
                 className="fixed inset-0 bg-black bg-opacity-50 z-40"
-                onClick={handleBackgroundClick} // Cierra el modal al hacer clic fuera del contenedor
+                onClick={handleBackgroundClick}
             ></div>
 
             {/* Contenedor del modal */}
@@ -56,7 +52,6 @@ function CreateClassModal({ isOpen, onClose }) {
                 >
                     <h2 className="text-xl mb-4">Crear una nueva clase</h2>
                     <form onSubmit={onSubmit}>
-                        {/* Campo para el nombre de la clase */}
                         <label className="block mb-2">Nombre de la clase:</label>
                         <input
                             type="text"
@@ -67,7 +62,6 @@ function CreateClassModal({ isOpen, onClose }) {
                         {errors.name && (
                             <span className="text-red-500">Este campo es requerido</span>
                         )}
-                        {/* Campo para la descripción de la clase */}
                         <label className="block mb-2">Descripción de la clase:</label>
                         <textarea
                             className="w-full p-2 border border-gray-300 rounded mb-4"
@@ -77,11 +71,10 @@ function CreateClassModal({ isOpen, onClose }) {
                         {errors.description && (
                             <span className="text-red-500">Este campo es requerido</span>
                         )}
-                        {/* Botones para cancelar o enviar */}
                         <div className="flex justify-end">
                             <button
                                 type="button"
-                                onClick={onClose}  // Botón para cerrar el modal sin enviar
+                                onClick={onClose}
                                 className="bg-gray-500 text-white px-4 py-2 rounded mr-2 hover:bg-gray-700 transition duration-300"
                             >
                                 Cancelar

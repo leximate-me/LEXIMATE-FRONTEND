@@ -7,6 +7,7 @@ import {
   getTaskRequest,
   updateTaskRequest,
 } from '../api/tasks';
+import { set } from 'react-hook-form';
 
 const TaskContext = createContext();
 
@@ -22,18 +23,23 @@ const useTask = () => {
 
 const TaskProvider = ({ children }) => {
   const [tasks, setTasks] = useState([]);
+  const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isCreating, setIsCreating] = useState(false);
+
+  const clearError = () => {
+    setError(null);
+  };
 
   const getTasks = async (classId) => {
     setIsLoading(true);
     try {
       const res = await getTasksRequest(classId);
-
       setTasks(res.data);
       setIsLoading(false);
     } catch (error) {
       console.error('Error during get tasks request:', error);
+      setError(error.response.data);
       setIsLoading(false);
       throw error;
     }
@@ -46,6 +52,7 @@ const TaskProvider = ({ children }) => {
       return res;
     } catch (error) {
       console.log('Error during create task request:', error);
+      setError(error.response.data);
       throw error;
     }finally {
       setIsCreating(false);
@@ -57,6 +64,7 @@ const TaskProvider = ({ children }) => {
       await updateTaskRequest(id, task);
     } catch (error) {
       console.log(error);
+      setError(error.response.data);
     }
   };
 
@@ -70,6 +78,7 @@ const TaskProvider = ({ children }) => {
       return res;
     } catch (error) {
       console.log(error);
+      setError(error.response.data);
     }
   };
 
@@ -79,6 +88,7 @@ const TaskProvider = ({ children }) => {
       return res.data;
     } catch (error) {
       console.log(error);
+      setError(error.response.data);
     }
   };
 
@@ -93,6 +103,8 @@ const TaskProvider = ({ children }) => {
         deleteTask,
         isLoading,
         isCreating,
+        clearError,
+        error,
       }}
     >
       {children}
