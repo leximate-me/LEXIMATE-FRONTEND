@@ -4,19 +4,18 @@ import { useTask } from '../context/TasksContext';
 import Loading from '../components/ui/Loading';
 
 function TaskPage({ tasks: initialTasks }) {
-    const { classId, taskId } = useParams(); // Obtener classId y taskId desde la URL
+    const { classId, taskId } = useParams();
     const { getTask } = useTask();
     const [task, setTask] = useState(initialTasks);
     const [isLoading, setIsLoading] = useState(true);
-    const [comments, setComments] = useState([]); // Estado para los comentarios
-    const [newComment, setNewComment] = useState(''); // Estado para el comentario nuevo
+    const [comments, setComments] = useState([]);
+    const [newComment, setNewComment] = useState('');
 
     useEffect(() => {
         const loadTask = async () => {
             try {
                 const fetchedTask = await getTask(classId, taskId);
                 setTask(fetchedTask);
-                // Aquí puedes cargar comentarios de la base de datos si los tienes
                 setComments(fetchedTask.comments || []);
             } catch (error) {
                 console.error('Error al cargar la tarea:', error);
@@ -32,7 +31,7 @@ function TaskPage({ tasks: initialTasks }) {
             const updatedComments = [...comments, newComment];
             setComments(updatedComments);
             setNewComment('');
-            // Aquí puedes agregar la lógica para enviar el comentario al servidor
+            // Agregar lógica para enviar el comentario al servidor si es necesario
         }
     };
 
@@ -45,11 +44,10 @@ function TaskPage({ tasks: initialTasks }) {
             ) : (
                 <>
                     {task ? (
-                        <div className="space-y-6 ">
+                        <div className="space-y-6">
                             {/* Información de la Tarea */}
                             <div className="grid grid-cols-6 grid-rows-2 p-5 border dark:border-gray-500 rounded-lg shadow-md dark:shadow-[0px_2px_4px_0px_#4a5568]">
-                                
-                                <div className='row-start-1 md:row-span-2 w-fit flex flex-col md:gap-10'>
+                                <div className="row-start-1 md:row-span-2 w-fit flex flex-col md:gap-10">
                                     <h1 className="text-2xl md:text-6xl font-bold text-gray-900 dark:text-white mb-4">{task.title}</h1>
                                     <p className="text-md md:text-3xl text-gray-700 dark:text-gray-300 mb-2">{task.description}</p>
                                     <p className="text-md md:text-2xl text-gray-600 dark:text-gray-400">
@@ -59,14 +57,16 @@ function TaskPage({ tasks: initialTasks }) {
 
                                 {task.files && task.files.length > 0 && (
                                     <div className="col-span-2 col-start-3 row-start-2 md:col-start-5 md:row-span-2 flex justify-center items-center">
-                                        <ul className="">
+                                        <ul>
                                             {task.files.map((file) => (
                                                 <li key={file._id}>
-                                                    <img
-                                                        src={file.file_url}
-                                                        alt="Archivo adjunto"
-                                                        className="h-[100px] md:h-[300px] object-cover rounded-lg shadow-md"
-                                                    />
+                                                    <a href={file.file_url} target="_blank" rel="noopener noreferrer" download>
+                                                        <img
+                                                            src={file.file_url}
+                                                            alt="Archivo adjunto"
+                                                            className="h-[100px] md:h-[300px] object-cover rounded-lg shadow-md hover:opacity-75 transition"
+                                                        />
+                                                    </a>
                                                 </li>
                                             ))}
                                         </ul>

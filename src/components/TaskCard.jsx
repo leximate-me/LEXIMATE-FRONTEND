@@ -77,37 +77,21 @@ function TaskCard({ tasks: initialTasks }) {
                   {tasks.map((task) => (
                     <li
                       onClick={() => handleSelectTask(task.id)}
-                      className="dark:bg-[#1a1a1a] bg-white p-4 rounded-lg shadow-[0px_8px_12px_-6px] border-2 border-gray-300 cursor-pointer"
+                      className="grid grid-cols-6 grid-rows-3 dark:bg-[#1a1a1a] bg-white p-4 rounded-lg shadow-[0px_8px_12px_-6px] border-2 border-gray-300 cursor-pointer"
                       key={task.id}
                     >
-                      <header className="flex justify-between">
-                        <h2 className="text-2xl font-semibold break-words dark:text-white">
-                          {task.title}
-                        </h2>
-                        <div className="flex gap-x-2 items-center"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                          }}>
-                          <Dropdown
-                            onAbandonClass={handleDeleteTask}
-                            classId={classId}
-                            additionalParam={task.id}
-                            msg={'Eliminar tarea'}
-                          />
-                        </div>
-                      </header>
-                      <p className="break-words dark:text-white">{task.description}</p>
-                      <p className="mt-2 dark:text-white"><b>Fecha de entrega: </b>{task.date}</p>
+                      <h2 className="col-span-6 md:col-span-3 text-2xl font-semibold break-words dark:text-white">
+                        {task.title}
+                      </h2>
+                      <p className="col-span-6 md:col-span-3 col-start-1 row-start-2 break-words dark:text-white">{task.description}</p>
+                      <p className="col-span-7 md:col-span-3 row-start-3 dark:text-white"><b>Fecha de entrega: </b>{task.date}</p>
 
                       {task.files && task.files.length > 0 && (
-                        <div className="mt-4">
-                          <h3 className="text-lg font-semibold dark:text-white">
-                            Archivos adjuntos:
-                          </h3>
-                          <ul className="space-y-2">
+                        <div className="col-span-7 md:col-span-2 md:row-span-3 m-2">
+                          <ul className="space-y-2 h-full flex justify-center items-center">
                             {task.files.map((file) => (
                               <li
-                                className="max-w-[50%] md:max-w-[20%]"
+                                className="min-w-full"
                                 key={file._id}
                               >
                                 <img
@@ -120,6 +104,17 @@ function TaskCard({ tasks: initialTasks }) {
                           </ul>
                         </div>
                       )}
+                      <div className="col-start-7 row-start-1 w-fit h-fit"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                        }}>
+                        <Dropdown
+                          onAbandonClass={handleDeleteTask}
+                          classId={classId}
+                          additionalParam={task.id}
+                          msg={'Eliminar tarea'}
+                        />
+                      </div>
                     </li>
                   ))}
                 </ul>
