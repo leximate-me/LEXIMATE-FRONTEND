@@ -73,9 +73,9 @@ const TaskProvider = ({ children }) => {
     }
   };
 
-  const getTask = async (id) => {
+  const getTask = async (classId, taskId) => {
     try {
-      const res = await getTaskRequest(id);
+      const res = await getTaskRequest(classId, taskId);
       return res.data;
     } catch (error) {
       console.log(error);

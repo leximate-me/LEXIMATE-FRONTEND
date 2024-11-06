@@ -10,9 +10,9 @@ const getTasksRequest = async (classId) => {
   }
 };
 
-const getTaskRequest = async (id) => {
+const getTaskRequest = async (classId, taskId) => {
   try {
-    const response = await axios.get(`/task/${id}`);
+    const response = await axios.get(`/class/${classId}/task/${taskId}`);
     return response;
   } catch (error) {
     console.error('Error during get task request:', error);

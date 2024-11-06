@@ -3,9 +3,8 @@ import { AuthProvider } from '../src/context/AuthContext';
 import RegisterPage from './pages/RegisterPage';
 import LoginPage from './pages/LoginPage';
 import HomePage from './pages/HomePage';
-import TaskPage from './pages/TaskPage';
+import TaskByClassPage from './pages/TaskByClassPage';
 import ClassPage from './pages/ClassPage';
-import TaskFormPage from './pages/TaskFormPage';
 import ProtetedRoutes from './components/ProtetedRoutes';
 import { TaskProvider } from './context/TasksContext';
 import { ClassProvider } from './context/ClassContext';
@@ -14,6 +13,7 @@ import LandingPage from './pages/LandingPage';
 import GamesPage from './pages/GamesPage';
 import MemoryGame from './games/MemoryGame';
 import ProfilePage from './pages/AccountSettingsPage';
+import TaskPage from './pages/TaskPage';
 
 function App() {
   return (
@@ -32,11 +32,10 @@ function App() {
                   <Route path="/register" element={<RegisterPage />} />
                   <Route element={<ProtetedRoutes />}>
                     <Route path="/home" element={<HomePage />} />
-                    <Route path="/:classId/task" element={<TaskPage />} />
+                    <Route path="/:classId/tasks" element={<TaskByClassPage />} />
                     <Route path="/classes" element={<ClassPage />} />
-                    <Route path="/tasks/new" element={<TaskFormPage />} />
-                    <Route path="/tasks/:taskId" element={<TaskFormPage />} />
                     <Route path="/profile" element={<ProfilePage />} />
+                    <Route path="/:classId/task/:taskId" element={<TaskPage />} />
                   </Route>
                 </Routes>
               </div>
