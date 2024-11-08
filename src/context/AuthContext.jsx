@@ -50,6 +50,7 @@ const AuthProvider = ({ children }) => {
       await logoutRequest();
       setUser(null);
       setIsAuthenticated(false);
+      window.location.href = '/login';
     } catch (error) {
       console.log(error);
       setError(error.response.data);

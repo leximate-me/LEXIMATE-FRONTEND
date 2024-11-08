@@ -8,15 +8,21 @@ function TaskPage({ tasks: initialTasks }) {
     const { getTask } = useTask();
     const [task, setTask] = useState(initialTasks);
     const [isLoading, setIsLoading] = useState(true);
-    const [comments, setComments] = useState([]);
-    const [newComment, setNewComment] = useState('');
+
+    // Función para formatear la fecha en AAAA/MM/DD
+    const formatDate = (dateString) => {
+        const date = new Date(dateString);
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0'); // Mes comienza en 0, se ajusta sumando 1
+        const day = String(date.getDate()).padStart(2, '0');
+        return `${year}/${month}/${day}`;
+    };
 
     useEffect(() => {
         const loadTask = async () => {
             try {
                 const fetchedTask = await getTask(classId, taskId);
                 setTask(fetchedTask);
-                setComments(fetchedTask.comments || []);
             } catch (error) {
                 console.error('Error al cargar la tarea:', error);
             } finally {
@@ -25,15 +31,6 @@ function TaskPage({ tasks: initialTasks }) {
         };
         loadTask();
     }, [classId, taskId, getTask]);
-
-    const handleAddComment = () => {
-        if (newComment.trim()) {
-            const updatedComments = [...comments, newComment];
-            setComments(updatedComments);
-            setNewComment('');
-            // Agregar lógica para enviar el comentario al servidor si es necesario
-        }
-    };
 
     return (
         <div className="container mx-auto p-6">
@@ -46,12 +43,12 @@ function TaskPage({ tasks: initialTasks }) {
                     {task ? (
                         <div className="space-y-6">
                             {/* Información de la Tarea */}
-                            <div className="grid grid-cols-6 grid-rows-2 p-5 border dark:border-gray-500 rounded-lg shadow-md dark:shadow-[0px_2px_4px_0px_#4a5568]">
-                                <div className="row-start-1 md:row-span-2 w-fit flex flex-col md:gap-10">
+                            <div className="grid grid-cols-6 grid-rows-2 p-2 md:p-5 border dark:border-gray-500 rounded-lg shadow-md dark:shadow-[0px_2px_4px_0px_#4a5568]">
+                                <div className="col-span-6 col-start-1 row-start-1 md:row-span-2 md:col-span-4 flex flex-col items-center md:gap-10 mb-2 md:items-start">
                                     <h1 className="text-2xl md:text-6xl font-bold text-gray-900 dark:text-white mb-4">{task.title}</h1>
                                     <p className="text-md md:text-3xl text-gray-700 dark:text-gray-300 mb-2">{task.description}</p>
                                     <p className="text-md md:text-2xl text-gray-600 dark:text-gray-400">
-                                        <b>Fecha de entrega:</b> {task.due_date}
+                                        <b>Fecha de entrega:</b> {formatDate(task.due_date)}
                                     </p>
                                 </div>
 
@@ -74,40 +71,6 @@ function TaskPage({ tasks: initialTasks }) {
                                 )}
                             </div>
 
-                            {/* Caja de Comentarios */}
-                            <div className="border dark:border-gray-500 p-6 rounded-lg shadow-md dark:shadow-[0px_2px_4px_0px_#4a5568]">
-                                <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">Comentarios</h2>
-
-                                {/* Lista de Comentarios */}
-                                <div className="space-y-4 mb-6">
-                                    {comments.length > 0 ? (
-                                        comments.map((comment, index) => (
-                                            <div key={index} className="bg-gray-100 dark:bg-gray-600 p-4 rounded-md shadow-sm">
-                                                <p className="text-gray-700 dark:text-gray-200">{comment}</p>
-                                            </div>
-                                        ))
-                                    ) : (
-                                        <p className="text-gray-500 dark:text-gray-400">No hay comentarios aún.</p>
-                                    )}
-                                </div>
-
-                                {/* Formulario de Comentario */}
-                                <div className="flex items-center space-x-4">
-                                    <input
-                                        type="text"
-                                        placeholder="Escribe un comentario..."
-                                        value={newComment}
-                                        onChange={(e) => setNewComment(e.target.value)}
-                                        className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                                    />
-                                    <button
-                                        onClick={handleAddComment}
-                                        className="px-4 py-2 bg-indigo-500 text-white rounded-lg hover:bg-indigo-600 transition"
-                                    >
-                                        Comentar
-                                    </button>
-                                </div>
-                            </div>
                         </div>
                     ) : (
                         <p className="text-gray-500 dark:text-gray-400 text-center">Tarea no encontrada</p>

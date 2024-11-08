@@ -10,6 +10,7 @@ import { SlArrowRight, SlArrowLeft } from 'react-icons/sl';
 import SideBar from '../components/SideBar';
 import CreateTaskModal from '../components/CreateTask';
 import { FaPlus } from 'react-icons/fa';
+import CommentsBox from '../components/CommentsBox';
 
 function TaskPage() {
   const { classId } = useParams();
@@ -38,7 +39,7 @@ function TaskPage() {
   };
 
   return (
-    <div className="grid grid-cols-8 grid-rows-8 gap-4 p-2">
+    <div className="grid grid-cols-8 grid-rows-7 md:grid-rows-3 gap-4 p-2">
       {isLoading || isCreating ? (
         <div className="h-[500px] col-start-1 col-end-9 flex justify-center items-center">
           {Loading(isLoading ? 'Cargando tareas...' : 'Creando tarea...')}
@@ -48,7 +49,7 @@ function TaskPage() {
           {user && user.rol === 3 ? (
 
             <>
-              <div className="col-span-8 col-start-1 md:col-span-6 md:col-start-3 md:row-span-4 md:row-start-1">
+              <div className="col-span-8 col-start-1 row-span-1 md:col-span-6 md:col-start-3 md:row-span-1 md:row-start-1">
                 <div
                   className="h-full rounded-lg bg-cover bg-center bg-no-repeat flex flex-col justify-end p-4"
                   style={{
@@ -68,8 +69,10 @@ function TaskPage() {
                   )}
                 </div>
               </div>
+              
+              <CommentsBox />
 
-              <div className="col-span-8 row-span-6 col-start-1 row-start-2 md:row-start-5 md:col-span-6 md:col-start-3">
+              <div className="col-span-8 row-span-4 col-start-1 row-start-4 md:row-start-3 md:row-span-1 md:col-span-6 md:col-start-3">
                 <TaskCard tasks={tasks} key={tasks.id} />
               </div>
 

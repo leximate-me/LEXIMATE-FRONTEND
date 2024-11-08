@@ -52,7 +52,7 @@ function TaskCard({ tasks: initialTasks }) {
   };
 
   return (
-    <div className="m-5 flex justify-center">
+    <div className="flex justify-center">
       {isDeleting ? (
         <div className="flex justify-center h-[100%]">
           {Loading('Eliminando tarea...')}
@@ -72,12 +72,12 @@ function TaskCard({ tasks: initialTasks }) {
             </div>
           ) : (
             <>
-              <div className="grid grid-cols-6 h-52">
+              <div className="w-full">
                 <ul className="col-start-1 col-end-7 space-y-4 m-2">
                   {tasks.map((task) => (
                     <li
                       onClick={() => handleSelectTask(task.id)}
-                      className="grid grid-cols-6 grid-rows-3 dark:bg-[#1a1a1a] bg-white p-4 rounded-lg shadow-[0px_8px_12px_-6px] border-2 border-gray-300 cursor-pointer"
+                      className="grid grid-cols-6 grid-rows-3 dark:bg-[#1a1a1a] bg-white p-4 rounded-lg shadow-[0px_8px_12px_-6px] border border-gray-300 cursor-pointer dark:border-gray-500"
                       key={task.id}
                     >
                       <h2 className="col-span-6 md:col-span-3 text-2xl font-semibold break-words dark:text-white">

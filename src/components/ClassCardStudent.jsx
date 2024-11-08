@@ -53,7 +53,7 @@ export default function ClassCardStudent({ classes }) {
                 <div
                   key={index}
                   onClick={() =>
-                    (window.location.href = `/${classItem.id}/task`)
+                    (window.location.href = `/${classItem.id}/tasks`)
                   } /* Redirigir al hacer clic en la carta */
                   className="card card-compact bg-base-100 w-80 shadow-xl h-fit cursor-pointer"
                 >
