@@ -50,10 +50,21 @@ const deleteClassRequest = async (classId) => {
   }
 };
 
+const getUsersByClassRequest = async (classId) => {
+  try {
+    const response = await axios.get(`/class/${classId}/user`);
+    return response;
+  } catch (error) {
+    console.error('Error during getUsersByClass request:', error);
+    throw error;
+  }
+};
+
 export {
   getClassesRequest,
   createClassesRequest,
   joinClassRequest,
   leaveClassRequest,
   deleteClassRequest,
+  getUsersByClassRequest,
 };

@@ -5,7 +5,9 @@ import {
   joinClassRequest,
   leaveClassRequest,
   deleteClassRequest,
+  getUsersByClassRequest,
 } from '../api/class';
+import { set } from 'react-hook-form';
 
 const ClassContext = createContext();
 
@@ -100,6 +102,17 @@ const ClassProvider = ({ children }) => {
     }
   };
 
+  const getUsersByClass = async (classId) => {
+    try {
+      const res = await getUsersByClassRequest(classId);
+      return res.data;
+    } catch (error) {
+      console.log('Error during get users by class request:', error);
+      setError(error.response.data);
+      throw error;
+    }
+  };
+
   return (
     <ClassContext.Provider
       value={{
@@ -114,6 +127,7 @@ const ClassProvider = ({ children }) => {
         leaveClass,
         deleteClass,
         isCreating,
+        getUsersByClass,
       }}
     >
       {children}

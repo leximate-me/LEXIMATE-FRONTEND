@@ -17,6 +17,7 @@ const PostProvider = ({ children }) => {
   const [error, setError] = useState(null);
   const [isCreating, setIsCreating] = useState(false);
   const [posts, setPosts] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   const clearError = () => {
     setError(null);
@@ -26,9 +27,11 @@ const PostProvider = ({ children }) => {
     try {
       const res = await getPostsRequest(classId);
       setPosts(res.data);
+      setIsLoading(false);
     } catch (error) {
       console.error('Error during get posts request:', error);
       setError(error.response?.data || 'Error fetching posts');
+      setIsLoading(false);
       throw error;
     }
   };
@@ -68,6 +71,7 @@ const PostProvider = ({ children }) => {
         error,
         clearError,
         deletePost,
+        isLoading,
       }}
     >
       {children}

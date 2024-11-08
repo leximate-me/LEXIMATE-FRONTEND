@@ -12,6 +12,7 @@ import CreateTaskModal from '../components/CreateTask';
 import { FaPlus } from 'react-icons/fa';
 import CommentsBox from '../components/CommentsBox';
 import NavbarClass from '../components/NavbarClass';
+import People from '../components/People';
 
 function TaskPage() {
   const { classId } = useParams();
@@ -48,21 +49,14 @@ function TaskPage() {
       case 'announcements':
         return <CommentsBox />;
       case 'people':
-        return (
-          <div className="bg-white p-4 rounded shadow">
-            <h2 className="text-xl font-bold mb-4">Personas en la clase</h2>
-            {currentClass?.students?.map((student) => (
-              <p key={student.id}>{student.name}</p>
-            ))}
-          </div>
-        );
+        return <People />;
       default:
         return null;
     }
   };
 
   return (
-    <div className="grid grid-cols-8 grid-rows-[50px_100px,repeat(4,minmax(0,1fr))] md:grid-rows-[50px_250px,repeat(4,minmax(0,1fr))] gap-4 p-2">
+    <div className="grid grid-cols-8 grid-rows-[50px_100px,repeat(1,minmax(0,1fr))] md:grid-rows-[50px_250px,repeat(3,minmax(0,1fr))] gap-4 p-2">
       {isLoading || isCreating ? (
         <div className="h-[500px] col-start-1 col-end-9 flex justify-center items-center">
           {Loading(isLoading ? 'Cargando tareas...' : 'Creando tarea...')}

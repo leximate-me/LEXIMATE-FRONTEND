@@ -3,13 +3,19 @@ import { useForm } from 'react-hook-form';
 import { usePost } from '../context/PostContext';
 import { useParams } from 'react-router-dom';
 import Dropdown from './ui/DropDownButton';
+import { Riple } from 'react-loading-indicators';
+import { div } from 'framer-motion/client';
 
 function CommentsBox() {
     const { classId } = useParams();
     const { handleSubmit, register, formState: { errors } } = useForm();
-    const { createPost, getPosts, deletePost, posts } = usePost();
+    const { createPost, getPosts, deletePost, posts, isLoading } = usePost();
 
     const [isDeleting, setIsDeleting] = useState(false);
+
+    useEffect(() => {
+        console.log(isLoading);
+    }, [isLoading]);
 
     // Cargar posts al montar el componente
     useEffect(() => {
@@ -79,30 +85,38 @@ function CommentsBox() {
 
             {/* Lista de Comentarios */}
             <div className="mt-2 w-full">
-                {Array.isArray(posts) && posts.length === 0 ? (
-                    <p className="text-gray-500 dark:text-gray-400">No hay anuncios aún.</p>
+                {isLoading ? (
+                    <div className='flex justify-center'>
+                        <Riple color="#cec702" size="large" />
+                    </div>
                 ) : (
-                    posts?.map((post) => (
-                        <div key={post.id} className="mb-2 grid grid-cols-6 p-2 border border-gray-300 rounded-lg">
-                            <div
-                                className="col-start-8 w-fit h-fit"
-                                onClick={(e) => {
-                                    e.stopPropagation();
-                                }}
-                            >
-                                <Dropdown
-                                    onAbandonClass={() => handleDeletePost(post.id)}
-                                    classId={classId}
-                                    additionalParam={post.id}
-                                    msg={'Eliminar anuncio'}
-                                />
-                            </div>
-                            <div className='col-span-5 row-start-1 col-start-1'>
-                                <h3 className="text-lg font-bold">{post.title}</h3>
-                                <p>{post.content}</p>
-                            </div>
-                        </div>
-                    ))
+                    <>
+                        {Array.isArray(posts) && posts.length === 0 ? (
+                            <p className="text-gray-500 dark:text-gray-400">No hay anuncios aún.</p>
+                        ) : (
+                            posts?.map((post) => (
+                                <div key={post.id} className="mb-2 grid grid-cols-6 p-2 border border-gray-300 rounded-lg">
+                                    <div
+                                        className="col-start-8 w-fit h-fit"
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                        }}
+                                    >
+                                        <Dropdown
+                                            onAbandonClass={() => handleDeletePost(post.id)}
+                                            classId={classId}
+                                            additionalParam={post.id}
+                                            msg={'Eliminar anuncio'}
+                                        />
+                                    </div>
+                                    <div className='col-span-5 row-start-1 col-start-1'>
+                                        <h3 className="text-lg font-bold">{post.title}</h3>
+                                        <p>{post.content}</p>
+                                    </div>
+                                </div>
+                            ))
+                        )}
+                    </>
                 )}
             </div>
         </div>
