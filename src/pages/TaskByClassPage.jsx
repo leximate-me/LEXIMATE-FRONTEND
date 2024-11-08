@@ -62,7 +62,7 @@ function TaskPage() {
   };
 
   return (
-    <div className="grid grid-cols-8 grid-rows-[50px,repeat(5,minmax(0,1fr))] md:grid-rows-[50px,repeat(4,minmax(0,1fr))] gap-4 p-2">
+    <div className="grid grid-cols-8 grid-rows-[50px_100px,repeat(4,minmax(0,1fr))] md:grid-rows-[50px_250px,repeat(4,minmax(0,1fr))] gap-4 p-2">
       {isLoading || isCreating ? (
         <div className="h-[500px] col-start-1 col-end-9 flex justify-center items-center">
           {Loading(isLoading ? 'Cargando tareas...' : 'Creando tarea...')}
@@ -72,7 +72,7 @@ function TaskPage() {
           <NavbarClass onSelect={setSelectedView} selectedView={selectedView} />
 
           {/* Encabezado con tamaño fijo */}
-          <div className="col-span-8 col-start-1 row-span-1 row-start-2 md:col-span-6 md:col-start-3 md:row-span-2 md:row-start-2">
+          <div className="col-span-8 col-start-1 row-span-1 row-start-2 md:col-span-6 md:col-start-3 md:row-span-1 md:row-start-2">
             <div
               className="md:h-[250px] rounded-lg bg-cover bg-center bg-no-repeat flex flex-col justify-end p-4 overflow-hidden"
               style={{
@@ -95,7 +95,7 @@ function TaskPage() {
 
 
           {/* Renderizar contenido basado en la opción seleccionada */}
-          <div className="col-span-8 row-span-4 col-start-1 md:col-span-6 md:col-start-3 md:row-span-2 md:row-start-4">
+          <div className="col-span-8 row-start-3 col-start-1 md:col-span-6 md:col-start-3 md:row-span-2 md:row-start-3">
             {renderContent()}
           </div>
 

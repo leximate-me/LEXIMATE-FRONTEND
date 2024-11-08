@@ -7,7 +7,6 @@ import {
   getTaskRequest,
   updateTaskRequest,
 } from '../api/tasks';
-import { set } from 'react-hook-form';
 
 const TaskContext = createContext();
 

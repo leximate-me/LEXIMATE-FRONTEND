@@ -87,11 +87,11 @@ function TaskCard({ tasks: initialTasks }) {
                       <p className="col-span-7 md:col-span-3 row-start-3 dark:text-white"><b>Fecha de entrega: </b>{task.date}</p>
 
                       {task.files && task.files.length > 0 && (
-                        <div className="col-span-7 md:col-span-2 md:row-span-3 m-2">
-                          <ul className="space-y-2 h-full flex justify-center items-center">
+                        <div className="col-span-7 md:col-span-3 md:row-span-3 m-2">
+                          <ul className="space-y-2 h-full">
                             {task.files.map((file) => (
                               <li
-                                className="min-w-full"
+                                className="min-w-full flex justify-center"
                                 key={file._id}
                               >
                                 <img
