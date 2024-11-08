@@ -2,7 +2,7 @@ import React from 'react'
 
 function CommentsBox() {
     return (
-        <div className="col-span-8 row-span-2 row-start-2 md:col-span-6 md:col-start-3 md:row-span-1 md:row-start-2 border border-gray-300 dark:border-gray-500 p-6 rounded-lg shadow-[0px_9px_15px_-7px_rgba(0,0,0,0.75)]">
+        <div className="col-span-8 row-span-2 row-start-3 md:col-span-6 md:col-start-3 md:row-span-1 md:row-start-3 border border-gray-300 dark:border-gray-500 p-6 rounded-lg shadow-[0px_9px_15px_-7px_rgba(0,0,0,0.75)]">
             <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">Comentarios</h2>
 
             {/* Lista de Comentarios */}

@@ -11,12 +11,14 @@ import SideBar from '../components/SideBar';
 import CreateTaskModal from '../components/CreateTask';
 import { FaPlus } from 'react-icons/fa';
 import CommentsBox from '../components/CommentsBox';
+import NavbarClass from '../components/NavbarClass';
 
 function TaskPage() {
   const { classId } = useParams();
   const [currentClass, setCurrentClass] = useState(null);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const [selectedView, setSelectedView] = useState('tasks'); // Estado para la vista seleccionada
   const { getTasks, tasks, isLoading, isCreating } = useTask();
   const { getClasses, classes } = useClass();
   const { user } = useAuth();
@@ -38,136 +40,110 @@ function TaskPage() {
     setIsSidebarOpen((prev) => !prev);
   };
 
+  // Función para renderizar el contenido basado en la selección
+  const renderContent = () => {
+    switch (selectedView) {
+      case 'tasks':
+        return <TaskCard tasks={tasks} key={tasks.id} />;
+      case 'announcements':
+        return <CommentsBox />;
+      case 'people':
+        return (
+          <div className="bg-white p-4 rounded shadow">
+            <h2 className="text-xl font-bold mb-4">Personas en la clase</h2>
+            {currentClass?.students?.map((student) => (
+              <p key={student.id}>{student.name}</p>
+            ))}
+          </div>
+        );
+      default:
+        return null;
+    }
+  };
+
   return (
-    <div className="grid grid-cols-8 grid-rows-7 md:grid-rows-3 gap-4 p-2">
+    <div className="grid grid-cols-8 grid-rows-[50px,repeat(5,minmax(0,1fr))] md:grid-rows-[50px,repeat(4,minmax(0,1fr))] gap-4 p-2">
       {isLoading || isCreating ? (
         <div className="h-[500px] col-start-1 col-end-9 flex justify-center items-center">
           {Loading(isLoading ? 'Cargando tareas...' : 'Creando tarea...')}
         </div>
       ) : (
         <>
-          {user && user.rol === 3 ? (
+          <NavbarClass onSelect={setSelectedView} selectedView={selectedView} />
 
-            <>
-              <div className="col-span-8 col-start-1 row-span-1 md:col-span-6 md:col-start-3 md:row-span-1 md:row-start-1">
-                <div
-                  className="h-full rounded-lg bg-cover bg-center bg-no-repeat flex flex-col justify-end p-4"
-                  style={{
-                    backgroundImage: `url(${bgImg})`,
-                    backgroundSize: 'cover',
-                  }}
-                >
-                  {currentClass && (
-                    <>
-                      <h1 className="text-3xl md:text-5xl text-white">
-                        <b>{currentClass.name}</b>
-                      </h1>
-                      <p className="text-xl md:text-2xl text-white">
-                        {currentClass.description}
-                      </p>
-                    </>
-                  )}
-                </div>
-              </div>
-              
-              <CommentsBox />
-
-              <div className="col-span-8 row-span-4 col-start-1 row-start-4 md:row-start-3 md:row-span-1 md:col-span-6 md:col-start-3">
-                <TaskCard tasks={tasks} key={tasks.id} />
-              </div>
-
-              {/* Fondo opaco cuando la sidebar está abierta */}
-              {isSidebarOpen && (
-                <div className="fixed inset-0 z-10 bg-black opacity-50 md:hidden" onClick={toggleSidebar}></div>
+          {/* Encabezado con tamaño fijo */}
+          <div className="col-span-8 col-start-1 row-span-1 row-start-2 md:col-span-6 md:col-start-3 md:row-span-2 md:row-start-2">
+            <div
+              className="md:h-[250px] rounded-lg bg-cover bg-center bg-no-repeat flex flex-col justify-end p-4 overflow-hidden"
+              style={{
+                backgroundImage: `url(${bgImg})`,
+                backgroundSize: 'cover',
+              }}
+            >
+              {currentClass && (
+                <>
+                  <h1 className="text-3xl md:text-5xl text-white truncate">
+                    <b>{currentClass.name}</b>
+                  </h1>
+                  <p className="text-xl md:text-2xl text-white line-clamp-2">
+                    {currentClass.description}
+                  </p>
+                </>
               )}
+            </div>
+          </div>
 
-              {/* Sidebar para dispositivos móviles */}
-              <div className={`fixed top-[calc(4*100%/8)] min-h-fit p-2 left-0 z-20 w-4/5 transform transition-all duration-500 md:hidden ${isSidebarOpen ? 'translate-x-0 w-4/5' : '-translate-x-full'}`}>
-                <SideBar onClose={toggleSidebar} />
-              </div>
 
-              {/* Botón que cambia según el estado de la sidebar */}
-              <button
-                className={`md:hidden fixed top-[calc(4*100%/8)] pb-5 left-2 z-30 h-fit text-black rounded transform -translate-y-1/2`}
-                onClick={toggleSidebar}
-              >
-                {isSidebarOpen ? <SlArrowLeft /> : <SlArrowRight />}
-              </button>
+          {/* Renderizar contenido basado en la opción seleccionada */}
+          <div className="col-span-8 row-span-4 col-start-1 md:col-span-6 md:col-start-3 md:row-span-2 md:row-start-4">
+            {renderContent()}
+          </div>
 
-              {/* Sidebar siempre visible en desktop */}
-              <div className="hidden md:block fixed top-[65px] min-h-fit p-2 left-0 z-20 w-1/5">
-                <SideBar />
-              </div>
-              <div className="fixed bottom-8 right-8">
-                <button
-                  onClick={() => setShowModal(true)}
-                  className="relative w-14 h-14 bg-blue-600 text-white rounded-full p-4 hover:bg-blue-700 transition duration-200 group"
-                >
-                  <FaPlus className="absolute left-5 bottom-5" />
-                  <span className="absolute bottom-full mb-2 w-20 left-1/2 -translate-x-1/2 bg-gray-800 text-white text-xs rounded py-1 px-2 opacity-0 transition-opacity duration-200 pointer-events-none group-hover:opacity-100">
-                    Crear una tarea
-                  </span>
-                </button>
-              </div>
-              <CreateTaskModal
-                isOpen={showModal}
-                onClose={() => setShowModal(false)}
-              />
-            </>
+          {/* Fondo opaco cuando la sidebar está abierta */}
+          {isSidebarOpen && (
+            <div
+              className="fixed inset-0 z-10 bg-black opacity-50 md:hidden"
+              onClick={toggleSidebar}
+            ></div>
+          )}
 
-          ) : user && user.rol === 2 ? (
+          {/* Sidebar para dispositivos móviles */}
+          <div
+            className={`fixed top-[calc(4*100%/8)] min-h-fit p-2 left-0 z-20 w-4/5 transform transition-all duration-500 md:hidden ${isSidebarOpen ? 'translate-x-0 w-4/5' : '-translate-x-full'
+              }`}
+          >
+            <SideBar onClose={toggleSidebar} />
+          </div>
 
-            <>
-              <div className="col-span-8 col-start-1 md:col-span-6 md:col-start-3 md:row-span-5 md:row-start-1">
-                <div
-                  className="h-full rounded-lg bg-cover bg-center bg-no-repeat flex flex-col justify-end p-4"
-                  style={{
-                    backgroundImage: `url(${bgImg})`,
-                    backgroundSize: 'cover',
-                  }}
-                >
-                  {currentClass && (
-                    <>
-                      <h1 className="text-3xl md:text-5xl text-white">
-                        <b>{currentClass.name}</b>
-                      </h1>
-                      <p className="text-xl md:text-2xl text-white">
-                        {currentClass.description}
-                      </p>
-                    </>
-                  )}
-                </div>
-              </div>
+          {/* Botón que cambia según el estado de la sidebar */}
+          <button
+            className={`md:hidden fixed top-[calc(4*100%/8)] pb-5 left-2 z-30 h-fit text-black rounded transform -translate-y-1/2`}
+            onClick={toggleSidebar}
+          >
+            {isSidebarOpen ? <SlArrowLeft /> : <SlArrowRight />}
+          </button>
 
-              <div className="col-span-8 row-span-6 col-start-1 row-start-2 md:row-start-6 md:col-span-6 md:col-start-3">
-                <TaskCard tasks={tasks} key={tasks.id} />
-              </div>
+          {/* Sidebar siempre visible en desktop */}
+          <div className="hidden md:block fixed top-[65px] min-h-fit p-2 left-0 z-20 w-1/5">
+            <SideBar />
+          </div>
 
-              {/* Fondo opaco cuando la sidebar está abierta */}
-              {isSidebarOpen && (
-                <div className="fixed inset-0 z-10 bg-black opacity-50 md:hidden" onClick={toggleSidebar}></div>
-              )}
+          <div className="fixed bottom-8 right-8">
+            <button
+              onClick={() => setShowModal(true)}
+              className="relative w-14 h-14 bg-blue-600 text-white rounded-full p-4 hover:bg-blue-700 transition duration-200 group"
+            >
+              <FaPlus className="absolute left-5 bottom-5" />
+              <span className="absolute bottom-full mb-2 w-20 left-1/2 -translate-x-1/2 bg-gray-800 text-white text-xs rounded py-1 px-2 opacity-0 transition-opacity duration-200 pointer-events-none group-hover:opacity-100">
+                Crear una tarea
+              </span>
+            </button>
+          </div>
 
-              {/* Sidebar para dispositivos móviles */}
-              <div className={`fixed top-[calc(4*100%/8)] min-h-fit p-2 left-0 z-20 w-4/5 transform transition-all duration-500 md:hidden ${isSidebarOpen ? 'translate-x-0 w-4/5' : '-translate-x-full'}`}>
-                <SideBar onClose={toggleSidebar} />
-              </div>
-
-              {/* Botón que cambia según el estado de la sidebar */}
-              <button
-                className={`md:hidden fixed top-[calc(4*100%/8)] pb-5 left-2 z-30 h-fit text-black rounded transform -translate-y-1/2`}
-                onClick={toggleSidebar}
-              >
-                {isSidebarOpen ? <SlArrowLeft /> : <SlArrowRight />}
-              </button>
-
-              {/* Sidebar siempre visible en desktop */}
-              <div className="hidden md:block fixed top-[65px] min-h-fit p-2 left-0 z-20 w-1/5">
-                <SideBar />
-              </div>
-            </>
-
-          ) : null}
+          <CreateTaskModal
+            isOpen={showModal}
+            onClose={() => setShowModal(false)}
+          />
         </>
       )}
     </div>
