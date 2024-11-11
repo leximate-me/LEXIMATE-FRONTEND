@@ -10,6 +10,16 @@ const getPostsRequest = async (classId) => {
   }
 };
 
+const getPostByIdRequest = async (classId, postId) => {
+  try {
+    const response = await axios.get(`/class/${classId}/post/${postId}`);
+    return response;
+  } catch (error) {
+    console.error('Error during get post by id request:', error);
+    throw error;
+  }
+};
+
 const createPostRequest = async (classId, post) => {
   try {
     const response = await axios.post(`/class/${classId}/post`, post);
@@ -35,4 +45,5 @@ export {
   createPostRequest,
   getPostsRequest,
   deletePostRequest,
+  getPostByIdRequest,
 };

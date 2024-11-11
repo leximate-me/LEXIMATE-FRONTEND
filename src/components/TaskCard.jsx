@@ -91,11 +91,11 @@ function TaskCard({ tasks: initialTasks }) {
                           <ul className="space-y-2 h-full">
                             {task.files.map((file) => (
                               <li
-                                className="min-w-full flex justify-center"
+                                className="w-full flex justify-center"
                                 key={file._id}
                               >
                                 <img
-                                  className="rounded-lg"
+                                  className="rounded-lg max-w-96 max-h-96"
                                   src={file.file_url}
                                   alt=""
                                 />

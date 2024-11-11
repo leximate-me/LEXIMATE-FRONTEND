@@ -15,6 +15,7 @@ import GamesPage from './pages/GamesPage';
 import MemoryGame from './games/MemoryGame';
 import ProfilePage from './pages/AccountSettingsPage';
 import TaskPage from './pages/TaskPage';
+import CommentsPage from './pages/CommentsPage';
 
 function App() {
   return (
@@ -38,6 +39,7 @@ function App() {
                       <Route path="/classes" element={<ClassPage />} />
                       <Route path="/profile" element={<ProfilePage />} />
                       <Route path="/:classId/task/:taskId" element={<TaskPage />} />
+                      <Route path="/:classId/task/post/:commentId" element={<CommentsPage />} />
                     </Route>
                   </Routes>
                 </div>

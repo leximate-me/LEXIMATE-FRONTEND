@@ -4,7 +4,7 @@ import { usePost } from '../context/PostContext';
 import { useParams } from 'react-router-dom';
 import Dropdown from './ui/DropDownButton';
 import { Riple } from 'react-loading-indicators';
-import { div } from 'framer-motion/client';
+import { useNavigate } from 'react-router-dom';
 
 function CommentsBox() {
     const { classId } = useParams();
@@ -12,6 +12,13 @@ function CommentsBox() {
     const { createPost, getPosts, deletePost, posts, isLoading } = usePost();
 
     const [isDeleting, setIsDeleting] = useState(false);
+
+    const navigate = useNavigate();
+
+    const handleSelectTask = (commentId) => {
+        console.log('comentario seleccionado:', commentId);
+        navigate(`/${classId}/task/post/${commentId}`);
+    }
 
     useEffect(() => {
         console.log(isLoading);
@@ -22,6 +29,7 @@ function CommentsBox() {
         const fetchPosts = async () => {
             try {
                 await getPosts(classId);
+                console.log('posts:', posts);
             } catch (error) {
                 console.error('Error al obtener los posts:', error);
             }
@@ -61,7 +69,7 @@ function CommentsBox() {
                     <input
                         type="text"
                         placeholder="Escribe un título para el anuncio..."
-                        className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 mb-5"
+                        className="dark:bg-[#1a1a1a] w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 mb-5"
                         {...register('title', { required: true })}
                     />
                     {errors.title && <span className="text-red-500">Este campo es requerido</span>}
@@ -69,7 +77,7 @@ function CommentsBox() {
                     <label>Contenido:</label>
                     <textarea
                         placeholder="Contenido del anuncio..."
-                        className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 mb-5"
+                        className="dark:bg-[#1a1a1a] w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 mb-5"
                         {...register('content', { required: true })}
                     />
                     {errors.content && <span className="text-red-500">Este campo es requerido</span>}
@@ -95,7 +103,10 @@ function CommentsBox() {
                             <p className="text-gray-500 dark:text-gray-400">No hay anuncios aún.</p>
                         ) : (
                             posts?.map((post) => (
-                                <div key={post.id} className="mb-2 grid grid-cols-6 p-2 border border-gray-300 rounded-lg">
+                                <div
+                                    onClick={ () => handleSelectTask(post.id) }
+                                    key={post.id}
+                                    className="dark:border-gray-600 mb-2 grid grid-cols-6 p-2 border border-gray-300 rounded-lg cursor-pointer">
                                     <div
                                         className="col-start-8 w-fit h-fit"
                                         onClick={(e) => {
@@ -109,7 +120,7 @@ function CommentsBox() {
                                             msg={'Eliminar anuncio'}
                                         />
                                     </div>
-                                    <div className='col-span-5 row-start-1 col-start-1'>
+                                    <div className='col-span-5 row-start-1 col-start-1 dark:text-white dark:hover:text-blue-400 hover:text-blue-700'>
                                         <h3 className="text-lg font-bold">{post.title}</h3>
                                         <p>{post.content}</p>
                                     </div>

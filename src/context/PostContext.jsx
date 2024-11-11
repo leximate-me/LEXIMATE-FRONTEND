@@ -1,5 +1,5 @@
 import { createContext, useContext, useState } from 'react';
-import { getPostsRequest, createPostRequest, deletePostRequest } from '../api/post';
+import { getPostsRequest, createPostRequest, deletePostRequest, getPostByIdRequest } from '../api/post';
 
 const PostContext = createContext();
 
@@ -61,6 +61,19 @@ const PostProvider = ({ children }) => {
     }
   }
 
+  const getPostById = async (classId, postId) => {
+    try {
+      const res = await getPostByIdRequest(classId, postId);
+      setIsLoading(false);
+      return res.data;
+    } catch (error) {
+      console.error('Error during get post by id request:', error);
+      setError(error.response?.data || 'Error fetching post');
+      setIsLoading(false);
+      throw error;
+    }
+  }
+
   return (
     <PostContext.Provider
       value={{
@@ -72,6 +85,7 @@ const PostProvider = ({ children }) => {
         clearError,
         deletePost,
         isLoading,
+        getPostById,
       }}
     >
       {children}
