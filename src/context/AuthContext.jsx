@@ -5,6 +5,7 @@ import {
   verifyToken,
   logoutRequest,
   verifyEmailRequest,
+  getProfileRequest,
 } from '../api/auth';
 
 const AuthContext = createContext();
@@ -24,6 +25,7 @@ const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [profile, setProfile] = useState(null);
 
   const signUp = async (user) => {
     try {
@@ -90,6 +92,15 @@ const AuthProvider = ({ children }) => {
     }
   };
 
+  const getProfile = async () => {
+    try {
+      const res = await getProfileRequest();
+      setProfile(res.data.user);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     updateUserFromToken();
   }, []);
@@ -106,6 +117,8 @@ const AuthProvider = ({ children }) => {
         logOut,
         clearError,
         verifyEmail,
+        getProfile,
+        profile,
       }}
     >
       {children}

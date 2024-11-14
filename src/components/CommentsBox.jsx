@@ -9,7 +9,8 @@ import { useNavigate } from 'react-router-dom';
 function CommentsBox() {
     const { classId } = useParams();
     const { handleSubmit, register, formState: { errors } } = useForm();
-    const { createPost, getPosts, deletePost, posts, isLoading } = usePost();
+    const { createPost, getPosts, deletePost, posts } = usePost();
+    const [isLoading, setIsLoading] = useState(true);
 
     const [isDeleting, setIsDeleting] = useState(false);
 
@@ -29,6 +30,7 @@ function CommentsBox() {
         const fetchPosts = async () => {
             try {
                 await getPosts(classId);
+                setIsLoading(false);
                 console.log('posts:', posts);
             } catch (error) {
                 console.error('Error al obtener los posts:', error);

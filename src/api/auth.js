@@ -50,10 +50,21 @@ const verifyEmailRequest = async () => {
   }
 };
 
+const getProfileRequest = async () => {
+  try {
+    const response = await axios.get(`/auth/profile`);
+    return response;
+  } catch (error) {
+    console.error('Error during profile request:', error);
+    throw error;
+  }
+};
+
 export {
   registerRequest,
   loginRequest,
   verifyToken,
   logoutRequest,
   verifyEmailRequest,
+  getProfileRequest,
 };

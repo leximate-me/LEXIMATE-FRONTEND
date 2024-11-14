@@ -77,25 +77,27 @@ function TaskCard({ tasks: initialTasks }) {
                   {tasks.map((task) => (
                     <li
                       onClick={() => handleSelectTask(task.id)}
-                      className="grid grid-cols-6 grid-rows-3 dark:bg-[#1a1a1a] bg-white p-4 rounded-lg shadow-[0px_8px_12px_-6px] border border-gray-300 cursor-pointer dark:border-gray-500"
+                      className="grid grid-cols-6 dark:bg-[#1a1a1a] p-4 rounded-lg shadow-[0px_8px_12px_-6px] border border-gray-300 cursor-pointer dark:border-gray-500"
                       key={task.id}
                     >
-                      <h2 className="col-span-6 md:col-span-3 text-2xl font-semibold break-words dark:text-white">
-                        {task.title}
-                      </h2>
-                      <p className="col-span-6 md:col-span-3 col-start-1 row-start-2 break-words dark:text-white">{task.description}</p>
-                      <p className="col-span-7 md:col-span-3 row-start-3 dark:text-white"><b>Fecha de entrega: </b>{task.date}</p>
+                      <div className='col-span-6 md:col-span-3 flex flex-col gap-5'>
+                        <h2 className="col-span-6 md:col-span-3 text-2xl font-semibold break-words dark:text-white">
+                          {task.title}
+                        </h2>
+                        <p className="col-span-6 md:col-span-3 col-start-1 break-words dark:text-white">{task.description}</p>
+                        <p className="col-span-7 md:col-span-3 dark:text-white"><b>Fecha de entrega: </b>{task.date}</p>
+                      </div>
 
                       {task.files && task.files.length > 0 && (
-                        <div className="col-span-7 md:col-span-3 md:row-span-3 m-2">
-                          <ul className="space-y-2 h-full">
-                            {task.files.map((file) => (
+                        <div className="col-span-7 md:col-span-3 m-2 h-fit">
+                          <ul className="space-y-2 h-fit">
+                            {task.files.map((file, index) => (
                               <li
                                 className="w-full flex justify-center"
-                                key={file._id}
+                                key={index}
                               >
                                 <img
-                                  className="rounded-lg max-w-96 max-h-96"
+                                  className="rounded-lg max-w-52 max-h-52"
                                   src={file.file_url}
                                   alt=""
                                 />

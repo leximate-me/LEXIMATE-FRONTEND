@@ -4,35 +4,56 @@ import { useAuth } from '../context/AuthContext';
 import { ButtonLink } from './ui/ButtonLink';
 import ToggleTheme from './ToggleTheme';
 import logo from '../assets/logo-leximate.png';
-import { HiUser, HiBell, HiChatAlt } from "react-icons/hi";
+import { HiUser, HiBell, HiChatAlt } from 'react-icons/hi';
 
 function NavBar() {
-  const { isAuthenticated, logOut } = useAuth();
+  const { isAuthenticated, logOut, user, getProfile, profile } = useAuth();
   const location = useLocation();
 
   const [isOpen, setIsOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
 
-  const toggleDropdown = () => setIsOpen(!isOpen);
-
   const dropdownRef = useRef(null);
+  const profileButtonRef = useRef(null);
+
+  const [isProfileLoaded, setIsProfileLoaded] = useState(false);
+
+  useEffect(() => {
+    const getProfileData = async () => {
+      if (isAuthenticated && !isProfileLoaded) {
+        try {
+          await getProfile();
+          setIsProfileLoaded(true);
+        } catch (error) {
+          console.error('Error getting profile:', error);
+        }
+      }
+    };
+    getProfileData();
+  }, [isAuthenticated, isProfileLoaded, getProfile]);
+
 
   const handleOutsideClick = (event) => {
-    // Verifica si el menú está abierto y el clic fue fuera del contenedor
-    if (isProfileOpen && dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+    // Verifica si el clic ocurrió fuera tanto del dropdown como del botón de perfil
+    if (
+      isProfileOpen &&
+      dropdownRef.current &&
+      !dropdownRef.current.contains(event.target) &&
+      profileButtonRef.current &&
+      !profileButtonRef.current.contains(event.target)
+    ) {
       setIsProfileOpen(false);
     }
   };
 
   useEffect(() => {
-    // Cambia a `mousedown` para capturar clics fuera del menú más rápido
     document.addEventListener('mousedown', handleOutsideClick);
-
-    // Limpia el evento cuando el componente se desmonte
     return () => {
       document.removeEventListener('mousedown', handleOutsideClick);
     };
   }, [isProfileOpen]);
+
+  const toggleDropdown = () => setIsOpen(!isOpen);
 
   return (
     <header
@@ -67,86 +88,106 @@ function NavBar() {
               <rect y="30" width="100" height="15"></rect>
               <rect y="60" width="100" height="15"></rect>
             </svg>
-          </button>)
-        }
-
+          </button>
+        )}
       </div>
 
       {/* NAVBAR CON SESIÓN INICIADA */}
       {isAuthenticated ? (
-
         <div className="flex flex-col-reverse items-center md:flex-row flex-1 md:justify-end">
           {/* Opciones de la Navbar */}
           <div
-            className={`md:absolute w-full flex flex-col justify-center gap-8 md:gap-20 md:flex-row items-center order-2 md:order-1 ${isOpen ? 'flex' : 'hidden'
-              } md:flex`}
+            className={`md:absolute w-full flex flex-col justify-center gap-8 md:gap-20 md:flex-row items-center order-2 md:order-1 ${
+              isOpen ? 'flex' : 'hidden'
+            } md:flex`}
           >
-
-            <Link className="text-md font-bold leading-normal hover:border-b-2 border-black dark:text-[#fffd92] dark:hover:border-b-[#fffd92]" to="/classes">
+            <Link
+              className="text-md font-bold leading-normal hover:border-b-2 border-black dark:text-[#fffd92] dark:hover:border-b-[#fffd92]"
+              to="/classes"
+            >
               Clases
             </Link>
-            <Link className="text-md font-bold leading-normal hover:border-b-2 border-black dark:text-[#fffd92] dark:hover:border-b-[#fffd92]" to="/games">
+            <Link
+              className="text-md font-bold leading-normal hover:border-b-2 border-black dark:text-[#fffd92] dark:hover:border-b-[#fffd92]"
+              to="/games"
+            >
               Juegos interactivos
             </Link>
           </div>
 
           {/* Botones de la Navbar */}
           <div
-            className={`z-50 flex-col-reverse md:flex-row items-center gap-5 order-1 md:order-2 mt-3 md:m-0 ${isOpen ? 'flex' : 'hidden'
-              } md:flex px-5`}
+            className={`z-50 flex-col-reverse md:flex-row items-center gap-5 order-1 md:order-2 mt-3 md:m-0 ${
+              isOpen ? 'flex' : 'hidden'
+            } md:flex px-5`}
           >
-
-
-            <div className='flex flex-col gap-5 md:flex-row items-center'>
-
-              <div className='flex gap-2 px-3'>
-                <div>
-                  <div
-                    onClick={() => setIsProfileOpen(!isProfileOpen)}
-                    className="w-fit p-1 cursor-pointer rounded-full hover:bg-gray-300 hover:bg-opacity-60 dark:hover:bg-gray-600 transition-all duration-200">
-                    <HiUser className='text-3xl' />
-                  </div>
+            <div className="flex flex-col gap-5 md:flex-row items-center">
+              <div className="flex gap-2 px-3">
+                {/* Botón de perfil */}
+                <div
+                  ref={profileButtonRef}
+                  onClick={() => setIsProfileOpen(!isProfileOpen)}
+                  className="border border-gray-700 rounded-full cursor-pointer"
+                >
+                  {profile && profile.avatar ? (
+                    <img
+                      src={profile.avatar.file_url}
+                      alt="Avatar del usuario"
+                      className="w-10 h-10 rounded-full object-cover"
+                    />
+                  ) : (
+                    <HiUser className="text-3xl" />
+                  )}
 
                   {/* Contenedor de opciones de perfil */}
                   <div
                     ref={dropdownRef}
-                    className={`absolute right-48 mt-2 w-fit flex flex-col bg-white dark:bg-gray-800 rounded-lg shadow-lg p-3 transition-all duration-300 ease-out transform ${isProfileOpen ? 'opacity-100 scale-100' : 'opacity-0 scale-95 pointer-events-none'
-                      }`}>
-                    <Link to='/profile'>
-                      <p className="text-black dark:text-white dark:hover:hover:bg-gray-700 hover:bg-gray-100 p-3 rounded-lg transition-all duration-200">Configuración del perfíl</p>
+                    className={`absolute right-28 md:right-44 mt-2 w-fit flex flex-col bg-white dark:bg-gray-800 rounded-lg shadow-lg p-3 transition-all duration-300 ease-out transform ${
+                      isProfileOpen
+                        ? 'opacity-100 scale-100'
+                        : 'opacity-0 scale-95 pointer-events-none'
+                    }`}
+                  >
+                    <Link to="/profile">
+                      <p className="text-black dark:text-white dark:hover:bg-gray-700 hover:bg-gray-100 p-3 rounded-lg transition-all duration-200">
+                        Configuración del perfil
+                      </p>
                     </Link>
-                    <button onClick={logOut} className="text-red-500 dark:hover:hover:bg-gray-700 hover:bg-gray-100 p-3 rounded-lg transition-all duration-200">Cerrar sesión</button>
+                    <button
+                      onClick={logOut}
+                      className="text-red-500 dark:hover:bg-gray-700 hover:bg-gray-100 p-3 rounded-lg transition-all duration-200"
+                    >
+                      Cerrar sesión
+                    </button>
                   </div>
-
                 </div>
 
                 <div className="w-fit p-1 cursor-pointer rounded-full hover:bg-gray-300 hover:bg-opacity-60 dark:hover:bg-gray-600 transition-all duration-200">
-                  <HiChatAlt className='text-3xl' />
+                  <HiChatAlt className="text-3xl" />
                 </div>
 
                 <div className="w-fit p-1 cursor-pointer rounded-full hover:bg-gray-300 hover:bg-opacity-60 dark:hover:bg-gray-600 transition-all duration-200">
-                  <HiBell className='text-3xl' />
+                  <HiBell className="text-3xl" />
                 </div>
               </div>
 
               <div className="flex items-center justify-center px-3">
                 <ToggleTheme />
               </div>
-
             </div>
           </div>
-
         </div>
       ) : (
         <>
           {location.pathname !== '/login' && (
             <div className="flex flex-col md:flex-row items-center gap-4 md:gap-8 order-2 md:order-1 px-5">
-              <ButtonLink to="/login" className="dark:bg-[#1a1a1a] dark:text-[#fffd92]">Iniciar Sesión</ButtonLink>
+              <ButtonLink to="/login" className="dark:bg-[#1a1a1a] dark:text-[#fffd92]">
+                Iniciar Sesión
+              </ButtonLink>
               <div className="flex items-center justify-center">
                 <ToggleTheme />
               </div>
             </div>
-
           )}
         </>
       )}

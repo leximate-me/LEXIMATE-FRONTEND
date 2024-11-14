@@ -41,9 +41,33 @@ const deletePostRequest = async (classId, postId) => {
   }
 };
 
+const getCommentsRequest = async (classId, postId) => {
+  try {
+    const response = await axios.get(`/class/${classId}/post/${postId}/comment`);
+    return response;
+  } catch (error) {
+    console.error('Error during get comments request:', error);
+    throw error;
+  }
+};
+
+const createCommentRequest = async (classId, postId, content) => {
+  try {
+    const response = await axios.post(`/class/${classId}/post/${postId}/comment`, { content });
+    return response;
+  } catch (error) {
+    console.error('Error during create comment request:', error);
+    throw error;
+  }
+  
+};
+
+
 export {
   createPostRequest,
   getPostsRequest,
   deletePostRequest,
   getPostByIdRequest,
+  createCommentRequest,
+  getCommentsRequest,
 };
