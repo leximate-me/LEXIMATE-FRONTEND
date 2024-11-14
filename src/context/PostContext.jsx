@@ -6,7 +6,9 @@ import {
   getPostByIdRequest,
   createCommentRequest,
   getCommentsRequest,
+  deleteCommentRequest,
 } from '../api/post';
+import { del } from 'framer-motion/client';
 
 const PostContext = createContext();
 
@@ -101,6 +103,16 @@ const PostProvider = ({ children }) => {
     }
   };
 
+  const deleteComment = async (classId, postId, commentId) => {
+    try {
+      await deleteCommentRequest(classId, postId, commentId);
+      setComments((prevComments) => prevComments.filter((c) => c.id !== commentId));
+    } catch (error) {
+      console.error('Error during delete comment request:', error);
+      setError(error.response?.data || 'Error deleting comment');
+    }
+  };
+
   return (
     <PostContext.Provider
       value={{
@@ -116,6 +128,7 @@ const PostProvider = ({ children }) => {
         createComment,
         comments,
         getComments,
+        deleteComment,
       }}
     >
       {children}

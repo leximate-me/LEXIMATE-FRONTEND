@@ -62,6 +62,15 @@ const createCommentRequest = async (classId, postId, content) => {
   
 };
 
+const deleteCommentRequest = async (classId, postId, commentId) => {
+  try {
+    const response = await axios.delete(`/class/${classId}/post/${postId}/comment/${commentId}`);
+    return response;
+  } catch (error) {
+    console.error('Error during delete comment request:', error);
+    throw error;
+  }
+};
 
 export {
   createPostRequest,
@@ -70,4 +79,5 @@ export {
   getPostByIdRequest,
   createCommentRequest,
   getCommentsRequest,
+  deleteCommentRequest,
 };
