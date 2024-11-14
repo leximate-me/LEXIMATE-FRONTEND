@@ -6,6 +6,7 @@ import Loading from "../components/ui/Loading";
 
 const ProfilePage = () => {
   const [loading, setLoading] = useState(true);
+  const [isUpdating, setIsUpdating] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { user, updateUser, profile } = useAuth();
 
@@ -60,9 +61,9 @@ const ProfilePage = () => {
       if (userData.file) {
         formData.append("file", userData.file);
       }
-
+      setIsUpdating(true);
       await updateUser(formData);
-
+      setIsUpdating(false);
       swal({
         title: "Datos actualizados correctamente",
         text: "Tu perfil ha sido actualizado con éxito.",
@@ -81,10 +82,10 @@ const ProfilePage = () => {
     }
   };
 
-  if (loading) {
+  if (loading || isUpdating) {
     return (
       <div className="h-[500px] flex justify-center items-center">
-        {Loading("Cargando datos del perfil...")}
+        {Loading(loading ? "Cargando datos del perfil..." : "Actualizando perfil...")}
       </div>
     );
   }
