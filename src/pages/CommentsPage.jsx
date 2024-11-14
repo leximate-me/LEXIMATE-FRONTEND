@@ -5,25 +5,30 @@ import { useParams } from 'react-router-dom';
 import Loading from '../components/ui/Loading';
 import { Riple } from 'react-loading-indicators';
 import DropDown from '../components/ui/DropDownButton';
+import { set } from 'react-hook-form';
 
 export default function CommentsPage({ posts: initialPosts }) {
   const { getProfile, profile } = useAuth();
   const { getPostById, createComment, comments, getComments, deleteComment } = usePost();
   const { classId, commentId } = useParams();
-  
+
   const [post, setPost] = useState(initialPosts);
   const [loading, setLoading] = useState(true);
   const [comment, setComment] = useState('');
+  const [gettingComments, setGettingComments] = useState(true);
   const [isProcessing, setIsProcessing] = useState(false); // Cargando tanto para crear como para eliminar comentario
-  
+
   useEffect(() => {
     const fetchData = async () => {
       try {
         await getProfile();
-        if (!comments.length) await getComments(classId, commentId);
+        if (!comments.length) {
+          await getComments(classId, commentId);
+          setGettingComments(false);
+        }
         if (!post) {
-          setLoading(true);
           const fetchedPost = await getPostById(classId, commentId);
+          setLoading(false);
           setPost(fetchedPost);
         }
       } catch (error) {
@@ -72,9 +77,9 @@ export default function CommentsPage({ posts: initialPosts }) {
           {/* Sección del Post */}
           {profile?.person && (
             <div className="border border-gray-300 dark:border-gray-500 p-6 rounded-lg shadow-lg mb-8">
-              <h2 className="text-3xl font-bold mb-4 dark:text-white">{post.title}</h2>
+              <h2 className="text-2xl md:text-3xl font-bold mb-4 dark:text-white">{post.title}</h2>
               <p className="text-gray-700 mb-6 dark:text-white">{post.content}</p>
-              <div className="flex justify-end gap-2 italic text-gray-500">
+              <div className="flex justify-end gap-1 italic text-gray-500">
                 <p>{profile.person.first_name}</p>
                 <p>{profile.person.last_name}</p>
               </div>
@@ -109,10 +114,26 @@ export default function CommentsPage({ posts: initialPosts }) {
               comments.map((cmt) => (
                 <div
                   key={cmt.id}
-                  className="grid grid-cols-6 dark:bg-[#1a1a1a] bg-white p-4 rounded-md shadow-lg border border-gray-300 dark:border-gray-500"
+                  className="grid grid-cols-8 grid-rows-2 md:grid-cols-[50px,repeat(7,1fr)] md:grid-rows-2  dark:bg-[#1a1a1a] bg-white p-4 rounded-md shadow-lg border border-gray-300 dark:border-gray-500"
                 >
-                  <p className="text-gray-800 dark:text-white">{cmt.content}</p>
-                  <div className="col-start-7 row-start-1">
+
+                  {profile ? (
+                    <>
+                      <div className="col-start-1 col-span-2 md:col-span-1">
+                        <img
+                          src={profile.avatar.file_url}
+                          alt="Avatar"
+                          className="md:w-12 rounded-full border border-gray-500"
+                        />
+                      </div>
+                      <div className='col-start-3 md:col-start-2 md:row-start-1 mx-1 flex w-fit gap-1 items-center'>
+                        <p className='text-gray-500'>{profile.person.first_name}</p>
+                        <p className='text-gray-500'>{profile.person.last_name}</p>
+                      </div>
+                    </>
+                  ) : null}
+                  <p className="text-gray-800 dark:text-white flex items-center col-start-1 col-span-8 row-start-2">{cmt.content}</p>
+                  <div className="col-start-9 row-start-1">
                     <DropDown
                       onAbandonClass={() => handleDelete(cmt.id)}
                       classId={classId}
@@ -128,7 +149,16 @@ export default function CommentsPage({ posts: initialPosts }) {
           </div>
         </div>
       ) : (
-        <h1 className="text-xl font-bold text-red-500">No se encontró el post</h1>
+        <div className="dark:bg-white w-80 h-52 flex flex-col justify-center items-center border border-gray-300 rounded-md shadow-[0px_9px_15px_-7px_rgba(0,0,0,0.75)]">
+          <div className="flex flex-wrap justify-center items-center w-[90%] h-[90%] m-5">
+            <img src={notFound} alt="No existen clases" />
+          </div>
+          <div className="flex flex-wrap justify-center items-center w-[90%] h-[90%] m-5">
+            <h1>
+              <b>OCURRIÓ UN ERROR INESPERADO</b>  
+            </h1>
+          </div>
+        </div>
       )}
     </div>
   );

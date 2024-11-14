@@ -136,7 +136,7 @@ function NavBar() {
                       className="w-10 h-10 rounded-full object-cover"
                     />
                   ) : (
-                    <HiUser className="text-3xl" />
+                    <HiUser className="text-3xl border-none" />
                   )}
 
                   {/* Contenedor de opciones de perfil */}
