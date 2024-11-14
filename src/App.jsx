@@ -16,6 +16,7 @@ import MemoryGame from './games/MemoryGame';
 import ProfilePage from './pages/AccountSettingsPage';
 import TaskPage from './pages/TaskPage';
 import CommentsPage from './pages/CommentsPage';
+import { ToolProvider } from './context/ToolContext';
 
 function App() {
   return (
@@ -23,28 +24,30 @@ function App() {
       <ClassProvider>
         <PostProvider>
           <TaskProvider>
-            <BrowserRouter>
-              <main className="container min-w-full min-h-[100vh] dark:bg-[#1a1a1a]">
-                <NavBar />
-                <div className='pt-[65px]'>
-                  <Routes>
-                    <Route path="/games" element={<GamesPage />} />
-                    <Route path="/games/memory" element={<MemoryGame />} />
-                    <Route path="/" element={<LandingPage />} />
-                    <Route path="/login" element={<LoginPage />} />
-                    <Route path="/register" element={<RegisterPage />} />
-                    <Route element={<ProtetedRoutes />}>
-                      <Route path="/home" element={<HomePage />} />
-                      <Route path="/:classId/tasks" element={<TaskByClassPage />} />
-                      <Route path="/classes" element={<ClassPage />} />
-                      <Route path="/profile" element={<ProfilePage />} />
-                      <Route path="/:classId/task/:taskId" element={<TaskPage />} />
-                      <Route path="/:classId/task/post/:commentId" element={<CommentsPage />} />
-                    </Route>
-                  </Routes>
-                </div>
-              </main>
-            </BrowserRouter>
+            <ToolProvider>
+              <BrowserRouter>
+                <main className="container min-w-full min-h-[100vh] dark:bg-[#1a1a1a]">
+                  <NavBar />
+                  <div className='pt-[65px]'>
+                    <Routes>
+                      <Route path="/games" element={<GamesPage />} />
+                      <Route path="/games/memory" element={<MemoryGame />} />
+                      <Route path="/" element={<LandingPage />} />
+                      <Route path="/login" element={<LoginPage />} />
+                      <Route path="/register" element={<RegisterPage />} />
+                      <Route element={<ProtetedRoutes />}>
+                        <Route path="/home" element={<HomePage />} />
+                        <Route path="/:classId/tasks" element={<TaskByClassPage />} />
+                        <Route path="/classes" element={<ClassPage />} />
+                        <Route path="/profile" element={<ProfilePage />} />
+                        <Route path="/:classId/task/:taskId" element={<TaskPage />} />
+                        <Route path="/:classId/task/post/:commentId" element={<CommentsPage />} />
+                      </Route>
+                    </Routes>
+                  </div>
+                </main>
+              </BrowserRouter>
+            </ToolProvider>
           </TaskProvider>
         </PostProvider>
       </ClassProvider>
