@@ -60,6 +60,16 @@ const getProfileRequest = async () => {
   }
 };
 
+const updateUserRequest = async (user) => {
+  try {
+    const response = await axios.put(`/auth/update-profile`, user);
+    return response;
+  } catch (error) {
+    console.error('Error during user update request:', error);
+    throw error;
+  }
+};
+
 export {
   registerRequest,
   loginRequest,
@@ -67,4 +77,5 @@ export {
   logoutRequest,
   verifyEmailRequest,
   getProfileRequest,
+  updateUserRequest,
 };

@@ -127,16 +127,16 @@ function NavBar() {
                 <div
                   ref={profileButtonRef}
                   onClick={() => setIsProfileOpen(!isProfileOpen)}
-                  className="border border-gray-700 rounded-full cursor-pointer"
+                  className="rounded-full cursor-pointer"
                 >
                   {profile && profile.avatar ? (
                     <img
                       src={profile.avatar.file_url}
                       alt="Avatar del usuario"
-                      className="w-10 h-10 rounded-full object-cover"
+                      className="w-10 h-10 rounded-full object-cover border border-gray-500"
                     />
                   ) : (
-                    <HiUser className="text-3xl border-none" />
+                    <HiUser className="text-3xl" />
                   )}
 
                   {/* Contenedor de opciones de perfil */}

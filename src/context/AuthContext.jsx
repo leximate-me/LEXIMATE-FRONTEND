@@ -6,6 +6,7 @@ import {
   logoutRequest,
   verifyEmailRequest,
   getProfileRequest,
+  updateUserRequest,
 } from '../api/auth';
 
 const AuthContext = createContext();
@@ -101,6 +102,15 @@ const AuthProvider = ({ children }) => {
     }
   };
 
+  const updateUser = async (data) => {
+    try {
+      await updateUserRequest(data);
+    } catch (error) {
+      console.log(error);
+    }
+    return profile;
+  }
+
   useEffect(() => {
     updateUserFromToken();
   }, []);
@@ -119,6 +129,7 @@ const AuthProvider = ({ children }) => {
         verifyEmail,
         getProfile,
         profile,
+        updateUser,
       }}
     >
       {children}
