@@ -8,7 +8,8 @@ import DropDown from '../components/ui/DropDownButton';
 
 export default function CommentsPage({ posts: initialPosts }) {
   const { getProfile, profile } = useAuth();
-  const { getPostById, createComment, comments, getComments, deleteComment } = usePost();
+  const { getPostById, createComment, comments, getComments, deleteComment } =
+    usePost();
   const { classId, commentId } = useParams();
 
   const [post, setPost] = useState(initialPosts);
@@ -36,7 +37,15 @@ export default function CommentsPage({ posts: initialPosts }) {
       }
     };
     fetchData();
-  }, [classId, commentId, getProfile, getComments, getPostById, comments.length, post]);
+  }, [
+    classId,
+    commentId,
+    getProfile,
+    getComments,
+    getPostById,
+    comments.length,
+    post,
+  ]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -77,8 +86,12 @@ export default function CommentsPage({ posts: initialPosts }) {
           {/* Sección del Post */}
           {profile?.person && (
             <div className="border border-gray-300 dark:border-gray-500 p-6 rounded-lg shadow-lg mb-8">
-              <h2 className="text-2xl md:text-3xl font-bold mb-4 dark:text-white">{post.title}</h2>
-              <p className="text-gray-700 mb-6 dark:text-white break-words overflow-hidden">{post.content}</p>
+              <h2 className="text-2xl md:text-3xl font-bold mb-4 dark:text-white">
+                {post.title}
+              </h2>
+              <p className="text-gray-700 mb-6 dark:text-white break-words overflow-hidden">
+                {post.content}
+              </p>
               <div className="flex justify-end gap-1 italic text-gray-500">
                 <p>{post.user?.people?.first_name || 'Usuario'}</p>
                 <p>{post.user?.people?.last_name || ''}</p>
@@ -88,7 +101,9 @@ export default function CommentsPage({ posts: initialPosts }) {
 
           {/* Caja de Comentarios */}
           <div className="border border-gray-300 dark:border-gray-500 p-6 rounded-lg shadow-lg">
-            <h3 className="text-xl font-semibold mb-4 dark:text-white">Comentarios</h3>
+            <h3 className="text-xl font-semibold mb-4 dark:text-white">
+              Comentarios
+            </h3>
             <form onSubmit={handleSubmit} className="mb-6">
               <textarea
                 className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 dark:bg-[#1a1a1a] dark:border-gray-500 dark:text-white"
@@ -119,14 +134,21 @@ export default function CommentsPage({ posts: initialPosts }) {
                   <>
                     <div className="col-start-1 col-span-2 md:col-span-1">
                       <img
-                        src={cmt.user?.fileUser?.[0]?.file_url || 'default-avatar-url.jpg'}
+                        src={
+                          cmt.user?.fileUser?.[0]?.file_url ||
+                          'default-avatar-url.jpg'
+                        }
                         alt="Avatar"
                         className="md:w-12 rounded-full border border-gray-500"
                       />
                     </div>
                     <div className="col-start-3 md:col-start-2 md:row-start-1 mx-1 flex flex-wrap gap-1 items-center">
-                      <p className="text-gray-500 truncate">{cmt.user?.people?.first_name || 'Usuario'}</p>
-                      <p className="text-gray-500 truncate">{cmt.user?.people?.last_name || ''}</p>
+                      <p className="text-gray-500 truncate">
+                        {cmt.user?.people?.first_name || 'Usuario'}
+                      </p>
+                      <p className="text-gray-500 truncate">
+                        {cmt.user?.people?.last_name || ''}
+                      </p>
                     </div>
                   </>
                   <p className="mt-2 text-gray-800 dark:text-white flex items-center col-start-1 col-span-8 row-start-2 break-all">
@@ -143,14 +165,18 @@ export default function CommentsPage({ posts: initialPosts }) {
                 </div>
               ))
             ) : (
-              <p className="text-gray-500">No hay comentarios aún. ¡Sé el primero en comentar!</p>
+              <p className="text-gray-500">
+                No hay comentarios aún. ¡Sé el primero en comentar!
+              </p>
             )}
           </div>
         </div>
       ) : (
         <div className="dark:bg-white w-80 h-52 flex flex-col justify-center items-center border border-gray-300 rounded-md shadow-[0px_9px_15px_-7px_rgba(0,0,0,0.75)]">
           <div className="flex flex-wrap justify-center items-center w-[90%] h-[90%] m-5">
-            <h1><b>OCURRIÓ UN ERROR INESPERADO</b></h1>
+            <h1>
+              <b>OCURRIÓ UN ERROR INESPERADO</b>
+            </h1>
           </div>
         </div>
       )}
