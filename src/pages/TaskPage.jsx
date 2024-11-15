@@ -97,7 +97,6 @@ function TaskPage({ tasks: initialTasks }) {
                 </p>
             );
         }
-
         return output;
     };
 

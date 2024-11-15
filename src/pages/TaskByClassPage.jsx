@@ -89,7 +89,7 @@ function TaskPage() {
 
 
           {/* Renderizar contenido basado en la opción seleccionada */}
-          <div className="col-span-8 row-start-3 col-start-1 md:col-span-6 md:col-start-3 md:row-span-2 md:row-start-3">
+          <div className="mt-5 md:mt-0 col-span-8 row-start-3 col-start-1 md:col-span-6 md:col-start-3 md:row-span-2 md:row-start-3">
             {renderContent()}
           </div>
 

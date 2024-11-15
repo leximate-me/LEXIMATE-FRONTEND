@@ -12,15 +12,15 @@ export default function SideBar() {
     };
 
     return (
-        <div className='dark:bg-[#1a1a1a] border border-gray-400 shadow-[0_3px_10px_rgb(0,0,0,0.2)] p-2 rounded-lg flex flex-col gap-4 bg-white'>
+        <div className='dark:bg-[#1a1a1a] border border-gray-400 shadow-[0_3px_10px_rgb(0,0,0,0.2)] rounded-lg flex flex-col gap-2 bg-white'>
             {classes ? (
                 <>
-                    <h1 className='dark:text-white'><b>Clases:</b></h1>
+                    <h1 className='dark:text-white bg-gradient-to-b from-bg-gradient-to-r from-[#f8f40c] to-[#ddda01] p-1 rounded-t-lg'><b>Clases:</b></h1>
                     {classes.map((clase) => (
                         <div
                             onClick={() => handleChangeClass(clase.id)}
                             key={clase.id}
-                            className='dark:text-white transition duration-100 rounded-md hover:bg-gray-200 p-2 dark:hover:bg-gray-700 cursor-pointer'>
+                            className='mx-2 mb-2 dark:text-white transition duration-100 rounded-md hover:bg-gray-200 p-2 dark:hover:bg-gray-700 cursor-pointer'>
                                 <h1>{clase.name}</h1>
                         </div>
                     ))}

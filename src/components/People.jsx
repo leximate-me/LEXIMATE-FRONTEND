@@ -24,7 +24,6 @@ function People() {
         fetchUsers();
     }, [classId, getUsersByClass]);
 
-
     return (
         <div>
             <h2 className="text-2xl font-bold mb-4">Integrantes de la clase</h2>
@@ -40,14 +39,14 @@ function People() {
                         <ul className="space-y-2">
                             {users.map((user, index) => {
 
-                                const { Person } = user;
+                                const { people } = user;
 
-                                if (Person) {
+                                if (people) {
 
                                     return (
 
                                         <li key={index} className="p-3 border border-gray-300 rounded-lg">
-                                            {Person.first_name} {Person.last_name}
+                                            {user.people.first_name} {user.people.last_name}
                                         </li>
                                     );
                                 }

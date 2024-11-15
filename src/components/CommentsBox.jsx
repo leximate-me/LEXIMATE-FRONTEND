@@ -17,7 +17,6 @@ function CommentsBox() {
     const navigate = useNavigate();
 
     const handleSelectTask = (commentId) => {
-        console.log('comentario seleccionado:', commentId);
         navigate(`/${classId}/task/post/${commentId}`);
     }
 
@@ -108,7 +107,7 @@ function CommentsBox() {
                                 <div
                                     onClick={ () => handleSelectTask(post.id) }
                                     key={post.id}
-                                    className="dark:border-gray-600 mb-2 grid grid-cols-6 p-2 border border-gray-300 rounded-lg cursor-pointer">
+                                    className="dark:border-gray-600 mb-2 grid grid-cols-6 p-4 border border-gray-300 rounded-lg cursor-pointer">
                                     <div
                                         className="col-start-8 w-fit h-fit"
                                         onClick={(e) => {
@@ -123,8 +122,8 @@ function CommentsBox() {
                                         />
                                     </div>
                                     <div className='col-span-5 row-start-1 col-start-1 dark:text-white dark:hover:text-blue-400 hover:text-blue-700'>
-                                        <h3 className="text-lg font-bold">{post.title}</h3>
-                                        <p>{post.content}</p>
+                                        <h3 className="text-lg font-bold break-words overflow-hidden mb-2">{post.title}</h3>
+                                        <p className='text-sm break-words overflow-hidden'>{post.content}</p>
                                     </div>
                                 </div>
                             ))
