@@ -46,7 +46,7 @@ function RegisterPage() {
   return (
     <div className="flex justify-center">
       <ErrorModal error={error} clearError={clearError} />
-      <Card className="min-w-[50%] m-7 flex flex-col md:flex-row items-center dark:bg-[#1a1a1a]">
+      <Card className="min-w-[50%] m-7 flex flex-col md:flex-row items-center dark:bg-[#1a1a1a] dark:border-[#fffd92]">
         <div className="flex justify-center md:items-center">
           <img className="h-10 md:h-auto" src={logo} alt="" />
         </div>

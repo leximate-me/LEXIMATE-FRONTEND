@@ -100,6 +100,10 @@ function TaskPage({ tasks: initialTasks }) {
         return output;
     };
 
+    useEffect(() => {
+        console.log(extractedText);
+    }, [extractedText]);
+
     return (
         <div className="container mx-auto p-6">
             {isLoading || isExtracting ? (
@@ -111,7 +115,7 @@ function TaskPage({ tasks: initialTasks }) {
                     {task ? (
                         <div className="space-y-6">
                             {/* Información de la Tarea */}
-                            <div className="grid grid-cols-1 md:grid-cols-6 gap-6 p-2 md:p-5 border dark:border-gray-500 rounded-lg shadow-md dark:shadow-[0px_2px_4px_0px_#4a5568]">
+                            <div className="dark:border-[#fffd92] grid grid-cols-1 md:grid-cols-6 gap-6 p-2 md:p-5 border rounded-lg shadow-md">
                                 <div className="col-span-6 md:col-span-4 flex flex-col items-center md:items-start gap-4">
                                     <h1 className="text-2xl md:text-6xl font-bold text-gray-900 dark:text-white mb-4">{task.title}</h1>
                                     <p className="text-md md:text-3xl text-gray-700 dark:text-gray-300 mb-2">{task.description}</p>
@@ -121,7 +125,7 @@ function TaskPage({ tasks: initialTasks }) {
                                 </div>
 
                                 {task.files && task.files.length > 0 && (
-                                    <div className="col-span-6 md:col-span-2 flex justify-center items-center ">
+                                    <div className="col-span-6 md:col-span-2 flex justify-center items-center">
                                         <ul>
                                             {task.files.map((file) => (
                                                 <li key={file._id} className='flex flex-col md:flex-row items-end gap-2'>
@@ -147,7 +151,7 @@ function TaskPage({ tasks: initialTasks }) {
 
                             {/* Mostrar el texto extraído en una tarjeta */}
                             {extractedText && extractedText.length > 0 && (
-                                <div className="bg-white dark:bg-gray-800 p-5 rounded-lg shadow-md border">
+                                <div className="bg-white dark:bg-[#1a1a1a] p-5 rounded-lg shadow-md border dark:border-[#fffd92]">
                                     <div className="text-lg font-sans leading-relaxed text-gray-700 dark:text-gray-300">
                                         {renderExtractedText(extractedText)}
                                     </div>

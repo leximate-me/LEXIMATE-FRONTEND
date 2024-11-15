@@ -2,7 +2,7 @@ import React from 'react';
 
 function NavbarClass({ onSelect, selectedView }) {
   return (
-    <div className='border-b-2 border-gray-300 rounded-lg col-span-8 md:col-span-6 md:col-start-3 md:row-start-1'>
+    <div className='border-b-2 dark:border-b-[#fffd92] border-gray-300 rounded-lg col-span-8 md:col-span-6 md:col-start-3 md:row-start-1'>
       <ul className='flex gap-5 h-full items-center justify-center md:justify-start p-2'>
         <li
           className={`dark:text-white w-fit px-2 cursor-pointer ${selectedView === 'tasks' ? 'border-b-2 border-blue-500 rounded-lg' : ''}`}
