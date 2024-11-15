@@ -77,7 +77,7 @@ function TaskCard({ tasks: initialTasks }) {
                   {tasks.map((task) => (
                     <li
                       onClick={() => handleSelectTask(task.id)}
-                      className="grid grid-cols-6 dark:bg-[#1a1a1a] p-4 rounded-lg shadow-[0px_8px_12px_-6px] border border-gray-300 cursor-pointer dark:border-gray-500"
+                      className="grid grid-cols-6 dark:border-[#fffd92] dark:bg-[#1a1a1a] p-4 rounded-lg shadow-[0px_8px_12px_-6px] border border-gray-300 cursor-pointer"
                       key={task.id}
                     >
                       <div className='col-span-6 md:col-span-3 flex flex-col gap-5'>

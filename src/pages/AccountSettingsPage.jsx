@@ -92,7 +92,7 @@ const ProfilePage = () => {
 
   return (
     <div className="flex items-start justify-center min-h-[calc(100vh_-_65px)] p-4">
-      <div className="w-full h-fit max-w-lg p-4 bg-white rounded-lg shadow-md border border-gray-400 dark:bg-[#1a1a1a]">
+      <div className="w-full h-fit max-w-lg p-4 bg-white rounded-lg shadow-md border border-gray-400 dark:border-[#fffd92] dark:bg-[#1a1a1a]">
         <h2 className="mb-4 text-xl font-semibold text-center text-gray-800 dark:text-white">
           Configurar Perfil
         </h2>

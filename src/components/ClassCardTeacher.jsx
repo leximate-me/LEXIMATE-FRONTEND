@@ -70,7 +70,7 @@ export default function ClassCardTeacher({ classes: initialClasses }) {
                       onClick={() =>
                         (window.location.href = `/${classItem.id}/tasks`)
                       } /* Redirigir al hacer clic en la carta */
-                      className="card card-compact bg-base-100 w-80 shadow-xl h-fit cursor-pointer"
+                      className="dark:bg-[#1a1a1a] dark:border-[#fffd92] card card-compact bg-base-100 w-80 shadow-xl h-fit cursor-pointer dark:border"
                     >
                       <figure className='relative h-48 cursor-pointer'>
                         <img
@@ -91,10 +91,10 @@ export default function ClassCardTeacher({ classes: initialClasses }) {
                         </div>
                       </figure>
                       <div className="card-body">
-                        <h2 className="card-title">
+                        <h2 className="card-title dark:text-white">
                           {classItem.name}
                         </h2>
-                        <p className="text-gray-500">{classItem.description}</p>
+                        <p className="text-gray-500 dark:text-gray-300">{classItem.description}</p>
                       </div>
 
                       <div className='card-actions justify-center'>
