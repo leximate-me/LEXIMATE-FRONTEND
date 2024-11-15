@@ -70,7 +70,7 @@ export default function CommentsPage({ posts: initialPosts }) {
     <div className="container mx-auto p-6">
       {loading ? (
         <div className="h-[500px] flex justify-center items-center">
-          {Loading('Cargando tarea...')}
+          {Loading('Cargando anuncio...')}
         </div>
       ) : post ? (
         <div>
@@ -129,7 +129,7 @@ export default function CommentsPage({ posts: initialPosts }) {
                       <p className="text-gray-500 truncate">{cmt.user?.people?.last_name || ''}</p>
                     </div>
                   </>
-                  <p className="mt-2 text-gray-800 dark:text-white flex items-center col-start-1 col-span-8 row-start-2">
+                  <p className="mt-2 text-gray-800 dark:text-white flex items-center col-start-1 col-span-8 row-start-2 break-all">
                     {cmt.content}
                   </p>
                   <div className="col-start-9 row-start-1">
