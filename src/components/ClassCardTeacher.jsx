@@ -5,6 +5,9 @@ import CodeModal from './ui/CodeModal';
 import Dropdown from './ui/DropDownButton';
 import Loading from './ui/Loading';
 import bgClassCard from '../assets/bg-classCard.jpg';
+import { useNavigate } from 'react-router-dom';
+
+const navigate = useNavigate(); // Hook para navegación
 
 export default function ClassCardTeacher({ classes: initialClasses }) {
   // Estado para controlar la visibilidad del modal
@@ -68,15 +71,12 @@ export default function ClassCardTeacher({ classes: initialClasses }) {
                     <div
                       key={index}
                       onClick={() =>
-                        (window.location.href = `/${classItem.id}/tasks`)
+                        navigate(`/${classItem.id}/tasks`)
                       } /* Redirigir al hacer clic en la carta */
                       className="dark:bg-[#1a1a1a] dark:border-[#fffd92] card card-compact bg-base-100 w-80 shadow-xl h-fit cursor-pointer dark:border"
                     >
-                      <figure className='relative h-48 cursor-pointer'>
-                        <img
-                          className='h-80'
-                          src={bgClassCard}
-                          alt="Shoes" />
+                      <figure className="relative h-48 cursor-pointer">
+                        <img className="h-80" src={bgClassCard} alt="Shoes" />
                         <div
                           className="absolute top-2 right-2"
                           key={index}
@@ -94,10 +94,12 @@ export default function ClassCardTeacher({ classes: initialClasses }) {
                         <h2 className="card-title dark:text-white">
                           {classItem.name}
                         </h2>
-                        <p className="text-gray-500 dark:text-gray-300">{classItem.description}</p>
+                        <p className="text-gray-500 dark:text-gray-300">
+                          {classItem.description}
+                        </p>
                       </div>
 
-                      <div className='card-actions justify-center'>
+                      <div className="card-actions justify-center">
                         <button
                           onClick={(e) => {
                             e.stopPropagation(); // Prevenir que el clic en el botón redirija
