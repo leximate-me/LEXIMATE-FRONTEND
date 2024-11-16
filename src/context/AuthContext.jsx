@@ -8,7 +8,6 @@ import {
   getProfileRequest,
   updateUserRequest,
 } from '../api/auth';
-import { useNavigate } from 'react-router-dom';
 
 const AuthContext = createContext();
 
@@ -51,11 +50,9 @@ const AuthProvider = ({ children }) => {
 
   const logOut = async () => {
     try {
-      const navigate = useNavigate();
       await logoutRequest();
       setUser(null);
       setIsAuthenticated(false);
-      navigate('/');
     } catch (error) {
       console.log(error);
       setError(error.response.data);
