@@ -8,6 +8,7 @@ import {
   getProfileRequest,
   updateUserRequest,
 } from '../api/auth';
+import { useNavigate } from 'react-router-dom';
 
 const AuthContext = createContext();
 
@@ -50,10 +51,11 @@ const AuthProvider = ({ children }) => {
 
   const logOut = async () => {
     try {
+      const navigate = useNavigate();
       await logoutRequest();
       setUser(null);
       setIsAuthenticated(false);
-      window.location.href = '/login';
+      navigate('/');
     } catch (error) {
       console.log(error);
       setError(error.response.data);
@@ -109,7 +111,7 @@ const AuthProvider = ({ children }) => {
       console.log(error);
     }
     return profile;
-  }
+  };
 
   useEffect(() => {
     updateUserFromToken();
