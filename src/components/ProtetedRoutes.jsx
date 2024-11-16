@@ -1,8 +1,17 @@
-import { Navigate, Outlet } from 'react-router-dom';
+import { useEffect } from 'react';
+import { useNavigate, Outlet } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
 function ProtetedRoutes() {
   const { loading, isAuthenticated } = useAuth();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!loading && !isAuthenticated) {
+      navigate('/login', { replace: true });
+    }
+  }, [loading, isAuthenticated, navigate]);
+
   if (loading) {
     return (
       <div className="flex items-center justify-center h-screen">
@@ -10,10 +19,8 @@ function ProtetedRoutes() {
       </div>
     );
   }
-  if (!loading && !isAuthenticated) {
-    return <Navigate to="/login" replace />;
-  }
-  return <Outlet />;
+
+  return isAuthenticated ? <Outlet /> : null;
 }
 
 export default ProtetedRoutes;
