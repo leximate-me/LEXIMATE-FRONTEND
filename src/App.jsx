@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { HashRouter, BrowserRouter, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from '../src/context/AuthContext';
 import RegisterPage from './pages/RegisterPage';
 import LoginPage from './pages/LoginPage';
@@ -25,10 +25,10 @@ function App() {
         <PostProvider>
           <TaskProvider>
             <ToolProvider>
-              <BrowserRouter>
+              <HashRouter>
                 <main className="container min-w-full min-h-[100vh] dark:bg-[#1a1a1a]">
                   <NavBar />
-                  <div className='pt-[65px]'>
+                  <div className="pt-[65px]">
                     <Routes>
                       <Route path="/games" element={<GamesPage />} />
                       <Route path="/games/memory" element={<MemoryGame />} />
@@ -37,16 +37,25 @@ function App() {
                       <Route path="/register" element={<RegisterPage />} />
                       <Route element={<ProtetedRoutes />}>
                         <Route path="/home" element={<HomePage />} />
-                        <Route path="/:classId/tasks" element={<TaskByClassPage />} />
+                        <Route
+                          path="/:classId/tasks"
+                          element={<TaskByClassPage />}
+                        />
                         <Route path="/classes" element={<ClassPage />} />
                         <Route path="/profile" element={<ProfilePage />} />
-                        <Route path="/:classId/task/:taskId" element={<TaskPage />} />
-                        <Route path="/:classId/task/post/:commentId" element={<CommentsPage />} />
+                        <Route
+                          path="/:classId/task/:taskId"
+                          element={<TaskPage />}
+                        />
+                        <Route
+                          path="/:classId/task/post/:commentId"
+                          element={<CommentsPage />}
+                        />
                       </Route>
                     </Routes>
                   </div>
                 </main>
-              </BrowserRouter>
+              </HashRouter>
             </ToolProvider>
           </TaskProvider>
         </PostProvider>
