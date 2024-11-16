@@ -42,6 +42,7 @@ const AuthProvider = ({ children }) => {
     try {
       await loginRequest(user);
       await updateUserFromToken();
+      await getProfile();
     } catch (error) {
       console.log('context', error);
       setError(error.response.data);
