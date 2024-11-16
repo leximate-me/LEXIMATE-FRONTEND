@@ -4,9 +4,9 @@ import Dropdown from './ui/DropDownButton';
 import bgClassCard from '../assets/bg-classCard.jpg';
 import { useNavigate } from 'react-router-dom';
 
-const navigate = useNavigate(); // Hook para navegación
 
 export default function ClassCardStudent({ classes }) {
+  const navigate = useNavigate(); // Hook para navegación
   // Estado para controlar la visibilidad del modal
   // const [showModal, setShowModal] = useState(false);
 

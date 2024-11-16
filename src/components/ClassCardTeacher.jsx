@@ -7,9 +7,8 @@ import Loading from './ui/Loading';
 import bgClassCard from '../assets/bg-classCard.jpg';
 import { useNavigate } from 'react-router-dom';
 
-const navigate = useNavigate(); // Hook para navegación
-
 export default function ClassCardTeacher({ classes: initialClasses }) {
+  const navigate = useNavigate(); // Hook para navegación
   // Estado para controlar la visibilidad del modal
   const [showModal, setShowModal] = useState(false);
 
