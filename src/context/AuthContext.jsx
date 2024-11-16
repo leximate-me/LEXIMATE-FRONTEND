@@ -52,6 +52,7 @@ const AuthProvider = ({ children }) => {
     try {
       await logoutRequest();
       setUser(null);
+      setProfile(null);
       setIsAuthenticated(false);
     } catch (error) {
       console.log(error);
