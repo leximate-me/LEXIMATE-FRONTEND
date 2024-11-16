@@ -25,7 +25,7 @@ function App() {
         <PostProvider>
           <TaskProvider>
             <ToolProvider>
-              <HashRouter>
+              <BrowserRouter basename="/">
                 <main className="container min-w-full min-h-[100vh] dark:bg-[#1a1a1a]">
                   <NavBar />
                   <div className="pt-[65px]">
@@ -55,7 +55,7 @@ function App() {
                     </Routes>
                   </div>
                 </main>
-              </HashRouter>
+              </BrowserRouter>
             </ToolProvider>
           </TaskProvider>
         </PostProvider>
