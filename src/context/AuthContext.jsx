@@ -1,4 +1,3 @@
-import { createContext, useState, useContext, useEffect } from 'react';
 import {
   registerRequest,
   loginRequest,
@@ -8,6 +7,7 @@ import {
   getProfileRequest,
   updateUserRequest,
 } from '../api/auth';
+import { createContext, useState, useContext, useEffect } from 'react';
 
 const AuthContext = createContext();
 
