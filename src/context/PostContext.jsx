@@ -8,7 +8,6 @@ import {
   getCommentsRequest,
   deleteCommentRequest,
 } from '../api/post';
-import { del } from 'framer-motion/client';
 
 const PostContext = createContext();
 
@@ -25,14 +24,14 @@ const PostProvider = ({ children }) => {
   const [isCreating, setIsCreating] = useState(false);
   const [posts, setPosts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [comments, setComments] = useState([]);
+  const [commentsByPost, setCommentsByPost] = useState({}); // Comentarios organizados por postId
 
   const clearError = () => {
     setError(null);
   };
 
   const getPosts = async (classId) => {
-    setIsLoading(true); // Inicia loading cuando comenzamos a obtener posts
+    setIsLoading(true);
     try {
       const res = await getPostsRequest(classId);
       setPosts(res.data);
@@ -40,7 +39,7 @@ const PostProvider = ({ children }) => {
       console.error('Error during get posts request:', error);
       setError(error.response?.data || 'Error fetching posts');
     } finally {
-      setIsLoading(false); // Se asegura de cambiar el estado al final de la operación
+      setIsLoading(false);
     }
   };
 
@@ -61,6 +60,11 @@ const PostProvider = ({ children }) => {
     try {
       await deletePostRequest(classId, postId);
       setPosts((prevPosts) => prevPosts.filter((p) => p.id !== postId));
+      setCommentsByPost((prev) => {
+        const updated = { ...prev };
+        delete updated[postId]; // Eliminar comentarios asociados al post eliminado
+        return updated;
+      });
     } catch (error) {
       console.error('Error during delete post request:', error);
       setError(error.response?.data || 'Error deleting post');
@@ -68,7 +72,7 @@ const PostProvider = ({ children }) => {
   };
 
   const getPostById = async (classId, postId) => {
-    setIsLoading(true); // Marca el loading cuando se obtiene el post
+    setIsLoading(true);
     try {
       const res = await getPostByIdRequest(classId, postId);
       return res.data;
@@ -76,27 +80,33 @@ const PostProvider = ({ children }) => {
       console.error('Error during get post by id request:', error);
       setError(error.response?.data || 'Error fetching post');
     } finally {
-      setIsLoading(false); // Termina el loading una vez completada la operación
+      setIsLoading(false);
     }
   };
 
   const getComments = async (classId, postId) => {
-    setIsLoading(true); // Marca el loading cuando se obtiene los comentarios
+    setIsLoading(true);
     try {
       const res = await getCommentsRequest(classId, postId);
-      setComments(res.data);
+      setCommentsByPost((prev) => ({
+        ...prev,
+        [postId]: res.data,
+      }));
     } catch (error) {
       console.error('Error during get comments request:', error);
       setError(error.response?.data || 'Error fetching comments');
     } finally {
-      setIsLoading(false); // Termina el loading cuando se obtienen los comentarios
+      setIsLoading(false);
     }
   };
 
   const createComment = async (classId, postId, comment) => {
     try {
       const res = await createCommentRequest(classId, postId, comment);
-      setComments((prevComments) => [...prevComments, res.data]);
+      setCommentsByPost((prev) => ({
+        ...prev,
+        [postId]: [...(prev[postId] || []), res.data],
+      }));
     } catch (error) {
       console.error('Error during create comment request:', error);
       setError(error.response?.data || 'Error creating comment');
@@ -106,9 +116,10 @@ const PostProvider = ({ children }) => {
   const deleteComment = async (classId, postId, commentId) => {
     try {
       await deleteCommentRequest(classId, postId, commentId);
-      setComments((prevComments) =>
-        prevComments.filter((c) => c.id !== commentId)
-      );
+      setCommentsByPost((prev) => ({
+        ...prev,
+        [postId]: prev[postId]?.filter((c) => c.id !== commentId),
+      }));
     } catch (error) {
       console.error('Error during delete comment request:', error);
       setError(error.response?.data || 'Error deleting comment');
@@ -128,7 +139,7 @@ const PostProvider = ({ children }) => {
         isLoading,
         getPostById,
         createComment,
-        comments,
+        commentsByPost,
         getComments,
         deleteComment,
       }}

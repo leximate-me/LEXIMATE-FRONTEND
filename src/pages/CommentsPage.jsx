@@ -8,22 +8,25 @@ import DropDown from '../components/ui/DropDownButton';
 
 export default function CommentsPage({ posts: initialPosts }) {
   const { profile } = useAuth();
-  const { getPostById, createComment, comments, getComments, deleteComment } =
-    usePost();
+  const {
+    getPostById,
+    createComment,
+    commentsByPost,
+    getComments,
+    deleteComment,
+  } = usePost();
   const { classId, commentId } = useParams();
 
   const [post, setPost] = useState(initialPosts);
   const [loading, setLoading] = useState(true);
   const [comment, setComment] = useState('');
-  const [gettingComments, setGettingComments] = useState(true);
   const [isProcessing, setIsProcessing] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        if (!comments.length) {
+        if (!commentsByPost[commentId]) {
           await getComments(classId, commentId);
-          setGettingComments(false);
         }
         if (!post) {
           const fetchedPost = await getPostById(classId, commentId);
@@ -36,7 +39,7 @@ export default function CommentsPage({ posts: initialPosts }) {
       }
     };
     fetchData();
-  }, [classId, commentId, getComments, getPostById, comments.length, post]);
+  }, [classId, commentId, getComments, getPostById, commentsByPost, post]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -45,8 +48,6 @@ export default function CommentsPage({ posts: initialPosts }) {
     try {
       await createComment(classId, commentId, comment);
       setComment('');
-      // Refetch de comentarios para actualizar la lista
-      await getComments(classId, commentId);
     } catch (error) {
       console.error('Error creating comment:', error);
     } finally {
@@ -54,17 +55,18 @@ export default function CommentsPage({ posts: initialPosts }) {
     }
   };
 
-  const handleDelete = async (postId) => {
+  const handleDelete = async (commentId) => {
     setIsProcessing(true);
     try {
-      await deleteComment(classId, commentId, postId);
-      await getComments(classId, commentId);
+      await deleteComment(classId, commentId, commentId);
     } catch (error) {
       console.error('Error deleting comment:', error);
     } finally {
       setIsProcessing(false);
     }
   };
+
+  const comments = commentsByPost[commentId] || [];
 
   return (
     <div className="container mx-auto p-6">
@@ -123,7 +125,7 @@ export default function CommentsPage({ posts: initialPosts }) {
                   className="mb-5 grid grid-cols-[50px,1fr,auto] dark:bg-[#1a1a1a] bg-white p-4 rounded-md shadow-lg border border-gray-300 dark:border-gray-500"
                 >
                   <>
-                    <div className="col-start-1 col-span-2 md:col-span-1">
+                    <div className="col-start-1 col-span-1 md:col-span-1">
                       <img
                         src={
                           cmt.user?.fileUser?.[0]?.file_url ||
@@ -133,7 +135,7 @@ export default function CommentsPage({ posts: initialPosts }) {
                         className="md:w-12 rounded-full border border-gray-500"
                       />
                     </div>
-                    <div className="col-start-3 md:col-start-2 md:row-start-1 mx-1 flex flex-wrap gap-1 items-center">
+                    <div className="col-start-2 md:col-start-2 md:row-start-1 mx-1 flex flex-wrap gap-1 items-center">
                       <p className="text-gray-500 truncate">
                         {cmt.user?.people?.first_name || 'Usuario'}
                       </p>
