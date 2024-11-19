@@ -65,6 +65,9 @@ export default function CommentsPage({ posts: initialPosts }) {
       setIsProcessing(false);
     }
   };
+  useEffect(() => {
+    console.log('comments:', comments);
+  }, [comments]);
 
   const comments = commentsByPost[commentId] || [];
 
