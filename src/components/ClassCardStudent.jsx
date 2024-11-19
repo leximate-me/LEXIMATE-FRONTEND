@@ -4,7 +4,6 @@ import Dropdown from './ui/DropDownButton';
 import bgClassCard from '../assets/bg-classCard.jpg';
 import { useNavigate } from 'react-router-dom';
 
-
 export default function ClassCardStudent({ classes }) {
   const navigate = useNavigate(); // Hook para navegación
   // Estado para controlar la visibilidad del modal
@@ -72,6 +71,7 @@ export default function ClassCardStudent({ classes }) {
                       <Dropdown
                         classId={classItem.id}
                         onAbandonClass={handleAbandonClass}
+                        msg="Abandonar clase"
                       />
                     </div>
                   </figure>

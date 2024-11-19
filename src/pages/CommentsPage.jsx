@@ -7,7 +7,7 @@ import { Riple } from 'react-loading-indicators';
 import DropDown from '../components/ui/DropDownButton';
 
 export default function CommentsPage({ posts: initialPosts }) {
-  const { getProfile, profile } = useAuth();
+  const { profile } = useAuth();
   const { getPostById, createComment, comments, getComments, deleteComment } =
     usePost();
   const { classId, commentId } = useParams();
@@ -21,7 +21,6 @@ export default function CommentsPage({ posts: initialPosts }) {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        await getProfile();
         if (!comments.length) {
           await getComments(classId, commentId);
           setGettingComments(false);
@@ -37,15 +36,7 @@ export default function CommentsPage({ posts: initialPosts }) {
       }
     };
     fetchData();
-  }, [
-    classId,
-    commentId,
-    getProfile,
-    getComments,
-    getPostById,
-    comments.length,
-    post,
-  ]);
+  }, [classId, commentId, getComments, getPostById, comments.length, post]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -86,7 +77,7 @@ export default function CommentsPage({ posts: initialPosts }) {
           {/* Sección del Post */}
           {profile?.person && (
             <div className="border border-gray-300 dark:border-gray-500 p-6 rounded-lg shadow-lg mb-8">
-              <h2 className="text-2xl md:text-3xl font-bold mb-4 dark:text-white">
+              <h2 className="text-2xl md:text-3xl font-bold mb-4 dark:text-white break-words">
                 {post.title}
               </h2>
               <p className="text-gray-700 mb-6 dark:text-white break-words overflow-hidden">

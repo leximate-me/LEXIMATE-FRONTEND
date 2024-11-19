@@ -106,7 +106,9 @@ const PostProvider = ({ children }) => {
   const deleteComment = async (classId, postId, commentId) => {
     try {
       await deleteCommentRequest(classId, postId, commentId);
-      setComments((prevComments) => prevComments.filter((c) => c.id !== commentId));
+      setComments((prevComments) =>
+        prevComments.filter((c) => c.id !== commentId)
+      );
     } catch (error) {
       console.error('Error during delete comment request:', error);
       setError(error.response?.data || 'Error deleting comment');

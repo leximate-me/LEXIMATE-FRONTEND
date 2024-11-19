@@ -86,6 +86,7 @@ export default function ClassCardTeacher({ classes: initialClasses }) {
                           <Dropdown
                             classId={classItem.id}
                             onAbandonClass={handleAbandonClass}
+                            msg="Abandonar clase"
                           />
                         </div>
                       </figure>
