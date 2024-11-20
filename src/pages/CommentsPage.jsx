@@ -5,9 +5,10 @@ import { useParams } from 'react-router-dom';
 import Loading from '../components/ui/Loading';
 import { Riple } from 'react-loading-indicators';
 import DropDown from '../components/ui/DropDownButton';
+import dayjs from 'dayjs';
 
 export default function CommentsPage({ posts: initialPosts }) {
-  const { profile } = useAuth();
+  const { profile, user } = useAuth();
   const {
     getPostById,
     createComment,
@@ -21,9 +22,11 @@ export default function CommentsPage({ posts: initialPosts }) {
   const [loading, setLoading] = useState(true);
   const [comment, setComment] = useState('');
   const [isProcessing, setIsProcessing] = useState(false);
+  const [comments, setComments] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
+      setLoading(true);
       try {
         if (!commentsByPost[commentId]) {
           await getComments(classId, commentId);
@@ -32,6 +35,7 @@ export default function CommentsPage({ posts: initialPosts }) {
           const fetchedPost = await getPostById(classId, commentId);
           setPost(fetchedPost);
         }
+        setComments(commentsByPost[commentId] || []);
       } catch (error) {
         console.error('Error fetching data:', error);
       } finally {
@@ -49,6 +53,7 @@ export default function CommentsPage({ posts: initialPosts }) {
       await createComment(classId, commentId, comment);
       setComment('');
       await getComments(classId, commentId); // Recargar comentarios después de crearlos
+      setComments(commentsByPost[commentId] || []);
     } catch (error) {
       console.error('Error creating comment:', error);
     } finally {
@@ -56,19 +61,19 @@ export default function CommentsPage({ posts: initialPosts }) {
     }
   };
 
-  const handleDelete = async (commentId) => {
+  const handleDelete = async (deletedCommentId) => {
     setIsProcessing(true);
     try {
-      await deleteComment(classId, commentId, commentId);
-      await getComments(classId, commentId); // Recargar comentarios después de eliminar uno
+      await deleteComment(classId, commentId, deletedCommentId);
+      // Actualizar el estado localmente eliminando el comentario
+      setComments((prevComments) => prevComments.filter((cmt) => cmt.id !== deletedCommentId));
+      // No volver a llamar a getComments para evitar sobreescribir el estado local
     } catch (error) {
       console.error('Error deleting comment:', error);
     } finally {
       setIsProcessing(false);
     }
   };
-
-  const comments = commentsByPost[commentId] || [];
 
   return (
     <div className="container mx-auto p-6">
@@ -120,49 +125,114 @@ export default function CommentsPage({ posts: initialPosts }) {
               <div className="flex justify-center">
                 <Riple color="#cec702" size="large" />
               </div>
-            ) : comments.length > 0 ? (
-              comments.map((cmt) => (
-                <div
-                  key={cmt.id}
-                  className="mb-5 grid grid-cols-[50px,1fr,auto] dark:bg-[#1a1a1a] bg-white p-4 rounded-md shadow-lg border border-gray-300 dark:border-gray-500"
-                >
-                  <>
-                    <div className="col-start-1 col-span-1 md:col-span-1">
-                      <img
-                        src={
-                          cmt.user?.fileUser?.[0]?.file_url ||
-                          'default-avatar-url.jpg'
-                        }
-                        alt="Avatar"
-                        className="w-12 h-12 rounded-full object-cover border border-gray-500"
-                      />
-                    </div>
-                    <div className="col-start-2 md:col-start-2 md:row-start-1 mx-1 flex flex-wrap gap-1 items-center">
-                      <p className="text-gray-500 truncate">
-                        {cmt.user?.people?.first_name || 'Usuario'}
-                      </p>
-                      <p className="text-gray-500 truncate">
-                        {cmt.user?.people?.last_name || ''}
-                      </p>
-                    </div>
-                  </>
-                  <p className="mt-2 text-gray-800 dark:text-white flex items-center col-start-1 col-span-8 row-start-2 break-all">
-                    {cmt.content}
-                  </p>
-                  <div className="col-start-9 row-start-1">
-                    <DropDown
-                      onAbandonClass={() => handleDelete(cmt.id)}
-                      classId={classId}
-                      additionalParam={cmt.id}
-                      msg="Eliminar comentario"
-                    />
-                  </div>
-                </div>
-              ))
             ) : (
-              <p className="text-gray-500">
-                No hay comentarios aún. ¡Sé el primero en comentar!
-              </p>
+              <>
+                {user && user.rol === 2 ? (
+                  <>
+                    {comments.length > 0 ? (
+                      comments.map((cmt) => (
+                        <div
+                          key={cmt.id}
+                          className="mb-5 grid grid-cols-[50px,150px,auto] grid-rows-2 md:grid-rows-2 dark:bg-[#1a1a1a] bg-white p-4 rounded-md shadow-lg border border-gray-300 dark:border-gray-500"
+                        >
+                          <div className="col-start-1 col-span-1 md:col-span-1">
+                            <img
+                              src={
+                                cmt.user?.fileUser?.[0]?.file_url ||
+                                'default-avatar-url.jpg'
+                              }
+                              alt="Avatar"
+                              className="w-12 h-12 rounded-full object-cover border border-gray-500"
+                            />
+                          </div>
+
+                          <div className='md:col-span-4 md:row-start-1 md:col-start-2 flex items-center flex-wrap'>
+                            <p className="mx-1 dark:text-white text-gray-800 truncate">
+                              {cmt.user?.people?.first_name || 'Usuario'}
+                            </p>
+                            <p className="mx-1 dark:text-white text-gray-800 truncate">
+                              {cmt.user?.people?.last_name || ''}
+                            </p>
+                            <p className='mx-2 italic text-gray-500'>
+                              {dayjs(cmt.createdAt).format('DD/MM/YYYY HH:mm')}
+                            </p>
+                          </div>
+
+                          <p className="row-start-2 md:row-start-2 mt-2 text-gray-800 dark:text-white flex items-center col-start-1 col-span-8 break-words">
+                            {cmt.content}
+                          </p>
+
+                          {user.id === cmt.user.id && (
+                            <div className="col-start-8 justify-self-end self-center">
+                              <DropDown
+                                onAbandonClass={() => handleDelete(cmt.id)}
+                                classId={classId}
+                                additionalParam={cmt.id}
+                                msg="Eliminar comentario"
+                              />
+                            </div>
+                          )}
+                        </div>
+                      ))
+                    ) : (
+                      <p className="text-gray-500">
+                        No hay comentarios aún. ¡Sé el primero en comentar!
+                      </p>
+                    )}
+                  </>
+                ) : (
+                  <>
+                    {comments.length > 0 ? (
+                      comments.map((cmt) => (
+                        <div
+                          key={cmt.id}
+                          className="mb-5 grid grid-cols-[50px,150px,auto] grid-rows-2 md:grid-rows-2 dark:bg-[#1a1a1a] bg-white p-4 rounded-md shadow-lg border border-gray-300 dark:border-gray-500"
+                        >
+                          <div className="col-start-1 col-span-1 md:col-span-1">
+                            <img
+                              src={
+                                cmt.user?.fileUser?.[0]?.file_url ||
+                                'default-avatar-url.jpg'
+                              }
+                              alt="Avatar"
+                              className="w-12 h-12 rounded-full object-cover border border-gray-500"
+                            />
+                          </div>
+
+                          <div className='md:col-span-4 md:row-start-1 md:col-start-2 flex items-center flex-wrap'>
+                            <p className="mx-1 dark:text-white text-gray-800 truncate">
+                              {cmt.user?.people?.first_name || 'Usuario'}
+                            </p>
+                            <p className="mx-1 dark:text-white text-gray-800 truncate">
+                              {cmt.user?.people?.last_name || ''}
+                            </p>
+                            <p className='mx-2 italic text-gray-500'>
+                              {dayjs(cmt.createdAt).format('DD/MM/YYYY HH:mm')}
+                            </p>
+                          </div>
+
+                          <p className="row-start-2 md:row-start-2 mt-2 text-gray-800 dark:text-white flex items-center col-start-1 col-span-8 break-words">
+                            {cmt.content}
+                          </p>
+
+                          <div className="col-start-8 justify-self-end self-center">
+                            <DropDown
+                              onAbandonClass={() => handleDelete(cmt.id)}
+                              classId={classId}
+                              additionalParam={cmt.id}
+                              msg="Eliminar comentario"
+                            />
+                          </div>
+                        </div>
+                      ))
+                    ) : (
+                      <p className="text-gray-500">
+                        No hay comentarios aún. ¡Sé el primero en comentar!
+                      </p>
+                    )}
+                  </>
+                )}
+              </>
             )}
           </div>
         </div>
