@@ -3,7 +3,7 @@ import apoyo from '../assets/apoyo-global.jpg';
 import conexion from '../assets/conexion-educativa.jpeg';
 import juegos from '../assets/juegos-interactivos.jpg';
 import leximate from '../assets/LEXIMATE.jpg';
-
+//
 function LandingPage() {
   return (
     <div className="relative flex flex-col min-h-screen min-w-full transition duration-300 dark:bg-[#1a1a1a]">
