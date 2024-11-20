@@ -103,10 +103,15 @@ const PostProvider = ({ children }) => {
   const createComment = async (classId, postId, comment) => {
     try {
       const res = await createCommentRequest(classId, postId, comment);
+
+      // Actualizar comentarios localmente para mostrar una respuesta inmediata
       setCommentsByPost((prev) => ({
         ...prev,
         [postId]: [...(prev[postId] || []), res.data],
       }));
+
+      // Refrescar comentarios desde el servidor para obtener datos completos
+      await getComments(classId, postId);
     } catch (error) {
       console.error('Error during create comment request:', error);
       setError(error.response?.data || 'Error creating comment');
