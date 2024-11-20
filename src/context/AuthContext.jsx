@@ -30,8 +30,7 @@ const AuthProvider = ({ children }) => {
 
   const signUp = async (user) => {
     try {
-      await registerRequest(user);
-      await updateUserFromToken();
+      await registerRequest(user); // Sólo realiza el registro
     } catch (error) {
       console.log(error.response.data);
       setError(error.response.data);

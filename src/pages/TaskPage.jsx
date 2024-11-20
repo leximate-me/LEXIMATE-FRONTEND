@@ -10,7 +10,7 @@ function TaskPage({ tasks: initialTasks }) {
   const { getTask } = useTask();
   const [task, setTask] = useState(initialTasks);
   const [isLoading, setIsLoading] = useState(true);
-  const { extractText, extractedText, isExtracting } = useTool();
+  const { extractText, extractedText, isExtracting, setExtractedText } = useTool();  // Asegúrate de obtener setExtractedText
 
   // Función para formatear la fecha en AAAA/MM/DD
   const formatDate = (dateString) => {
@@ -43,6 +43,11 @@ function TaskPage({ tasks: initialTasks }) {
     loadTask();
   }, [classId, taskId, getTask]);
 
+  // Limpiar el texto extraído al cambiar la tarea
+  useEffect(() => {
+    setExtractedText([]); // Limpiar el texto extraído cada vez que cambie la tarea
+  }, [taskId, classId, setExtractedText]);
+
   // Función para procesar el texto extraído
   const renderExtractedText = (extractedText) => {
     let titleWords = []; // Para acumular las palabras de tipo title
@@ -71,6 +76,7 @@ function TaskPage({ tasks: initialTasks }) {
                     <br />
                   </React.Fragment>
                 ))}
+
             </p>
           );
           subtitleAndParagraph = [];
@@ -100,6 +106,7 @@ function TaskPage({ tasks: initialTasks }) {
                     <br />
                   </React.Fragment>
                 ))}
+
             </p>
           );
           titleWords = []; // Reseteamos el array de palabras 'title' después de imprimirlas
@@ -151,10 +158,6 @@ function TaskPage({ tasks: initialTasks }) {
     }
     return output;
   };
-
-  useEffect(() => {
-    console.log(extractedText);
-  }, [extractedText]);
 
   return (
     <div className="container mx-auto p-6">

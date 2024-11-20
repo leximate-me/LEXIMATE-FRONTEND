@@ -1,12 +1,18 @@
 import React from 'react';
 
-export function Input({ register, name, rules, placeholder, className, type }) {
+export const Input = ({ type, register, name, rules, placeholder, error }) => {
   return (
-    <input
-      className={`w-full bg-[#e5e5e5] text-black px-4 placeholder-black py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-400 ${className}`}
-      type={type}
-      {...(register && register(name, rules))}
-      placeholder={placeholder}
-    />
+    <div>
+      <input
+        type={type}
+        {...register(name, rules)}
+        className={`w-full bg-[#e5e5e5] text-black px-4 py-2 rounded-lg ${
+          error ? 'border-red-500' : ''
+        } focus:outline-none`}
+        placeholder={placeholder}
+      />
+      {error && <span className="text-red-500">{error}</span>}
+    </div>
   );
-}
+};
+

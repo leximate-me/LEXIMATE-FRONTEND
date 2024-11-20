@@ -21,7 +21,7 @@ function ModalVerification () {
 
   return (
     <>
-        <div className="fixed bottom-4 right-4 bg-red-600 text-white px-6 py-3 rounded-lg hover:bg-red-800 transition duration-300 shadow-[0px_8px_5px_-5px_rgba(0,0,0,0.75)] animate-slide-in">
+        <div className="fixed w-52 bottom-6 right-24 bg-red-600 text-white px-6 py-3 rounded-lg hover:bg-red-800 transition duration-300 shadow-[0px_8px_5px_-5px_rgba(0,0,0,0.75)] animate-slide-in">
           <div className="flex justify-between items-center">
             <button onClick={handleSendEmail}>Se necesita verificar la cuenta</button>
           </div>
