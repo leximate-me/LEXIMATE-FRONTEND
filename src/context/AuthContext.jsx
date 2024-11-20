@@ -1,3 +1,4 @@
+import { get } from 'react-hook-form';
 import {
   registerRequest,
   loginRequest,
@@ -31,6 +32,8 @@ const AuthProvider = ({ children }) => {
   const signUp = async (user) => {
     try {
       await registerRequest(user); // Sólo realiza el registro
+      await updateUserFromToken(); // Actualiza el estado del usuario
+      await getProfile(); // Obtiene el perfil del usuario
     } catch (error) {
       console.log(error.response.data);
       setError(error.response.data);
