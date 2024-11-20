@@ -161,14 +161,6 @@ function NavBar() {
                     </button>
                   </div>
                 </div>
-
-                <div className="w-fit p-1 cursor-pointer rounded-full hover:bg-gray-300 hover:bg-opacity-60 dark:hover:bg-gray-600 transition-all duration-200">
-                  <HiChatAlt className="text-3xl" />
-                </div>
-
-                <div className="w-fit p-1 cursor-pointer rounded-full hover:bg-gray-300 hover:bg-opacity-60 dark:hover:bg-gray-600 transition-all duration-200">
-                  <HiBell className="text-3xl" />
-                </div>
               </div>
 
               <div className="flex items-center justify-center px-3">

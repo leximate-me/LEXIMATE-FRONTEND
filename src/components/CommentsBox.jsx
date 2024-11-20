@@ -5,6 +5,8 @@ import { useParams } from 'react-router-dom';
 import Dropdown from './ui/DropDownButton';
 import { Riple } from 'react-loading-indicators';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
+import dayjs from 'dayjs';
 
 function CommentsBox() {
   const { classId } = useParams();
@@ -12,8 +14,10 @@ function CommentsBox() {
     handleSubmit,
     register,
     formState: { errors },
+    reset,
   } = useForm();
   const { createPost, getPosts, deletePost, posts } = usePost();
+  const { user } = useAuth();
   const [isLoading, setIsLoading] = useState(true);
   const [isCreating, setIsCreating] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -43,6 +47,7 @@ function CommentsBox() {
     try {
       await createPost(classId, data);
       await getPosts(classId); // Obtener posts actualizados
+      reset()
     } catch (error) {
       console.error('Error al crear el post:', error);
     } finally {
@@ -75,7 +80,7 @@ function CommentsBox() {
           <input
             type="text"
             placeholder="Escribe un título para el anuncio..."
-            className="dark:bg-[#1a1a1a] w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 mb-5"
+            className="dark:text-white dark:bg-[#1a1a1a] w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 mb-5"
             {...register('title', { required: true })}
           />
           {errors.title && (
@@ -85,7 +90,7 @@ function CommentsBox() {
           <label>Contenido:</label>
           <textarea
             placeholder="Contenido del anuncio..."
-            className="dark:bg-[#1a1a1a] w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 mb-5"
+            className="dark:text-white dark:bg-[#1a1a1a] w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 mb-5"
             {...register('content', { required: true })}
           />
           {errors.content && (
@@ -104,7 +109,7 @@ function CommentsBox() {
 
       {/* Lista de Comentarios */}
       <div className="mt-2 w-full">
-        {isLoading || isCreating ? (
+        {isLoading || isCreating || isDeleting ? (
           <div className="flex justify-center">
             <Riple color="#cec702" size="large" />
           </div>
@@ -115,35 +120,78 @@ function CommentsBox() {
                 No hay anuncios aún.
               </p>
             ) : (
-              posts?.map((post) => (
-                <div
-                  onClick={() => handleSelectTask(post.id)}
-                  key={post.id}
-                  className="dark:border-gray-600 mb-2 grid grid-cols-6 p-4 border border-gray-300 rounded-lg cursor-pointer"
-                >
-                  <div
-                    className="col-start-8 w-fit h-fit"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                    }}
-                  >
-                    <Dropdown
-                      onAbandonClass={() => handleDeletePost(post.id)}
-                      classId={classId}
-                      additionalParam={post.id}
-                      msg={'Eliminar anuncio'}
-                    />
-                  </div>
-                  <div className="col-span-5 row-start-1 col-start-1 dark:text-white dark:hover:text-blue-400 hover:text-blue-700">
-                    <h3 className="text-lg font-bold break-words overflow-hidden mb-2">
-                      {post.title}
-                    </h3>
-                    <p className="text-sm break-words overflow-hidden">
-                      {post.content}
-                    </p>
-                  </div>
-                </div>
-              ))
+              <>
+                {user && user.rol === 2 ? (
+                  <>
+                    {posts?.map((post) => (
+                      <div
+                        onClick={() => handleSelectTask(post.id)}
+                        key={post.id}
+                        className="hover:text-blue-700 dark:hover:text-blue-400 transition-colors duration-200 dark:border-gray-600 mb-2 grid grid-cols-6 grid-rows-3 md:grid-rows-2 p-4 border border-gray-300 rounded-lg cursor-pointer"
+                      >
+                        {user.id === post.user.id && (
+                          <div
+                            className="col-start-6 justify-self-end h-fit"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                            }}
+                          >
+                            <Dropdown
+                              onAbandonClass={() => handleDeletePost(post.id)}
+                              classId={classId}
+                              additionalParam={post.id}
+                              msg={'Eliminar anuncio'}
+                            />
+                          </div>
+                        )}
+                        <h3 className="dark:text-white text-xl  row-start-1 font-bold break-words overflow-hidden mb-2 col-span-4">
+                          {post.title}
+                        </h3>
+                        <p className="dark:text-white text-lg break-words overflow-hidden row-start-2  col-span-4">
+                          {post.content}
+                        </p>
+
+                        <div className='dark:text-gray-400 text-gray-500 col-span-4 col-start-1 row-start-3 md:col-start-6 md:row-start-2 md:justify-self-end self-center italic'>
+                          {dayjs(post.createdAt).format('DD/MM/YYYY HH:mm')}
+                        </div>
+                      </div>
+                    ))}
+                  </>
+                ) : (
+                  <>
+                    {posts?.map((post) => (
+                      <div
+                        onClick={() => handleSelectTask(post.id)}
+                        key={post.id}
+                        className="hover:text-blue-700 dark:hover:text-blue-400 transition-colors duration-200 dark:border-gray-600 mb-2 grid grid-cols-6 grid-rows-3 md:grid-rows-2 p-4 border border-gray-300 rounded-lg cursor-pointer"
+                      >
+                        <div
+                          className="col-start-6 justify-self-end h-fit"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                          }}
+                        >
+                          <Dropdown
+                            onAbandonClass={() => handleDeletePost(post.id)}
+                            classId={classId}
+                            additionalParam={post.id}
+                            msg={'Eliminar anuncio'}
+                          />
+                        </div>
+                        <h3 className="dark:text-white text-xl  row-start-1 font-bold break-words overflow-hidden mb-2 col-span-4">
+                          {post.title}
+                        </h3>
+                        <p className="dark:text-white text-lg break-words overflow-hidden row-start-2  col-span-4">
+                          {post.content}
+                        </p>
+                        <div className='dark:text-gray-400 text-gray-500 col-span-4 col-start-1 row-start-3 md:col-start-6 md:row-start-2 md:justify-self-end self-center italic'>
+                          {dayjs(post.createdAt).format('DD/MM/YYYY HH:mm')}
+                        </div>
+                      </div>
+                    ))}
+                  </>
+                )}
+              </>
             )}
           </>
         )}
