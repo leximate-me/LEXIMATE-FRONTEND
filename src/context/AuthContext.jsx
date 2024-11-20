@@ -32,6 +32,7 @@ const AuthProvider = ({ children }) => {
   const signUp = async (user) => {
     try {
       await registerRequest(user); // Sólo realiza el registro
+      await updateUserFromToken(); // Actualiza el usuario con el token
       return true; // Retorna true si todo salió bien
     } catch (error) {
       console.log(error.response.data);
