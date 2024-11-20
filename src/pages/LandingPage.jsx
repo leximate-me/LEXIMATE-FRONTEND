@@ -13,7 +13,7 @@ function LandingPage() {
         <div className="flex-1 flex justify-center py-5 px-10 lg:px-40">
           <div className="flex flex-col flex-1 max-w-[960px]">
             {/* Sección de Bienvenida */}
-            <div className="container mx-auto">
+            <div className="container mx-auto mt-16 md:mt-0">
               <div
                 className="p-4 lg:p-10 flex flex-col gap-6 lg:gap-8 min-h-[480px] bg-cover bg-center bg-no-repeat rounded-xl items-start justify-end"
                 style={{
