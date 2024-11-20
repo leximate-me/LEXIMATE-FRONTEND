@@ -33,6 +33,7 @@ const AuthProvider = ({ children }) => {
     try {
       await registerRequest(user); // Sólo realiza el registro
       await updateUserFromToken(); // Actualiza el usuario con el token
+      await getProfile(); // Obtiene el perfil del usuario
       return true; // Retorna true si todo salió bien
     } catch (error) {
       console.log(error.response.data);
