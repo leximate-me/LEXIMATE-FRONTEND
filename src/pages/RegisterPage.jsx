@@ -11,7 +11,7 @@ import dayjs from 'dayjs';
 import { ErrorModal } from '../components/ui/ErrorModal';
 import Loading from '../components/ui/Loading';
 dayjs.extend(utc);
-
+//
 function RegisterPage() {
   const {
     register,
