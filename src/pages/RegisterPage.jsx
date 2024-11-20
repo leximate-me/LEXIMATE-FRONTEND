@@ -45,7 +45,7 @@ function RegisterPage() {
 
     if (result) {
       // Si el registro es exitoso, redirige al login
-      navigate('/login');
+      navigate('/classes');
     } else {
       // Si hay error, marcamos los campos relevantes en rojo
       if (error?.errors) {

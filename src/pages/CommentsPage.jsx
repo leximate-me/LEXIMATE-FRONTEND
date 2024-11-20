@@ -48,6 +48,7 @@ export default function CommentsPage({ posts: initialPosts }) {
     try {
       await createComment(classId, commentId, comment);
       setComment('');
+      await getComments(classId, commentId); // Recargar comentarios después de crearlos
     } catch (error) {
       console.error('Error creating comment:', error);
     } finally {
@@ -59,6 +60,7 @@ export default function CommentsPage({ posts: initialPosts }) {
     setIsProcessing(true);
     try {
       await deleteComment(classId, commentId, commentId);
+      await getComments(classId, commentId); // Recargar comentarios después de eliminar uno
     } catch (error) {
       console.error('Error deleting comment:', error);
     } finally {
@@ -132,7 +134,7 @@ export default function CommentsPage({ posts: initialPosts }) {
                           'default-avatar-url.jpg'
                         }
                         alt="Avatar"
-                        className="md:w-12 rounded-full border border-gray-500"
+                        className="w-12 h-12 rounded-full object-cover border border-gray-500"
                       />
                     </div>
                     <div className="col-start-2 md:col-start-2 md:row-start-1 mx-1 flex flex-wrap gap-1 items-center">
