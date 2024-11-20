@@ -3,30 +3,24 @@ import notFound from '../assets/not-found.svg';
 import Dropdown from './ui/DropDownButton';
 import bgClassCard from '../assets/bg-classCard.jpg';
 import { useNavigate } from 'react-router-dom';
+import { useClass } from '../context/ClassContext';
 
-export default function ClassCardStudent({ classes }) {
+export default function ClassCardStudent({ classes: initialClasses }) {
   const navigate = useNavigate(); // Hook para navegación
-  // Estado para controlar la visibilidad del modal
-  // const [showModal, setShowModal] = useState(false);
-
-  // // Estado para almacenar la clase seleccionada
-  // const [selectedClass, setSelectedClass] = useState(null);
-
-  // const { error } = useClass();
-
-  // const handleOpenModal = (classItem) => {
-  //   setSelectedClass(classItem); // Guardar la clase seleccionada
-  //   setShowModal(true); // Abrir el modal
-  // };
+  const { leaveClass, setClasses } = useClass();
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [localClasses, setLocalClasses] = useState(initialClasses);
 
   const handleAbandonClass = async (classId) => {
     setIsDeleting(true); // Mostrar loading al iniciar la eliminación
     try {
       console.log('Clase abandonada:', classId);
-      await deleteClass(classId);
+      await leaveClass(classId);
 
       // Filtrar la clase eliminada del estado
-      setClasses((prevClasses) => prevClasses.filter((c) => c.id !== classId));
+      setLocalClasses((prevClasses) =>
+        prevClasses.filter((c) => c.id !== classId)
+      );
     } catch (error) {
       console.log('Error al abandonar la clase:', error);
     } finally {
@@ -36,7 +30,7 @@ export default function ClassCardStudent({ classes }) {
 
   return (
     <div className="h-[100%] flex justify-center">
-      {classes && classes.length === 0 ? (
+      {localClasses && localClasses.length === 0 ? (
         <div className="w-80 h-52 flex flex-col justify-center items-center m-5 border border-gray-300 rounded-md shadow-[0px_9px_15px_-7px_rgba(0,0,0,0.75)]">
           <div className="flex flex-wrap justify-center items-center w-[90%] h-[90%] m-5">
             <img src={notFound} alt="No existen clases" />
@@ -50,8 +44,8 @@ export default function ClassCardStudent({ classes }) {
       ) : (
         <>
           <div className="flex flex-wrap h-fit gap-5">
-            {classes &&
-              classes.map((classItem, index) => (
+            {localClasses &&
+              localClasses.map((classItem, index) => (
                 <div
                   key={index}
                   onClick={() =>

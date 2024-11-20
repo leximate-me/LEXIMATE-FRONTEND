@@ -32,7 +32,7 @@ const joinClassRequest = async (classCode) => {
 
 const leaveClassRequest = async (classId) => {
   try {
-    const response = await axios.post(`/class/leave`, { classId });
+    const response = await axios.post(`/class/${classId}/leave`);
     return response;
   } catch (error) {
     console.log('Error during leaveClass request:', error);
