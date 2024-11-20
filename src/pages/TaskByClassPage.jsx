@@ -87,7 +87,6 @@ function TaskPage() {
             </div>
           </div>
 
-
           {/* Renderizar contenido basado en la opción seleccionada */}
           <div className="mt-5 md:mt-0 col-span-8 row-start-3 col-start-1 md:col-span-6 md:col-start-3 md:row-span-2 md:row-start-3">
             {renderContent()}
@@ -103,8 +102,9 @@ function TaskPage() {
 
           {/* Sidebar para dispositivos móviles */}
           <div
-            className={`fixed top-[calc(4*100%/8)] min-h-fit p-2 left-0 z-20 w-4/5 transform transition-all duration-500 md:hidden ${isSidebarOpen ? 'translate-x-0 w-4/5' : '-translate-x-full'
-              }`}
+            className={`fixed top-[calc(4*100%/8)] min-h-fit p-2 left-0 z-20 w-4/5 transform transition-all duration-500 md:hidden ${
+              isSidebarOpen ? 'translate-x-0 w-4/5' : '-translate-x-full'
+            }`}
           >
             <SideBar onClose={toggleSidebar} />
           </div>
@@ -122,17 +122,20 @@ function TaskPage() {
             <SideBar />
           </div>
 
-          <div className="fixed bottom-8 right-8">
-            <button
-              onClick={() => setShowModal(true)}
-              className="relative w-14 h-14 bg-blue-600 text-white rounded-full p-4 hover:bg-blue-700 transition duration-200 group"
-            >
-              <FaPlus className="absolute left-5 bottom-5" />
-              <span className="absolute bottom-full mb-2 w-20 left-1/2 -translate-x-1/2 bg-gray-800 text-white text-xs rounded py-1 px-2 opacity-0 transition-opacity duration-200 pointer-events-none group-hover:opacity-100">
-                Crear una tarea
-              </span>
-            </button>
-          </div>
+          {/* Botón para crear tarea, visible solo para profesores */}
+          {user && user.rol === 3 && (
+            <div className="fixed bottom-8 right-8">
+              <button
+                onClick={() => setShowModal(true)}
+                className="relative w-14 h-14 bg-blue-600 text-white rounded-full p-4 hover:bg-blue-700 transition duration-200 group"
+              >
+                <FaPlus className="absolute left-5 bottom-5" />
+                <span className="absolute bottom-full mb-2 w-20 left-1/2 -translate-x-1/2 bg-gray-800 text-white text-xs rounded py-1 px-2 opacity-0 transition-opacity duration-200 pointer-events-none group-hover:opacity-100">
+                  Crear una tarea
+                </span>
+              </button>
+            </div>
+          )}
 
           <CreateTaskModal
             isOpen={showModal}

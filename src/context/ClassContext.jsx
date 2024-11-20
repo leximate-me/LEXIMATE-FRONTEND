@@ -1,4 +1,4 @@
-import { createContext, useState, useContext, useEffect } from 'react';
+import { createContext, useState, useContext } from 'react';
 import {
   getClassesRequest,
   createClassesRequest,
@@ -7,7 +7,6 @@ import {
   deleteClassRequest,
   getUsersByClassRequest,
 } from '../api/class';
-import { set } from 'react-hook-form';
 
 const ClassContext = createContext();
 

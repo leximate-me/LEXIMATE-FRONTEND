@@ -4,37 +4,31 @@ import { useParams, useNavigate } from 'react-router-dom';
 import notFound from '../assets/not-found.svg';
 import Loading from './ui/Loading';
 import Dropdown from './ui/DropDownButton';
+import { useAuth } from '../context/AuthContext';
 
 function TaskCard({ tasks: initialTasks }) {
-
   const navigate = useNavigate();
-
   const { updateTask, deleteTask } = useTask();
-
   const { classId } = useParams();
+  const { user } = useAuth();
 
   const [tasks, setTasks] = useState(initialTasks);
-
   const [isDeleting, setIsDeleting] = useState(false);
 
   const date = tasks.map((task) => {
     let dateCont = [];
-
     let dateSplit = task.due_date.split('');
-
     for (let i = 0; i < 10; i++) {
       dateCont.push(dateSplit[i]);
     }
-
     let joinDate = dateCont.join('');
-
     task.date = joinDate;
   });
 
   const handleSelectTask = (taskId) => {
     console.log('Tarea seleccionada:', taskId);
     navigate(`/${classId}/task/${taskId}`);
-  }
+  };
 
   const handleDeleteTask = async (classId, taskId) => {
     setIsDeleting(true); // Mostrar loading al iniciar la eliminación
@@ -80,12 +74,17 @@ function TaskCard({ tasks: initialTasks }) {
                       className="grid grid-cols-6 dark:border-[#fffd92] dark:bg-[#1a1a1a] p-4 rounded-lg shadow-[0px_8px_12px_-6px] border border-gray-300 cursor-pointer"
                       key={task.id}
                     >
-                      <div className='col-span-6 md:col-span-3 flex flex-col gap-5'>
+                      <div className="col-span-6 md:col-span-3 flex flex-col gap-5">
                         <h2 className="col-span-6 md:col-span-3 text-2xl font-semibold break-words dark:text-white">
                           {task.title}
                         </h2>
-                        <p className="col-span-6 md:col-span-3 col-start-1 break-words dark:text-white">{task.description}</p>
-                        <p className="col-span-7 md:col-span-3 dark:text-white"><b>Fecha de entrega: </b>{task.date}</p>
+                        <p className="col-span-6 md:col-span-3 col-start-1 break-words dark:text-white">
+                          {task.description}
+                        </p>
+                        <p className="col-span-7 md:col-span-3 dark:text-white">
+                          <b>Fecha de entrega: </b>
+                          {task.date}
+                        </p>
                       </div>
 
                       {task.files && task.files.length > 0 && (
@@ -106,17 +105,21 @@ function TaskCard({ tasks: initialTasks }) {
                           </ul>
                         </div>
                       )}
-                      <div className="col-start-7 row-start-1 w-fit h-fit"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                        }}>
-                        <Dropdown
-                          onAbandonClass={handleDeleteTask}
-                          classId={classId}
-                          additionalParam={task.id}
-                          msg={'Eliminar tarea'}
-                        />
-                      </div>
+                      {user && user.rol === 3 && (
+                        <div
+                          className="col-start-7 row-start-1 w-fit h-fit"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                          }}
+                        >
+                          <Dropdown
+                            onAbandonClass={handleDeleteTask}
+                            classId={classId}
+                            additionalParam={task.id}
+                            msg={'Eliminar tarea'}
+                          />
+                        </div>
+                      )}
                     </li>
                   ))}
                 </ul>
