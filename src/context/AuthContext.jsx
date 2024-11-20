@@ -34,9 +34,11 @@ const AuthProvider = ({ children }) => {
       await registerRequest(user); // Sólo realiza el registro
       await updateUserFromToken(); // Actualiza el estado del usuario
       await getProfile(); // Obtiene el perfil del usuario
+      return true; // Retorna true si todo salió bien
     } catch (error) {
       console.log(error.response.data);
       setError(error.response.data);
+      return false; // Retorna false si ocurrió un error
     }
   };
 
