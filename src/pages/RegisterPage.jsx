@@ -43,7 +43,10 @@ function RegisterPage() {
 
     const result = await signUp(user);
 
-    if (!result) {
+    if (result) {
+      // Si el registro es exitoso, redirige al login
+      navigate('/login');
+    } else {
       // Si hay error, marcamos los campos relevantes en rojo
       if (error?.errors) {
         Object.keys(error.errors).forEach((field) => {
@@ -53,9 +56,6 @@ function RegisterPage() {
           });
         });
       }
-    } else {
-      // Si no hay error, redirigimos al login
-      navigate('/login');
     }
 
     setIsLoading(false);
@@ -158,8 +158,9 @@ function RegisterPage() {
                   error={errors.password?.message}
                 />
                 <select
-                  className={`w-full bg-[#e5e5e5] text-black px-4 py-2 rounded-lg ${errors.role ? 'border-red-500' : ''
-                    } focus:outline-none`}
+                  className={`w-full bg-[#e5e5e5] text-black px-4 py-2 rounded-lg ${
+                    errors.role ? 'border-red-500' : ''
+                  } focus:outline-none`}
                   {...register('role', { required: 'Este campo es requerido' })}
                 >
                   <option value="" disabled>
