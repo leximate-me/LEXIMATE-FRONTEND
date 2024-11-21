@@ -43,6 +43,16 @@ const PostProvider = ({ children }) => {
     }
   }, []);
 
+  const getComments = async (classId, postId) => {
+    try {
+      const res = await getCommentsRequest(classId, postId);
+      setCommentsByPost((prev) => ({ ...prev, [postId]: res.data }));
+    } catch (error) {
+      console.error('Error during get comments request:', error);
+      setError(error.response?.data || 'Error fetching comments');
+    }
+  };
+
   const createPost = async (classId, post) => {
     setIsCreating(true);
     try {
@@ -71,6 +81,42 @@ const PostProvider = ({ children }) => {
     }
   };
 
+  const createComment = async (classId, postId, content) => {
+    try {
+      const res = await createCommentRequest(classId, postId, content);
+      setCommentsByPost((prev) => ({
+        ...prev,
+        [postId]: [...(prev[postId] || []), res.data],
+      }));
+    } catch (error) {
+      console.error('Error during create comment request:', error);
+      setError(error.response?.data || 'Error creating comment');
+    }
+  };
+
+  const getPostById = async (classId, postId) => {
+    try {
+      const res = await getPostByIdRequest(classId, postId);
+      return res.data;
+    } catch (error) {
+      console.error('Error during get post by id request:', error);
+      setError(error.response?.data || 'Error fetching post');
+    }
+  };
+  
+  const deleteComment = async (classId, postId, commentId) => {
+    try {
+      await deleteCommentRequest(classId, postId, commentId);
+      setCommentsByPost((prev) => ({
+        ...prev,
+        [postId]: prev[postId].filter((c) => c.id !== commentId),
+      }));
+    } catch (error) {
+      console.error('Error during delete comment request:', error);
+      setError(error.response?.data || 'Error deleting comment');
+    }
+  };
+
   return (
     <PostContext.Provider
       value={{
@@ -83,6 +129,10 @@ const PostProvider = ({ children }) => {
         deletePost,
         isLoading,
         commentsByPost,
+        getComments,
+        createComment,
+        getPostById,
+        deleteComment,
       }}
     >
       {children}
