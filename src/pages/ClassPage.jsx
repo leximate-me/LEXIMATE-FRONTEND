@@ -22,7 +22,7 @@ function ClassPage() {
   return (
     <div className="flex justify-center h-[500px] m-5">
       {isLoading || isCreating ? (
-        <>{Loading(isLoading ? 'Cargando clases...' : 'Creando tarea...')}</>
+        <>{Loading(isLoading ? 'Cargando clases...' : 'Creando clase...')}</>
       ) : (
         <>
           {user && user.rol === 3 ? (
