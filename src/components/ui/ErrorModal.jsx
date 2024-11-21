@@ -4,7 +4,13 @@ import swal from 'sweetalert';
 export function ErrorModal({ error, clearError }) {
   useEffect(() => {
     if (error) {
-      const messages = error.error.map((err) => err).join('\n');
+      let messages;
+      if (Array.isArray(error.error)) {
+        messages = error.error.map((err) => err).join('\n');
+      } else {
+        messages = error.error || error.message || null;
+      }
+
       swal({
         title: 'ERROR!',
         text: messages,
