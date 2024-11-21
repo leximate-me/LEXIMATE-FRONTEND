@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from 'react';
+import { createContext, useContext, useState, useCallback } from 'react';
 import {
   getPostsRequest,
   createPostRequest,
@@ -20,17 +20,17 @@ const usePost = () => {
 };
 
 const PostProvider = ({ children }) => {
-  const [error, setError] = useState(null);
-  const [isCreating, setIsCreating] = useState(false);
   const [posts, setPosts] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [commentsByPost, setCommentsByPost] = useState({}); // Comentarios organizados por postId
+  const [error, setError] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isCreating, setIsCreating] = useState(false);
+  const [commentsByPost, setCommentsByPost] = useState({});
 
   const clearError = () => {
     setError(null);
   };
 
-  const getPosts = async (classId) => {
+  const getPosts = useCallback(async (classId) => {
     setIsLoading(true);
     try {
       const res = await getPostsRequest(classId);
@@ -41,7 +41,7 @@ const PostProvider = ({ children }) => {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, []);
 
   const createPost = async (classId, post) => {
     setIsCreating(true);
@@ -62,72 +62,12 @@ const PostProvider = ({ children }) => {
       setPosts((prevPosts) => prevPosts.filter((p) => p.id !== postId));
       setCommentsByPost((prev) => {
         const updated = { ...prev };
-        delete updated[postId]; // Eliminar comentarios asociados al post eliminado
+        delete updated[postId];
         return updated;
       });
     } catch (error) {
       console.error('Error during delete post request:', error);
       setError(error.response?.data || 'Error deleting post');
-    }
-  };
-
-  const getPostById = async (classId, postId) => {
-    setIsLoading(true);
-    try {
-      const res = await getPostByIdRequest(classId, postId);
-      return res.data;
-    } catch (error) {
-      console.error('Error during get post by id request:', error);
-      setError(error.response?.data || 'Error fetching post');
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const getComments = async (classId, postId) => {
-    setIsLoading(true);
-    try {
-      const res = await getCommentsRequest(classId, postId);
-      setCommentsByPost((prev) => ({
-        ...prev,
-        [postId]: res.data,
-      }));
-    } catch (error) {
-      console.error('Error during get comments request:', error);
-      setError(error.response?.data || 'Error fetching comments');
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const createComment = async (classId, postId, comment) => {
-    try {
-      const res = await createCommentRequest(classId, postId, comment);
-
-      // Actualizar comentarios localmente para mostrar una respuesta inmediata
-      setCommentsByPost((prev) => ({
-        ...prev,
-        [postId]: [...(prev[postId] || []), res.data],
-      }));
-
-      // Refrescar comentarios desde el servidor para obtener datos completos
-      await getComments(classId, postId);
-    } catch (error) {
-      console.error('Error during create comment request:', error);
-      setError(error.response?.data || 'Error creating comment');
-    }
-  };
-
-  const deleteComment = async (classId, postId, commentId) => {
-    try {
-      await deleteCommentRequest(classId, postId, commentId);
-      setCommentsByPost((prev) => ({
-        ...prev,
-        [postId]: prev[postId]?.filter((c) => c.id !== commentId),
-      }));
-    } catch (error) {
-      console.error('Error during delete comment request:', error);
-      setError(error.response?.data || 'Error deleting comment');
     }
   };
 
@@ -142,11 +82,7 @@ const PostProvider = ({ children }) => {
         clearError,
         deletePost,
         isLoading,
-        getPostById,
-        createComment,
         commentsByPost,
-        getComments,
-        deleteComment,
       }}
     >
       {children}
