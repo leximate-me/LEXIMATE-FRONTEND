@@ -8,7 +8,7 @@ import {
   getCommentsRequest,
   deleteCommentRequest,
 } from '../api/post';
-
+//
 const PostContext = createContext();
 
 const usePost = () => {
@@ -103,7 +103,7 @@ const PostProvider = ({ children }) => {
       setError(error.response?.data || 'Error fetching post');
     }
   };
-  
+
   const deleteComment = async (classId, postId, commentId) => {
     try {
       await deleteCommentRequest(classId, postId, commentId);
