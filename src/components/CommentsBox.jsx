@@ -36,7 +36,7 @@ function CommentsBox() {
       } catch (error) {
         console.error('Error al obtener los posts:', error);
       } finally {
-        setIsLoading(false); // Asegúrate de que siempre se desactive el estado de carga
+        setIsLoading(false);
       }
     };
     fetchPosts();
@@ -47,11 +47,11 @@ function CommentsBox() {
     try {
       await createPost(classId, data);
       await getPosts(classId); // Obtener posts actualizados
-      reset()
+      reset(); // Limpiar los campos del formulario
     } catch (error) {
       console.error('Error al crear el post:', error);
     } finally {
-      setIsCreating(false); // Asegúrate de que se desactive el estado de creación
+      setIsCreating(false);
     }
   });
 
@@ -63,9 +63,13 @@ function CommentsBox() {
     } catch (error) {
       console.error('Error al eliminar el post:', error);
     } finally {
-      setIsDeleting(false); // Asegúrate de que se desactive el estado de eliminación
+      setIsDeleting(false);
     }
   };
+
+  useEffect(() => {
+    console.log('me recargue')
+  }, [getPosts])
 
   return (
     <div className="border border-gray-300 dark:border-gray-500 p-6 rounded-lg shadow-[0px_9px_15px_-7px_rgba(0,0,0,0.75)]">
@@ -76,7 +80,7 @@ function CommentsBox() {
       {/* Formulario de Comentario */}
       <div className="flex items-center space-x-4">
         <form onSubmit={onSubmit} className="w-full">
-          <label>Título:</label>
+          <label className="block mb-1 text-gray-700 dark:text-gray-300">Título:</label>
           <input
             type="text"
             placeholder="Escribe un título para el anuncio..."
@@ -87,7 +91,7 @@ function CommentsBox() {
             <span className="text-red-500">Este campo es requerido</span>
           )}
 
-          <label>Contenido:</label>
+          <label className="block mb-1 text-gray-700 dark:text-gray-300">Contenido:</label>
           <textarea
             placeholder="Contenido del anuncio..."
             className="dark:text-white dark:bg-[#1a1a1a] w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 mb-5"
@@ -100,7 +104,7 @@ function CommentsBox() {
           <button
             type="submit"
             className="px-4 py-2 mb-5 bg-indigo-500 text-white rounded-lg hover:bg-indigo-600 transition"
-            disabled={isCreating} // Deshabilitar botón mientras se crea un anuncio
+            disabled={isCreating}
           >
             {isCreating ? 'Creando...' : 'Comentar'}
           </button>
@@ -129,7 +133,7 @@ function CommentsBox() {
                         key={post.id}
                         className="hover:text-blue-700 dark:hover:text-blue-400 transition-colors duration-200 dark:border-gray-600 mb-2 grid grid-cols-6 grid-rows-3 md:grid-rows-2 p-4 border border-gray-300 rounded-lg cursor-pointer"
                       >
-                        {user.id === post.user.id && (
+                        {user?.id === post?.user?.id && (
                           <div
                             className="col-start-6 justify-self-end h-fit"
                             onClick={(e) => {
@@ -144,14 +148,13 @@ function CommentsBox() {
                             />
                           </div>
                         )}
-                        <h3 className="dark:text-white text-xl  row-start-1 font-bold break-words overflow-hidden mb-2 col-span-4">
-                          {post.title}
+                        <h3 className="dark:text-white text-xl row-start-1 font-bold break-words overflow-hidden mb-2 col-span-4">
+                          {post.title || 'Sin Título'}
                         </h3>
-                        <p className="dark:text-white text-lg break-words overflow-hidden row-start-2  col-span-4">
-                          {post.content}
+                        <p className="dark:text-white text-lg break-words overflow-hidden row-start-2 col-span-4">
+                          {post.content || 'Sin Contenido'}
                         </p>
-
-                        <div className='dark:text-gray-400 text-gray-500 col-span-4 col-start-1 row-start-3 md:col-start-6 md:row-start-2 md:justify-self-end self-center italic'>
+                        <div className="dark:text-gray-400 text-gray-500 col-span-4 col-start-1 row-start-3 md:col-start-6 md:row-start-2 md:justify-self-end self-center italic">
                           {dayjs(post.createdAt).format('DD/MM/YYYY HH:mm')}
                         </div>
                       </div>
@@ -178,13 +181,13 @@ function CommentsBox() {
                             msg={'Eliminar anuncio'}
                           />
                         </div>
-                        <h3 className="dark:text-white text-xl  row-start-1 font-bold break-words overflow-hidden mb-2 col-span-4">
-                          {post.title}
+                        <h3 className="dark:text-white text-xl row-start-1 font-bold break-words overflow-hidden mb-2 col-span-4">
+                          {post.title || 'Sin Título'}
                         </h3>
-                        <p className="dark:text-white text-lg break-words overflow-hidden row-start-2  col-span-4">
-                          {post.content}
+                        <p className="dark:text-white text-lg break-words overflow-hidden row-start-2 col-span-4">
+                          {post.content || 'Sin Contenido'}
                         </p>
-                        <div className='dark:text-gray-400 text-gray-500 col-span-4 col-start-1 row-start-3 md:col-start-6 md:row-start-2 md:justify-self-end self-center italic'>
+                        <div className="dark:text-gray-400 text-gray-500 col-span-4 col-start-1 row-start-3 md:col-start-6 md:row-start-2 md:justify-self-end self-center italic">
                           {dayjs(post.createdAt).format('DD/MM/YYYY HH:mm')}
                         </div>
                       </div>
