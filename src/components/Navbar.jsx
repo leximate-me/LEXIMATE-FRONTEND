@@ -58,7 +58,7 @@ function NavBar() {
   return (
     <header
       id="navbar"
-      className="fixed top-0 left-0 right-0 z-50 w-full flex flex-col md:flex-row items-center justify-between whitespace-nowrap border-b border-solid transition duration-300 dark:border-b-[#fffd92] py-3 bg-[#f8f40c] dark:bg-[#1a1a1a]"
+      className="fixed top-0 left-0 right-0 z-50 w-full flex flex-col md:flex-row items-center justify-between whitespace-nowrap border-b border-[#dbcf7f] transition duration-300 dark:border-b-[#fffd92] py-3 bg-primary dark:bg-[#1a1a1a]"
     >
       {/* LOGO Y BOTÓN DE MENÚ */}
       <div className="flex items-center justify-between w-full md:w-fit px-5 z-50">
@@ -174,7 +174,9 @@ function NavBar() {
           {location.pathname !== '/login' && (
             <div className="flex flex-col md:flex-row items-center gap-4 md:gap-8 order-2 md:order-1 px-5">
               <ButtonLink to="/login" className="dark:bg-[#1a1a1a] dark:text-[#fffd92]">
-                Iniciar Sesión
+              <p>
+                <span className='text-accent'>I</span>niciar Sesió<span className='text-accent'>n</span>
+              </p>
               </ButtonLink>
               <div className="flex items-center justify-center">
                 <ToggleTheme />

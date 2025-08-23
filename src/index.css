@@ -24,3 +24,37 @@ div {
 svg {
   color: var(--icon-color);
 }
+
+@font-face {
+  font-family: 'OpenDyslexic';
+  src: url('./fonts/OpenDyslexic-Regular.otf') format('opentype');
+  font-weight: 400; /* Regular */
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'OpenDyslexic';
+  src: url('./fonts/OpenDyslexic-Bold.otf') format('opentype');
+  font-weight: 700; /* Negrita */
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'OpenDyslexic';
+  src: url('./fonts/OpenDyslexic-Italic.otf') format('opentype');
+  font-weight: 400; /* Cursiva */
+  font-style: italic;
+  font-display: swap;
+}
+
+/* Puedes añadir las versiones "Alta" o "Mono" si las necesitas */
+/* Ejemplo de la versión Alta */
+@font-face {
+  font-family: 'OpenDyslexicAlta';
+  src: url('./fonts/OpenDyslexicAlta-Regular.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
