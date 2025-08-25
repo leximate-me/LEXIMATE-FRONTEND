@@ -5,6 +5,7 @@ import { ButtonLink } from './ui/ButtonLink';
 import ToggleTheme from './ToggleTheme';
 import logo from '../assets/logo-leximate.png';
 import { HiUser, HiBell, HiChatAlt } from 'react-icons/hi';
+import HighlightLetter from './ui/HighlightLetter';
 
 function NavBar() {
   const { isAuthenticated, logOut, user, getProfile, profile } = useAuth();
@@ -71,9 +72,11 @@ function NavBar() {
                 className="w-full h-full object-cover"
               />
             </div>
-            <h2 className="text-lg font-bold leading-tight tracking-[-0.015em]">
-              LexiMate
-            </h2>
+            <p className="text-lg font-opendyslexic tracking-very-wide leading-tight">
+              <HighlightLetter color='green'>L</HighlightLetter>
+              exiMat
+              <HighlightLetter color='green'>e</HighlightLetter>
+            </p>
           </div>
         </Link>
 
@@ -175,7 +178,8 @@ function NavBar() {
             <div className="flex flex-col md:flex-row items-center gap-4 md:gap-8 order-2 md:order-1 px-5">
               <ButtonLink to="/login" className="dark:bg-[#1a1a1a] dark:text-[#fffd92]">
               <p>
-                <span className='text-accent'>I</span>niciar Sesió<span className='text-accent'>n</span>
+                <HighlightLetter color='red'>I</HighlightLetter>niciar sesió
+                <HighlightLetter color='red'>n</HighlightLetter>
               </p>
               </ButtonLink>
               <div className="flex items-center justify-center">
