@@ -4,63 +4,67 @@ import Dropdown from './ui/DropDownButton';
 import bgClassCard from '../assets/bg-classCard.jpg';
 import { useNavigate } from 'react-router-dom';
 import { useClass } from '../context/ClassContext';
+import HighlightLetter from './ui/HighlightLetter';
+
+// Paleta de colores pastel que combinan con amarillo pastel
+const pastelColors = [
+  "#fef195", // amarillo pastel
+  "#FFB6B9", // rosa pastel
+  "#A0E7E5", // celeste pastel
+  "#B5EAD7", // verde menta pastel
+  "#C7CEEA", // lavanda pastel
+  "#F9D5E5", // rosa claro
+  "#E2F0CB", // verde pastel
+  "#FFF5BA", // amarillo muy claro
+];
 
 export default function ClassCardStudent({ classes: initialClasses }) {
-  const navigate = useNavigate(); // Hook para navegación
+  const navigate = useNavigate();
   const { leaveClass, setClasses } = useClass();
   const [isDeleting, setIsDeleting] = useState(false);
   const [localClasses, setLocalClasses] = useState(initialClasses);
 
   const handleAbandonClass = async (classId) => {
-    setIsDeleting(true); // Mostrar loading al iniciar la eliminación
+    setIsDeleting(true);
     try {
-      console.log('Clase abandonada:', classId);
       await leaveClass(classId);
-
-      // Filtrar la clase eliminada del estado
       setLocalClasses((prevClasses) =>
         prevClasses.filter((c) => c.id !== classId)
       );
     } catch (error) {
-      console.log('Error al abandonar la clase:', error);
+      console.log("Error al abandonar la clase:", error);
     } finally {
-      setIsDeleting(false); // Ocultar loading cuando termine
+      setIsDeleting(false);
     }
   };
 
   return (
-    <div className="h-[100%] flex justify-center">
+    <div className="h-full flex justify-center">
       {localClasses && localClasses.length === 0 ? (
         <div className="w-80 h-52 flex flex-col justify-center items-center m-5 border border-gray-300 rounded-md shadow-[0px_9px_15px_-7px_rgba(0,0,0,0.75)]">
-          <div className="flex flex-wrap justify-center items-center w-[90%] h-[90%] m-5">
-            <img src={notFound} alt="No existen clases" />
-          </div>
-          <div className="flex flex-wrap justify-center items-center w-[90%] h-[90%] m-5">
-            <h1>
-              <b>NO EXISTEN CLASES</b>
-            </h1>
-          </div>
+          <img src={notFound} alt="No existen clases" className="w-24" />
+          <h1 className="mt-4 font-bold">NO EXISTEN CLASES</h1>
         </div>
       ) : (
-        <>
-          <div className="flex flex-wrap h-fit gap-5">
-            {localClasses &&
-              localClasses.map((classItem, index) => (
+        <div className="flex flex-wrap h-fit gap-5">
+          {localClasses &&
+            localClasses.map((classItem, index) => {
+              // Elegir un color de la paleta
+              const bgColor =
+                pastelColors[index % pastelColors.length]; // para que sea cíclico
+
+              return (
                 <div
                   key={index}
-                  onClick={() =>
-                    navigate(`/${classItem.id}/tasks`)
-                  } /* Redirigir al hacer clic en la carta */
-                  className="card card-compact bg-base-100 w-80 shadow-xl h-fit cursor-pointer"
+                  onClick={() => navigate(`/${classItem.id}/tasks`)}
+                  className="card card-compact w-80 shadow-xl h-fit cursor-pointer"
+                  style={{ backgroundColor: bgColor }} // <-- color pastel aplicado
                 >
                   <figure className="relative h-48 cursor-pointer">
-                    <img className="h-80" src={bgClassCard} alt="Shoes" />
+                    <img className="h-80" src={bgClassCard} alt="Fondo" />
                     <div
                       className="absolute top-2 right-2"
-                      key={index}
-                      onClick={(e) => {
-                        e.stopPropagation(); // Prevenir que el clic en el botón redirija
-                      }}
+                      onClick={(e) => e.stopPropagation()}
                     >
                       <Dropdown
                         classId={classItem.id}
@@ -69,14 +73,34 @@ export default function ClassCardStudent({ classes: initialClasses }) {
                       />
                     </div>
                   </figure>
-                  <div className="card-body">
-                    <h2 className="card-title">{classItem.name}</h2>
-                    <p className="text-gray-500">{classItem.description}</p>
+                  <div className="card-body tracking-very-wide font-opendyslexic">
+                    <p className="text-xl font-bold">
+                      <HighlightLetter>
+                        {classItem.name[0]}
+                      </HighlightLetter>
+                      {classItem.name.slice(1, -1)}
+                      <HighlightLetter>
+                        {classItem.name[classItem.name.length - 1]}
+                      </HighlightLetter>
+                    </p>
+                    <p className="text-gray-700">
+                      <HighlightLetter color="red">
+                        {classItem.description[0]}
+                      </HighlightLetter>
+                      {classItem.description.slice(1, -1)}
+                      <HighlightLetter color="red">
+                        {
+                          classItem.description[
+                            classItem.description.length - 1
+                          ]
+                        }
+                      </HighlightLetter>
+                    </p>
                   </div>
                 </div>
-              ))}
-          </div>
-        </>
+              );
+            })}
+        </div>
       )}
     </div>
   );
