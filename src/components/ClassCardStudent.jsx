@@ -82,8 +82,9 @@ export default function ClassCardStudent({ classes: initialClasses }) {
                       <HighlightLetter>
                         {classItem.name[classItem.name.length - 1]}
                       </HighlightLetter>
+                      {console.log(classItem.name[classItem.name.length - 1])}
                     </p>
-                    <p className="text-gray-700">
+                    <p className="text-gray-700 break-all">
                       <HighlightLetter color="red">
                         {classItem.description[0]}
                       </HighlightLetter>
