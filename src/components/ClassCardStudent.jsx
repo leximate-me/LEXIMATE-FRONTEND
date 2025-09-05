@@ -57,7 +57,7 @@ export default function ClassCardStudent({ classes: initialClasses }) {
                 <div
                   key={index}
                   onClick={() => navigate(`/${classItem.id}/tasks`)}
-                  className="card card-compact w-80 shadow-xl h-fit cursor-pointer"
+                  className="card card-compact w-80 shadow-xl h-fit cursor-pointer hover:scale-105 transition-transform duration-200"
                   style={{ backgroundColor: bgColor }} // <-- color pastel aplicado
                 >
                   <figure className="relative h-48 cursor-pointer">

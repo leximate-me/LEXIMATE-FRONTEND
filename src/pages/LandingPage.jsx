@@ -11,21 +11,15 @@ function LandingPage() {
         <div className='w-96 flex flex-col justify-center font-opendyslexic tracking-very-wide'>
 
           <p className='mb-4'>
-            <HighlightLetter color="blue">L</HighlightLetter>
-            eximate es una app educativa para estudiantes con dislexi
-            <HighlightLetter color="blue">a</HighlightLetter>
+            <HighlightLetter color="blue">Leximate es una app educativa para estudiantes con dislexia</HighlightLetter>
           </p>
           
           <p className='mb-4'>
-            <HighlightLetter color="red">L</HighlightLetter>
-            es ayuda a aprender mejor. Ofrece actividades interactivas y fácile
-            <HighlightLetter color="red">s</HighlightLetter>
+            <HighlightLetter color="red">Les ayuda a aprender mejor. Ofrece actividades interactivas y fáciles de usar</HighlightLetter>
           </p>
 
           <p className='mb-4'>
-            <HighlightLetter color="green">M</HighlightLetter>
-            ejora la lectura, la escritura y la comprensió
-            <HighlightLetter color="green">n</HighlightLetter>
+            <HighlightLetter color="green">Mejora la lectura, la escritura y la comprensión</HighlightLetter>
           </p>
 
         </div>
@@ -33,9 +27,8 @@ function LandingPage() {
       <div className="flex flex-col gap-5 mt-5">
 
         <p className='font-opendyslexic tracking-very-wide text-xl'>
-          <HighlightLetter color='blue'>¿</HighlightLetter>
-          Listo para empezar
-          <HighlightLetter color='blue'>?</HighlightLetter>🚀
+          <HighlightLetter color='blue'>¿Listo para empezar?</HighlightLetter>
+          🚀
         </p>
 
         <div className="flex justify-center">
@@ -44,9 +37,7 @@ function LandingPage() {
             className="text-base dark:bg-[#1a1a1a] dark:text-[#fffd92]"
           >
             <p>
-              <HighlightLetter color='red'>R</HighlightLetter>
-              egistrars
-              <HighlightLetter color='red'>e</HighlightLetter>
+              <HighlightLetter color='red'>Registrarse</HighlightLetter>
             </p>
           </ButtonLink>
         </div>

@@ -17,9 +17,19 @@ export default {
         'more-wide': '0.20em',  // Un valor recomendado
         'very-wide': '0.25em',  // El valor que ya tenías
       },
+      colors: {
+        pastelYellow: "#FEF195",
+        pastelPink: "#FFB6B9",
+        pastelBlue: "#A0E7E5",
+        pastelGreen: "#B5EAD7",
+        pastelLavender: "#C7CEEA",
+        pastelLightPink: "#F9D5E5",
+        pastelMint: "#E2F0CB",
+        pastelVeryLightYellow: "#FFF5BA",
+      },
     },
   },
-  daisyui: {  
+  daisyui: {
     themes: [
       {
         mytheme: {
