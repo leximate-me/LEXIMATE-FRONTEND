@@ -7,6 +7,8 @@ import { Input } from '../components/ui/Input';
 import { Button } from '../components/ui/Button';
 import { ErrorModal } from '../components/ui/ErrorModal';
 import Loading from '../components/ui/Loading';
+import HighlightLetter from '../components/ui/HighlightLetter';
+import { ButtonLink } from '../components/ui/ButtonLink';
 
 function LoginPage() {
   const {
@@ -39,49 +41,56 @@ function LoginPage() {
           <>{Loading('Iniciando sesión...')}</>
         ) : (
           <>
-            <Card className="m-7 dark:bg-[#1a1a1a]">
-              <form className="space-y-4" onSubmit={onSubmit}>
-                <h1 className="text-3xl font-bold text-center py-5 dark:text-white">
-                  Inicia sesión
-                </h1>
-                <Input
-                  type="email"
-                  register={register}
-                  name="email"
-                  rules={{ required: 'Este campo es requerido' }}
-                  placeholder="Correo electrónico"
-                />
+            <Card className="m-7 border-none bg-white">
+              {/* header */}
+              <div className="rounded-t-lg bg-gradient-to-r from-yellow-300 to-amber-400 p-8 text-center">
+                <HighlightLetter color="blue" className='font-opendyslexic' size='text-3xl'>
+                  Iniciar Sesión
+                </HighlightLetter>
+              </div>
 
-                {errors.email && (
-                  <span className="text-red-500">{errors.email.message}</span>
-                )}
 
-                <Input
-                  type="password"
-                  register={register}
-                  name="password"
-                  rules={{ required: 'Este campo es requerido' }}
-                  placeholder="Contraseña"
-                />
-                {errors.password && (
-                  <span className="text-red-500">
-                    {errors.password.message}
-                  </span>
-                )}
+              <div className="p-6 flex flex-col space-y-4">
+                <form onSubmit={onSubmit} className="flex flex-col space-y-4">
+                  <Input
+                    type="email"
+                    register={register}
+                    name="email"
+                    rules={{ required: 'Este campo es requerido' }}
+                    placeholder="Correo electrónico"
+                  />
+                  {errors.email && <span className="text-red-500">{errors.email.message}</span>}
 
-                <Button
-                  type="submit"
-                  className="btn w-full bg-[#ffff13] text-slate-900 hover:bg-[#e9e91b] transition-colors px-4 py-2 rounded-lg"
-                >
-                  Ingresar
-                </Button>
-              </form>
-              <p className="text-center py-4 dark:text-white">
-                No tienes una cuenta?
-                <Link className="mx-2 text-blue-600" to="/register">
-                  Registrate
-                </Link>
-              </p>
+                  <Input
+                    type="password"
+                    register={register}
+                    name="password"
+                    rules={{ required: 'Este campo es requerido' }}
+                    placeholder="Contraseña"
+                  />
+                  {errors.password && (
+                    <span className="text-red-500">{errors.password.message}</span>
+                  )}
+
+                  <button
+                    type="submit"
+                    className="w-full bg-gradient-to-r from-yellow-400 to-amber-500 font-semibold py-4 rounded-2xl hover:from-yellow-500 hover:to-amber-600 transform hover:scale-[1.02] transition-all duration-200 shadow-lg hover:shadow-xl"
+                  >
+                    <HighlightLetter color="green" className='font-opendyslexic' size='text-xl'>
+                      Iniciar Sesión
+                    </HighlightLetter>
+                  </button>
+                </form>
+
+                <p className="text-center py-4 dark:text-white">
+                  <HighlightLetter color="blue" className='font-opendyslexic' size='text-lg'>
+                    ¿No tienes una cuenta?
+                  </HighlightLetter>
+                  <Link className="mx-2 text-blue-600 font-opendyslexic" to="/register">
+                    Registrate
+                  </Link>
+                </p>
+              </div>
             </Card>
           </>
         )}

@@ -178,8 +178,7 @@ function NavBar() {
             <div className="flex flex-col md:flex-row items-center gap-4 md:gap-8 order-2 md:order-1 px-5">
               <ButtonLink to="/login" className="dark:bg-[#1a1a1a] dark:text-[#fffd92]">
               <p>
-                <HighlightLetter color='red'>I</HighlightLetter>niciar sesió
-                <HighlightLetter color='red'>n</HighlightLetter>
+                <HighlightLetter color='blue'>Iniciar sesión</HighlightLetter>
               </p>
               </ButtonLink>
               <div className="flex items-center justify-center">
