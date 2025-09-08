@@ -7,6 +7,7 @@ import '../styles/fonts.css'; // Fuente OpenDyslexic
 import HighlightLetter from '../components/ui/HighlightLetter';
 import CardExtractedText from '../components/CardExtractedText';
 import { FaBook } from "react-icons/fa6";
+import NotFound from '../assets/not-found.svg';
 
 function TaskPage({ tasks: initialTasks }) {
   const { classId, taskId } = useParams();
@@ -47,7 +48,7 @@ function TaskPage({ tasks: initialTasks }) {
   }, [taskId, classId, setExtractedText]);
 
   return (
-    <div className="container mx-auto p-6">
+    <div className="container mx-auto p-6 ">
       {isLoading || isExtracting ? (
         <div className="h-[500px] flex justify-center items-center">
           {Loading(isLoading ? 'Cargando tarea...' : 'Extrayendo texto...')}
@@ -55,7 +56,7 @@ function TaskPage({ tasks: initialTasks }) {
       ) : (
         <>
           {task ? (
-            <div className="grid grid-cols-8 grid-rows-[200px] gap-6">
+            <div className="grid grid-cols-8 grid-rows-[190px] gap-4">
 
               {/* Información (fila 1, col 1-4, menos alta) */}
               <div className="col-span-6 row-span-1 bg-white rounded-lg shadow-md flex flex-col">
@@ -69,7 +70,7 @@ function TaskPage({ tasks: initialTasks }) {
                 </div>
                 <div className='m-5 flex bg-pastelVeryLightYellow rounded-lg p-2'>
                   <FaBook className="text-4xl text-black p-2" />
-                  <HighlightLetter size="text-lg" className="font-opendyslexic mb-2">
+                  <HighlightLetter color='green' size="text-lg" className="font-opendyslexic mb-2">
                     {task.description}
                   </HighlightLetter>
                 </div>
@@ -121,9 +122,14 @@ function TaskPage({ tasks: initialTasks }) {
 
             </div>
           ) : (
-            <p className="text-gray-500 dark:text-gray-400 text-center font-opendyslexic">
-              Tarea no encontrada
-            </p>
+            <div className='flex flex-col justify-center items-center'>
+              <div className='bg-pastelYellow p-10 rounded-lg shadow-md flex flex-col justify-center items-center'>
+                <img src={NotFound} alt="Tarea no encontrada"   />
+                <HighlightLetter color='red' size="text-lg" className="font-opendyslexic mt-4">
+                  Tarea no encontrada
+                </HighlightLetter>
+              </div>
+            </div>
           )}
         </>
       )}

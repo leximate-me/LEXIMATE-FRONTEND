@@ -74,29 +74,12 @@ export default function ClassCardStudent({ classes: initialClasses }) {
                     </div>
                   </figure>
                   <div className="card-body tracking-very-wide font-opendyslexic">
-                    <p className="text-xl font-bold">
-                      <HighlightLetter>
-                        {classItem.name[0]}
-                      </HighlightLetter>
-                      {classItem.name.slice(1, -1)}
-                      <HighlightLetter>
-                        {classItem.name[classItem.name.length - 1]}
-                      </HighlightLetter>
-                      {console.log(classItem.name[classItem.name.length - 1])}
-                    </p>
-                    <p className="text-gray-700 break-all">
-                      <HighlightLetter color="red">
-                        {classItem.description[0]}
-                      </HighlightLetter>
-                      {classItem.description.slice(1, -1)}
-                      <HighlightLetter color="red">
-                        {
-                          classItem.description[
-                            classItem.description.length - 1
-                          ]
-                        }
-                      </HighlightLetter>
-                    </p>
+                    <HighlightLetter color="blue" size="text-xl" className="font-opendyslexic font-bold">
+                      {classItem.name}
+                    </HighlightLetter>
+                    <HighlightLetter color="green" size="text-lg" className="font-opendyslexic text-gray-800">
+                      {classItem.description}
+                    </HighlightLetter>
                   </div>
                 </div>
               );
