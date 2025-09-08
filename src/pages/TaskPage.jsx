@@ -6,6 +6,7 @@ import { useTool } from '../context/ToolContext';
 import '../styles/fonts.css'; // Fuente OpenDyslexic
 import HighlightLetter from '../components/ui/HighlightLetter';
 import CardExtractedText from '../components/CardExtractedText';
+import { FaBook } from "react-icons/fa6";
 
 function TaskPage({ tasks: initialTasks }) {
   const { classId, taskId } = useParams();
@@ -14,13 +15,9 @@ function TaskPage({ tasks: initialTasks }) {
   const [isLoading, setIsLoading] = useState(true);
   const { extractText, extractedText, isExtracting, setExtractedText } = useTool();
 
-  // Formatea la fecha en AAAA/MM/DD
   const formatDate = (dateString) => {
     const date = new Date(dateString);
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
-    return `${year}/${month}/${day}`;
+    return `${date.getFullYear()}/${String(date.getMonth() + 1).padStart(2, '0')}/${String(date.getDate()).padStart(2, '0')}`;
   };
 
   const handleExtractText = async (url) => {
@@ -45,7 +42,6 @@ function TaskPage({ tasks: initialTasks }) {
     loadTask();
   }, [classId, taskId, getTask]);
 
-  // Limpiar el texto extraído al cambiar de tarea
   useEffect(() => {
     setExtractedText([]);
   }, [taskId, classId, setExtractedText]);
@@ -59,64 +55,73 @@ function TaskPage({ tasks: initialTasks }) {
       ) : (
         <>
           {task ? (
-            <div className="space-y-6">
-              {/* Información de la Tarea */}
-              <div className="dark:border-[#fffd92] grid grid-cols-1 md:grid-cols-6 gap-6 p-2 md:p-5 border rounded-lg shadow-md bg-pastelYellow">
-                <div className="col-span-6 md:col-span-4 flex flex-col items-center md:items-start gap-4">
-                  <HighlightLetter size="text-3xl" className="font-opendyslexic">
+            <div className="grid grid-cols-8 grid-rows-[200px] gap-6">
+
+              {/* Información (fila 1, col 1-4, menos alta) */}
+              <div className="col-span-6 row-span-1 bg-white rounded-lg shadow-md flex flex-col">
+                <div className='p-3 rounded-t-lg flex justify-between bg-gradient-to-r from-yellow-300 to-amber-400'>
+                  <HighlightLetter size="text-2xl" className="font-opendyslexic mb-2">
                     {task.title}
                   </HighlightLetter>
-                  <HighlightLetter size="text-xl" className="font-opendyslexic">
-                    {task.description}
-                  </HighlightLetter>
-                  <p className="text-md md:text-2xl text-gray-600 dark:text-gray-400 font-opendyslexic">
+                  <p className="self-center text-gray-600 dark:text-gray-400 font-opendyslexic text-md">
                     <b>Fecha de entrega:</b> {formatDate(task.due_date)}
                   </p>
                 </div>
-
-                {task.files && task.files.length > 0 && (
-                  <div className="col-span-6 md:col-span-2 flex justify-center items-center">
-                    <ul>
-                      {task.files.map((file) => (
-                        <li
-                          key={file._id}
-                          className="flex flex-col md:flex-row items-end gap-2"
-                        >
-                          <a
-                            href={file.file_url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            download
-                          >
-                            <img
-                              src={file.file_url}
-                              alt="Archivo adjunto"
-                              className="border-2 border-gray-300 h-[200px] md:h-[300px] object-cover rounded-lg shadow-[0px_5px_20px_-8px_#4a5568] hover:opacity-75 transition"
-                            />
-                          </a>
-                          <button
-                            onClick={() => handleExtractText(file.file_url)}
-                            className="h-fit mt-3 bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition duration-300"
-                          >
-                            Convertir Texto
-                          </button>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
+                <div className='m-5 flex bg-pastelVeryLightYellow rounded-lg p-2'>
+                  <FaBook className="text-4xl text-black p-2" />
+                  <HighlightLetter size="text-lg" className="font-opendyslexic mb-2">
+                    {task.description}
+                  </HighlightLetter>
+                </div>
               </div>
 
-              {/* Mostrar el texto extraído en una tarjeta con scroll */}
-              {extractedText && extractedText.length > 0 && (
-                <CardExtractedText extractedText={extractedText} />
+              {/* Materiales (fila 1-2, col 5-6, más alta) */}
+              {task.files && task.files.length > 0 && (
+                <div className="h-fit col-start-7 col-span-2 row-span-2 bg-white rounded-lg shadow-md flex flex-col">
+                  <div className='p-3 rounded-t-lg bg-gradient-to-r from-yellow-300 to-amber-400'>
+                    <HighlightLetter size="text-xl" className="font-opendyslexic">
+                      Materiales:
+                    </HighlightLetter>
+                  </div>
+                  <div className="flex flex-col gap-3 p-3">
+                    {task.files.map((file) => (
+                      <div key={file._id} className="flex flex-col items-center gap-2">
+                        <a
+                          href={file.file_url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          download
+                        >
+                          <img
+                            src={file.file_url}
+                            alt="Archivo adjunto"
+                            className="h-[150px] md:h-[180px] object-cover rounded-lg shadow-lg hover:opacity-80 transition"
+                          />
+                        </a>
+                        <button
+                          onClick={() => handleExtractText(file.file_url)}
+                          className="w-1/2 bg-gradient-to-r from-yellow-400 to-amber-500 font-semibold p-1 rounded-xl hover:from-yellow-500 hover:to-amber-600 transform hover:scale-[1.02] transition-all duration-200 shadow-lg hover:shadow-xl"
+                        >
+                          <HighlightLetter color="green" className='font-opendyslexic' size='text-[14px]'>
+                            Convertir Texto
+                          </HighlightLetter>
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                </div>
               )}
+
+              {/* Texto extraído (fila 3-6, col 1-6) */}
+              {extractedText && extractedText.length > 0 && (
+                <div className="col-span-6 row-start-2 row-span-4">
+                  <CardExtractedText extractedText={extractedText} />
+                </div>
+              )}
+
             </div>
           ) : (
-            <p
-              className="text-gray-500 dark:text-gray-400 text-center"
-              style={{ fontFamily: 'OpenDyslexic' }}
-            >
+            <p className="text-gray-500 dark:text-gray-400 text-center font-opendyslexic">
               Tarea no encontrada
             </p>
           )}

@@ -107,9 +107,9 @@ const CardExtractedText = ({ extractedText }) => {
   };
 
   return (
-    <div className="w-full max-w-3xl mx-auto px-6 py-4 box-border">
+    <div className="w-full box-border">
       {/* Contenedor con scroll */}
-      <div className="max-h-96 overflow-y-auto p-5 border rounded-lg shadow-md bg-white dark:bg-[#1a1a1a] dark:border-[#fffd92]">
+      <div className="max-h-96 overflow-y-auto p-5 rounded-lg bg-pastelVeryLightYellow dark:bg-[#1a1a1a] shadow-[0px_8px_11px_-6px_#5c5c5c]">
         {renderExtractedText(extractedText)}
       </div>
     </div>

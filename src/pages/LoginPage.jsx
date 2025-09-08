@@ -77,7 +77,7 @@ function LoginPage() {
                     className="w-full bg-gradient-to-r from-yellow-400 to-amber-500 font-semibold py-4 rounded-2xl hover:from-yellow-500 hover:to-amber-600 transform hover:scale-[1.02] transition-all duration-200 shadow-lg hover:shadow-xl"
                   >
                     <HighlightLetter color="green" className='font-opendyslexic' size='text-xl'>
-                      Iniciar Sesión
+                      Ingresar
                     </HighlightLetter>
                   </button>
                 </form>
