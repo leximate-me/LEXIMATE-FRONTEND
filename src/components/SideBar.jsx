@@ -1,36 +1,55 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useClass } from '../context/ClassContext';
+import HighlightLetter from './ui/HighlightLetter';
+import { RiBook2Line } from "react-icons/ri";
 
-export default function SideBar() {
-  const { getClasses, classes } = useClass();
+export default function SideBar({ selectedClassId = '', onSelect = () => { }, onClose }) {
+  const { classes } = useClass();
   const navigate = useNavigate();
 
   const handleChangeClass = (classId) => {
-    console.log('Cambiando a la clase:', classId);
+    // Navega y notifica al padre cuál quedó seleccionado, luego cierra el sidebar si corresponde
     navigate(`/${classId}/tasks`);
+    onSelect(String(classId));
+    if (typeof onClose === 'function') onClose();
   };
 
+  if (!classes || classes.length === 0) {
+    return (
+      <div className="rounded-lg p-2">
+        <p className="text-sm text-gray-500">No hay clases</p>
+      </div>
+    );
+  }
+
   return (
-    <div className="dark:bg-[#1a1a1a] border border-gray-400 dark:border-[#fffd92] shadow-[0_3px_10px_rgb(0,0,0,0.2)] rounded-lg flex flex-col gap-2 bg-white">
-      {classes ? (
-        <>
-          <h1 className="dark:text-black bg-gradient-to-b from-bg-gradient-to-r from-[#f8f40c] to-[#ddda01] p-1 rounded-t-lg ">
-            <b>Clases:</b>
-          </h1>
-          {classes.map((clase) => (
-            <div
-              onClick={() => handleChangeClass(clase.id)}
-              key={clase.id}
-              className="mx-2 mb-2 dark:text-white transition duration-100 rounded-md hover:bg-gray-200 p-2 dark:hover:bg-gray-700 cursor-pointer"
-            >
-              <h1>{clase.name}</h1>
-            </div>
-          ))}
-        </>
-      ) : (
-        console.log('no hay clases')
-      )}
+    <div className="border-l-4 border-yellow-400 shadow-[0_3px_10px_rgb(0,0,0,0.2)] rounded-lg flex flex-col gap-2 bg-pastelVeryLightYellow h-fit">
+      <div className='flex gap-2 align-middle bg-gradient-to-r from-yellow-300 to-amber-400 rounded-t-lg mb-2 pt-2 pl-2'>
+        <RiBook2Line className="text-3xl opacity-50" />
+        <HighlightLetter size="text-xl" className="font-opendyslexic mb-2 ">
+          Mis Clases
+        </HighlightLetter>
+      </div>
+
+      {classes.map((clase) => {
+        const isActive = String(clase.id) === String(selectedClassId);
+
+        return (
+          <div
+            key={clase.id}
+            onClick={() => handleChangeClass(clase.id)}
+            className={`mx-2 mb-2 transition duration-200 rounded-md p-2 cursor-pointer ${isActive
+                ? 'bg-pastelYellow border-l-4 border-yellow-400 shadow-md font-bold'
+                : 'hover:bg-pastelYellow'
+              }`}
+          >
+            <HighlightLetter color="green" size="text-md" className="font-opendyslexic">
+              {clase.name}
+            </HighlightLetter>
+          </div>
+        );
+      })}
     </div>
   );
 }

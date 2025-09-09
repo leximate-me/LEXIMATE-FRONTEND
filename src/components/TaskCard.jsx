@@ -5,6 +5,9 @@ import notFound from '../assets/not-found.svg';
 import Loading from './ui/Loading';
 import Dropdown from './ui/DropDownButton';
 import { useAuth } from '../context/AuthContext';
+import HighlightLetter from './ui/HighlightLetter';
+import { HiOutlineChevronDoubleLeft, HiOutlineChevronDoubleRight } from "react-icons/hi";
+import { motion, AnimatePresence } from "framer-motion";
 
 function TaskCard({ tasks: initialTasks }) {
   const navigate = useNavigate();
@@ -14,39 +17,40 @@ function TaskCard({ tasks: initialTasks }) {
 
   const [tasks, setTasks] = useState(initialTasks);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 3;
 
-  const date = tasks.map((task) => {
-    let dateCont = [];
-    let dateSplit = task.due_date.split('');
-    for (let i = 0; i < 10; i++) {
-      dateCont.push(dateSplit[i]);
+  // Calcular paginación
+  const totalPages = Math.ceil(tasks.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const currentTasks = tasks.slice(startIndex, startIndex + itemsPerPage);
+
+  // Formatear fecha
+  tasks.forEach((task) => {
+    if (task.due_date) {
+      let dateSplit = task.due_date.split('');
+      task.date = dateSplit.slice(0, 10).join('');
     }
-    let joinDate = dateCont.join('');
-    task.date = joinDate;
   });
 
   const handleSelectTask = (taskId) => {
-    console.log('Tarea seleccionada:', taskId);
     navigate(`/${classId}/task/${taskId}`);
   };
 
   const handleDeleteTask = async (classId, taskId) => {
-    setIsDeleting(true); // Mostrar loading al iniciar la eliminación
+    setIsDeleting(true);
     try {
-      console.log('Tarea abandonada:', taskId);
       await deleteTask(classId, taskId);
-
-      // Filtrar la clase eliminada del estado
       setTasks((prevTasks) => prevTasks.filter((t) => t.id !== taskId));
     } catch (error) {
-      console.log('Error al abandonar la tarea:', error);
+      console.log('Error al eliminar tarea:', error);
     } finally {
-      setIsDeleting(false); // Ocultar loading cuando termine
+      setIsDeleting(false);
     }
   };
 
   return (
-    <div className="flex justify-center">
+    <div className="flex flex-col items-center gap-4">
       {isDeleting ? (
         <div className="flex justify-center h-[100%]">
           {Loading('Eliminando tarea...')}
@@ -54,63 +58,49 @@ function TaskCard({ tasks: initialTasks }) {
       ) : (
         <>
           {tasks.length === 0 ? (
-            <div className="w-80 h-52 flex flex-col justify-center items-center border border-gray-300 rounded-md shadow-[0px_9px_15px_-7px_rgba(0,0,0,0.75)]">
-              <div className="flex flex-wrap justify-center items-center w-[90%] h-[90%] m-5">
-                <img src={notFound} alt="No existen clases" />
-              </div>
-              <div className="flex flex-wrap justify-center items-center w-[90%] h-[90%] m-5">
-                <h1>
-                  <b>NO EXISTEN TAREAS</b>
-                </h1>
-              </div>
+            <div className="w-80 h-52 flex flex-col justify-center items-center border border-gray-300 rounded-md shadow-md">
+              <img src={notFound} alt="No existen tareas" className="w-24 h-24 mb-4" />
+              <h1><b>NO EXISTEN TAREAS</b></h1>
             </div>
           ) : (
             <>
-              <div className="w-full">
-                <ul className="col-start-1 col-end-7 space-y-4 m-2">
-                  {tasks.map((task) => (
-                    <li
-                      onClick={() => handleSelectTask(task.id)}
-                      className="grid grid-cols-6 dark:border-[#fffd92] dark:bg-[#1a1a1a] p-4 rounded-lg shadow-[0px_8px_12px_-6px] border border-gray-300 cursor-pointer"
+              {/* Lista de tareas con animación */}
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={currentPage} // <- importante para que se reinicie la animación en cada página
+                  className="flex gap-4"
+                  initial={{ opacity: 0, x: 50 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -50 }}
+                  transition={{ duration: 0.4, ease: "easeInOut" }}
+                >
+                  {currentTasks.map((task) => (
+                    <div
                       key={task.id}
+                      onClick={() => handleSelectTask(task.id)}
+                      className="relative border-l-4 border-yellow-400 hover:scale-105 w-80 flex-shrink-0 cursor-pointer rounded-lg shadow-md hover:shadow-lg transition duration-200"
                     >
-                      <div className="col-span-6 md:col-span-3 flex flex-col gap-5">
-                        <h2 className="col-span-6 md:col-span-3 text-2xl font-semibold break-words dark:text-white">
+                      <p className='bg-gradient-to-r from-yellow-300 to-amber-400 p-2 rounded-t-md'>
+                        <HighlightLetter size="text-xl" className="font-opendyslexic dark:text-white">
                           {task.title}
-                        </h2>
-                        <p className="col-span-6 md:col-span-3 col-start-1 break-words dark:text-white">
+                        </HighlightLetter>
+                      </p>
+                      <div className='p-4 flex flex-col gap-2'>
+                        <HighlightLetter color='red' size="text-md" className="font-opendyslexic dark:text-white">
                           {task.description}
-                        </p>
-                        <p className="col-span-7 md:col-span-3 dark:text-white">
-                          <b>Fecha de entrega: </b>
-                          {task.date}
+                        </HighlightLetter>
+                        <p>
+                          <HighlightLetter color='green' size="text-sm" className="font-opendyslexic text-gray-600 dark:text-gray-400">
+                            Fecha de entrega:
+                          </HighlightLetter>
+                          <b>{task.date}</b>
                         </p>
                       </div>
 
-                      {task.files && task.files.length > 0 && (
-                        <div className="col-span-7 md:col-span-3 m-2 h-fit">
-                          <ul className="space-y-2 h-fit">
-                            {task.files.map((file, index) => (
-                              <li
-                                className="w-full flex justify-center"
-                                key={index}
-                              >
-                                <img
-                                  className="rounded-lg max-w-52 max-h-52"
-                                  src={file.file_url}
-                                  alt=""
-                                />
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
-                      )}
                       {user && user.rol === 3 && (
                         <div
-                          className="col-start-7 row-start-1 w-fit h-fit"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                          }}
+                          className="absolute top-2 right-2"
+                          onClick={(e) => e.stopPropagation()}
                         >
                           <Dropdown
                             onAbandonClass={handleDeleteTask}
@@ -120,10 +110,35 @@ function TaskCard({ tasks: initialTasks }) {
                           />
                         </div>
                       )}
-                    </li>
+                    </div>
                   ))}
-                </ul>
-              </div>
+                </motion.div>
+              </AnimatePresence>
+
+              {/* Paginación */}
+              {totalPages > 1 && (
+                <div className="flex justify-center gap-4 mt-4">
+                  <button
+                    className="cursor-pointer hover:scale-110 transition disabled:opacity-50"
+                    disabled={currentPage === 1}
+                    onClick={() => setCurrentPage(prev => prev - 1)}
+                  >
+                    <HiOutlineChevronDoubleLeft className="text-xl" />
+                  </button>
+
+                  <span className="self-center font-semibold">
+                    {currentPage} / {totalPages}
+                  </span>
+
+                  <button
+                    className="cursor-pointer hover:scale-110 transition disabled:opacity-50"
+                    disabled={currentPage === totalPages}
+                    onClick={() => setCurrentPage(prev => prev + 1)}
+                  >
+                    <HiOutlineChevronDoubleRight className="text-xl" />
+                  </button>
+                </div>
+              )}
             </>
           )}
         </>

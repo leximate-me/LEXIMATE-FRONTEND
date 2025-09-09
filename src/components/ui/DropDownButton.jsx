@@ -30,7 +30,7 @@ const StaggeredDropDown = ({ classId, onAbandonClass, additionalParam, msg }) =>
   };
 
   return (
-    <div className="flex items-center justify-center">
+    <div className="flex justify-end items-center">
       <motion.div
         ref={dropdownRef}
         animate={open ? 'open' : 'closed'}
@@ -38,7 +38,7 @@ const StaggeredDropDown = ({ classId, onAbandonClass, additionalParam, msg }) =>
       >
         <button
           onClick={() => setOpen((pv) => !pv)}
-          className="flex items-center gap-2 px-3 py-2 rounded-md text-indigo-50 hover:bg-gray-500 hover:bg-opacity-20 transition-colors duration-300"
+          className=""
         >
           <motion.span variants={iconVariants}>
             <FiMoreVertical className="dark:text-white text-black text-lg" />

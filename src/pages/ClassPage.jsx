@@ -7,6 +7,8 @@ import { useAuth } from '../context/AuthContext';
 import CreateClassModal from '../components/ClassForm';
 import JoinClassModal from '../components/JoinClass';
 import Loading from '../components/ui/Loading';
+import { HiOutlineChevronDoubleLeft, HiOutlineChevronDoubleRight } from "react-icons/hi2";
+import { motion, AnimatePresence } from "framer-motion";
 
 function ClassPage() {
   const { getClasses, classes, isLoading, setClasses, isCreating } = useClass();
@@ -14,22 +16,84 @@ function ClassPage() {
   const [showJoinModal, setShowJoinModal] = useState(false);
   const { user } = useAuth();
 
+  // PAGINACIÓN
+  const [currentPage, setCurrentPage] = useState(1);
+  const [direction, setDirection] = useState(0); // -1: izquierda, 1: derecha
+  const itemsPerPage = 4;
+  const totalPages = Math.ceil(classes.length / itemsPerPage);
+
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const currentClasses = classes.slice(startIndex, startIndex + itemsPerPage);
+
+  const handlePrev = () => {
+    if (currentPage > 1) {
+      setDirection(-1);
+      setCurrentPage(prev => prev - 1);
+    }
+  };
+
+  const handleNext = () => {
+    if (currentPage < totalPages) {
+      setDirection(1);
+      setCurrentPage(prev => prev + 1);
+    }
+  };
+
   useEffect(() => {
     setClasses([]);
     getClasses();
   }, [user]);
 
   return (
-    <div className="flex justify-center h-[500px] m-5">
+    <div className="flex flex-col items-center h-fit p-2 m-5">
       {isLoading || isCreating ? (
         <>{Loading(isLoading ? 'Cargando clases...' : 'Creando clase...')}</>
       ) : (
         <>
           {user && user.rol === 3 ? (
             <>
-              <div className="w-[90%] h-[100%] ">
-                <ClassCardTeacher classes={classes} />
+              {/* DOCENTE */}
+              <div className="relative w-[90%] h-[520px] flex justify-center items-center">
+                {/* Flecha izquierda */}
+                {currentPage > 1 && (
+                  <button
+                    onClick={handlePrev}
+                    className="absolute right-0 top-1/2 -translate-y-1/2 z-20 p-2 rounded-full shadow hover:bg-yellow-400 transition"
+                  >
+                    <HiOutlineChevronDoubleLeft className="text-2xl" />
+                  </button>
+                )}
+                {/* Flecha derecha */}
+                {currentPage < totalPages && (
+                  <button
+                    onClick={handleNext}
+                    className="absolute right-0 top-1/2 -translate-y-1/2 z-20 p-2 rounded-full shadow hover:bg-yellow-400 transition"
+                  >
+                    <HiOutlineChevronDoubleRight className="text-2xl" />
+                  </button>
+                )}
+
+                <AnimatePresence initial={false} custom={direction}>
+                  <motion.div
+                    key={currentPage}
+                    custom={direction}
+                    variants={{
+                      enter: (dir) => ({ x: dir > 0 ? 300 : -300, opacity: 0 }),
+                      center: { x: 0, opacity: 1 },
+                      exit: (dir) => ({ x: dir < 0 ? 300 : -300, opacity: 0 })
+                    }}
+                    initial="enter"
+                    animate="center"
+                    exit="exit"
+                    transition={{ duration: 0.3 }}
+                    className="grid grid-cols-2 gap-5 absolute w-full h-full justify-center items-center"
+                  >
+                    <ClassCardTeacher classes={currentClasses} />
+                  </motion.div>
+                </AnimatePresence>
               </div>
+
+              {/* BOTÓN CREAR */}
               <div className="fixed bottom-8 right-8">
                 <button
                   onClick={() => setShowModal(true)}
@@ -48,9 +112,48 @@ function ClassPage() {
             </>
           ) : user && user.rol === 2 ? (
             <>
-              <div className="w-[90%] h-fit">
-                <ClassCardStudent classes={classes} />
+              {/* ESTUDIANTE */}
+              <div className="relative w-[90%] h-[520px] flex justify-center items-center">
+                {/* Flecha izquierda */}
+                {currentPage > 1 && (
+                  <button
+                    onClick={handlePrev}
+                    className="absolute left-0 top-1/2 -translate-y-1/2 z-20 p-3 rounded-full  hover:bg-pastelYellow transition duration-150"
+                  >
+                    <HiOutlineChevronDoubleLeft className="text-3xl" />
+                  </button>
+                )}
+                {/* Flecha derecha */}
+                {currentPage < totalPages && (
+                  <button
+                    onClick={handleNext}
+                    className="absolute right-0 top-1/2 -translate-y-1/2 z-20 p-3 rounded-full  hover:bg-pastelYellow transition duration-150"
+                  >
+                    <HiOutlineChevronDoubleRight className="text-3xl" />
+                  </button>
+                )}
+
+                <AnimatePresence initial={false} custom={direction}>
+                  <motion.div
+                    key={currentPage}
+                    custom={direction}
+                    variants={{
+                      enter: (dir) => ({ x: dir > 0 ? 300 : -300, opacity: 0 }),
+                      center: { x: 0, opacity: 1 },
+                      exit: (dir) => ({ x: dir < 0 ? 300 : -300, opacity: 0 })
+                    }}
+                    initial="enter"
+                    animate="center"
+                    exit="exit"
+                    transition={{ duration: 0.3 }}
+                    className="flex flex-wrap gap-10 absolute w-full h-full justify-center items-center"
+                  >
+                      <ClassCardStudent classes={currentClasses} />
+                  </motion.div>
+                </AnimatePresence>
               </div>
+
+              {/* BOTÓN UNIRSE */}
               <div className="fixed bottom-8 right-8">
                 <button
                   onClick={() => setShowJoinModal(true)}

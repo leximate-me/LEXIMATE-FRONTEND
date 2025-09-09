@@ -4,11 +4,9 @@ import { useNavigate, Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { Card } from '../components/ui/Card';
 import { Input } from '../components/ui/Input';
-import { Button } from '../components/ui/Button';
 import { ErrorModal } from '../components/ui/ErrorModal';
 import Loading from '../components/ui/Loading';
 import HighlightLetter from '../components/ui/HighlightLetter';
-import { ButtonLink } from '../components/ui/ButtonLink';
 
 function LoginPage() {
   const {
