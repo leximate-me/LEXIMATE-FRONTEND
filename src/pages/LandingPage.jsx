@@ -32,14 +32,14 @@ function LandingPage() {
         </p>
 
         <div className="flex justify-center">
-          <button
+          <ButtonLink
             to='/register'
             className="w-1/2 bg-gradient-to-r from-yellow-300 to-amber-400 font-semibold py-4 rounded-2xl hover:from-yellow-400 hover:to-amber-500 transform hover:scale-[1.02] transition-all duration-200 shadow-lg hover:shadow-xl"
           >
             <HighlightLetter color="green" className='font-opendyslexic ' size='text-xl'>
               Registrarse
             </HighlightLetter>
-          </button>
+          </ButtonLink>
         </div>
       </div>
     </div>

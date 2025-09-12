@@ -171,14 +171,14 @@ function NavBar() {
         <>
           {location.pathname !== '/login' && (
             <div className="flex flex-col md:flex-row items-center gap-2 md:gap-8 order-2 md:order-1 px-4">
-              <button
-                to='/register'
+              <ButtonLink
+                to='/login'
                 className="hover:border-b-[1px] rounded-md border-gray-700 hover:shadow-sm"
               >
                 <HighlightLetter color="green" className='m-2 font-opendyslexic font-bold' size='text-xl'>
                   Iniciar Sesión
                 </HighlightLetter>
-              </button>
+              </ButtonLink>
               {/* <div className="flex items-center justify-center">
                 <ToggleTheme />
               </div> */}
