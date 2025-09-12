@@ -72,11 +72,9 @@ function NavBar() {
                 className="w-full h-full object-cover"
               />
             </div>
-            <p className="text-lg font-opendyslexic tracking-very-wide leading-tight">
-              <HighlightLetter color='green'>L</HighlightLetter>
-              exiMat
-              <HighlightLetter color='green'>e</HighlightLetter>
-            </p>
+            <HighlightLetter color="green" className='font-opendyslexic font-bold' size='text-2xl'>
+              LexiMate
+            </HighlightLetter>
           </div>
         </Link>
 
@@ -100,9 +98,8 @@ function NavBar() {
         <div className="flex flex-col-reverse items-center md:flex-row flex-1 md:justify-end">
           {/* Opciones de la Navbar */}
           <div
-            className={`md:absolute w-full flex flex-col justify-center gap-8 md:gap-20 md:flex-row items-center order-2 md:order-1 ${
-              isOpen ? 'flex' : 'hidden'
-            } md:flex`}
+            className={`md:absolute w-full flex flex-col justify-center gap-8 md:gap-20 md:flex-row items-center order-2 md:order-1 ${isOpen ? 'flex' : 'hidden'
+              } md:flex`}
           >
             <Link
               className="text-md font-bold leading-normal hover:border-b-2 border-black dark:text-[#fffd92] dark:hover:border-b-[#fffd92]"
@@ -120,9 +117,8 @@ function NavBar() {
 
           {/* Botones de la Navbar */}
           <div
-            className={`z-50 flex-col-reverse md:flex-row items-center gap-5 order-1 md:order-2 mt-3 md:m-0 ${
-              isOpen ? 'flex' : 'hidden'
-            } md:flex px-5`}
+            className={`z-50 flex-col-reverse md:flex-row items-center gap-5 order-1 md:order-2 mt-3 md:m-0 ${isOpen ? 'flex' : 'hidden'
+              } md:flex px-5`}
           >
             <div className="flex flex-col gap-5 md:flex-row items-center">
               <div className="flex gap-2 px-3">
@@ -145,11 +141,10 @@ function NavBar() {
                   {/* Contenedor de opciones de perfil */}
                   <div
                     ref={dropdownRef}
-                    className={`absolute right-28 md:right-44 mt-2 w-fit flex flex-col bg-white dark:bg-gray-800 rounded-lg shadow-lg p-3 transition-all duration-300 ease-out transform ${
-                      isProfileOpen
+                    className={`absolute right-28 md:right-44 mt-2 w-fit flex flex-col bg-white dark:bg-gray-800 rounded-lg shadow-lg p-3 transition-all duration-300 ease-out transform ${isProfileOpen
                         ? 'opacity-100 scale-100'
                         : 'opacity-0 scale-95 pointer-events-none'
-                    }`}
+                      }`}
                   >
                     <Link to="/profile">
                       <p className="text-black dark:text-white dark:hover:bg-gray-700 hover:bg-gray-100 p-3 rounded-lg transition-all duration-200">
@@ -175,15 +170,18 @@ function NavBar() {
       ) : (
         <>
           {location.pathname !== '/login' && (
-            <div className="flex flex-col md:flex-row items-center gap-4 md:gap-8 order-2 md:order-1 px-5">
-              <ButtonLink to="/login" className="dark:bg-[#1a1a1a] dark:text-[#fffd92]">
-              <p>
-                <HighlightLetter color='blue'>Iniciar sesión</HighlightLetter>
-              </p>
-              </ButtonLink>
-              <div className="flex items-center justify-center">
+            <div className="flex flex-col md:flex-row items-center gap-2 md:gap-8 order-2 md:order-1 px-4">
+              <button
+                to='/register'
+                className="hover:border-b-[1px] rounded-md border-gray-700 hover:shadow-sm"
+              >
+                <HighlightLetter color="green" className='m-2 font-opendyslexic font-bold' size='text-xl'>
+                  Iniciar Sesión
+                </HighlightLetter>
+              </button>
+              {/* <div className="flex items-center justify-center">
                 <ToggleTheme />
-              </div>
+              </div> */}
             </div>
           )}
         </>
