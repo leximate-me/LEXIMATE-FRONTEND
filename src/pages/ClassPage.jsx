@@ -45,7 +45,7 @@ function ClassPage() {
   }, [user]);
 
   return (
-    <div className="flex flex-col items-center h-fit p-2 m-5">
+    <div className="flex flex-col justify-center items-center h-[520px] p-2 m-5">
       {isLoading || isCreating ? (
         <>{Loading(isLoading ? 'Cargando clases...' : 'Creando clase...')}</>
       ) : (
