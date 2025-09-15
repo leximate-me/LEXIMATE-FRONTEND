@@ -48,8 +48,10 @@ const StaggeredDropDown = ({ classId, onAbandonClass, additionalParam, msg }) =>
         <motion.ul
           initial={wrapperVariants.closed}
           variants={wrapperVariants}
-          style={{ originY: 'top' }}
-          className="flex flex-col gap-2 p-2 rounded-lg bg-white shadow-xl absolute top-[calc(100%+5px)] right-0 w-fit border border-gray-300 z-[10000]"
+          style={{ 
+            originX: 'right', 
+            originY: 'top' }}
+          className="flex flex-col bg-white shadow-xl absolute top-[-7px] right-8 w-fit border border-gray-300 p-1 rounded-md"
         >
             <Option text={msg} onClick={handleAbandonClick} />
         </motion.ul>
@@ -75,17 +77,19 @@ export default StaggeredDropDown;
 
 const wrapperVariants = {
   open: {
-    scaleY: 1,
+    scaleX: 1,
+    opacity: 1,
     transition: {
-      duration: 0.1,
+      duration: 0.2,
       when: 'beforeChildren',
       staggerChildren: 0.1,
     },
   },
   closed: {
-    scaleY: 0,
+    scaleX: 0,
+    opacity: 0,
     transition: {
-      duration: 0.1,
+      duration: 0.2,
       when: 'afterChildren',
       staggerChildren: 0.1,
     },

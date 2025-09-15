@@ -167,7 +167,7 @@ function CommentsBox() {
 
                     {/* SOLO aparece si el post es del usuario logueado */}
                     {user?.id === post?.user?.id && (
-                      <div className='relative z-[9999]' onClick={(e) => e.stopPropagation()}>
+                      <div onClick={(e) => e.stopPropagation()}>
                         <Dropdown
                           onAbandonClass={() => handleDeletePost(post.id)}
                           classId={classId}
