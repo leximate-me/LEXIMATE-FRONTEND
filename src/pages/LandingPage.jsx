@@ -11,15 +11,15 @@ function LandingPage() {
         <div className='w-96 flex flex-col justify-center font-opendyslexic space-y-5'>
 
           <p className=''>
-            <HighlightLetter className='leading-loose' color="blue" size='text-xl'>Leximate es una app educativa para estudiantes con dislexia</HighlightLetter>
+            <HighlightLetter className='leading-loose' color="blue" size='text-lg'>Leximate es una app educativa para estudiantes con dislexia</HighlightLetter>
           </p>
 
           <p className=''>
-            <HighlightLetter className='leading-loose' color="red" size='text-xl'>Les ayuda a aprender mejor. Ofrece actividades interactivas y fáciles de usar</HighlightLetter>
+            <HighlightLetter className='leading-loose' color="red" size='text-lg'>Les ayuda a aprender mejor. Ofrece actividades interactivas y fáciles de usar</HighlightLetter>
           </p>
 
           <p className=''>
-            <HighlightLetter className='leading-loose' color="green" size='text-xl'>Mejora la lectura, la escritura y la comprensión</HighlightLetter>
+            <HighlightLetter className='leading-loose' color="green" size='text-lg'>Mejora la lectura, la escritura y la comprensión</HighlightLetter>
           </p>
 
         </div>

@@ -91,7 +91,7 @@ export default function CommentsPage({ posts: initialPosts }) {
   const totalPages = Math.ceil(comments.length / commentsPerPage);
 
   return (
-    <div className="grid grid-cols-8 grid-rows-[200px_300px_auto] gap-4 p-4">
+    <div className="grid grid-cols-8  gap-4 p-4">
       {loading ? (
         <div className="h-[500px] flex justify-center items-center col-span-8">
           {Loading('Cargando anuncio...')}
@@ -138,7 +138,7 @@ export default function CommentsPage({ posts: initialPosts }) {
               />
               <div className="w-full flex flex-col items-end gap-2">
                 <textarea
-                  className="w-full h-[80px] p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 dark:bg-[#1a1a1a] dark:border-gray-500 dark:text-white"
+                  className="w-full h-[80px] p-3 border border-gray-300 rounded-md focus:ring-2 focus:outline-none focus:ring-amber-400"
                   rows="3"
                   placeholder="Escribe tu comentario..."
                   value={comment}
@@ -201,7 +201,7 @@ export default function CommentsPage({ posts: initialPosts }) {
                             key={cmt.id}
                             className="mb-5 col-start-2 col-span-10 row-span-1 bg-pastelVeryLightYellow rounded-md shadow-[0_3px_8px_0px_rgba(0,0,0,0.3)]"
                           >
-                            <div className='bg-gradient-to-r from-yellow-300 to-amber-400 rounded-t-md p-2 col-span-8 mb-2'>
+                            <div className='bg-gradient-to-r from-yellow-300 to-amber-400 rounded-t-md p-2 col-span-8 mb-2 flex justify-between'>
                               <div className='md:col-span-4 md:row-start-1 md:col-start-2 flex items-center flex-wrap'>
                                 <HighlightLetter className="mx-1 font-opendyslexic truncate" size='text-xl' color="green">{cmt.user?.people?.first_name || 'Usuario'}</HighlightLetter>
                                 <HighlightLetter className="mx-1 font-opendyslexic truncate" size='text-xl' color="red">{cmt.user?.people?.last_name || ''}</HighlightLetter>
@@ -209,22 +209,21 @@ export default function CommentsPage({ posts: initialPosts }) {
                                   {dayjs(cmt.createdAt).format('DD/MM/YYYY HH:mm')}
                                 </p>
                               </div>
+                              {user.id === cmt.user.id && (
+                                <div className="">
+                                  <DropDown
+                                    onAbandonClass={() => handleDelete(cmt.id)}
+                                    classId={classId}
+                                    additionalParam={cmt.id}
+                                    msg="Eliminar comentario"
+                                  />
+                                </div>
+                              )}
                             </div>
 
                             <HighlightLetter className="m-2 font-opendyslexic" size='text-lg' color="blue">
                               {cmt.content}
                             </HighlightLetter>
-
-                            {user.id === cmt.user.id && (
-                              <div className="col-start-8 justify-self-end self-center">
-                                <DropDown
-                                  onAbandonClass={() => handleDelete(cmt.id)}
-                                  classId={classId}
-                                  additionalParam={cmt.id}
-                                  msg="Eliminar comentario"
-                                />
-                              </div>
-                            )}
                           </div>
                         </div>
                       ))
@@ -263,20 +262,19 @@ export default function CommentsPage({ posts: initialPosts }) {
                             <p className='mx-2 italic text-gray-500'>
                               {dayjs(cmt.createdAt).format('DD/MM/YYYY HH:mm')}
                             </p>
+                            <div className="col-start-8 justify-self-end self-center">
+                              <DropDown
+                                onAbandonClass={() => handleDelete(cmt.id)}
+                                classId={classId}
+                                additionalParam={cmt.id}
+                                msg="Eliminar comentario"
+                              />
+                            </div>
                           </div>
 
                           <p className="row-start-2 md:row-start-2 mt-2 text-gray-800 dark:text-white flex items-center col-start-1 col-span-8 break-words">
                             {cmt.content}
                           </p>
-
-                          <div className="col-start-8 justify-self-end self-center">
-                            <DropDown
-                              onAbandonClass={() => handleDelete(cmt.id)}
-                              classId={classId}
-                              additionalParam={cmt.id}
-                              msg="Eliminar comentario"
-                            />
-                          </div>
                         </div>
                       ))
                     ) : (

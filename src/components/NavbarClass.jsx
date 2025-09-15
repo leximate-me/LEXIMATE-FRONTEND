@@ -19,7 +19,7 @@ function NavbarClass({ onSelect, selectedView }) {
           onClick={() => onSelect('tasks')}
         >
           <HiOutlineClipboardDocumentList className="text-xl h-full" />
-          <HighlightLetter size="text-lg" className="font-opendyslexic flex justify-center items-center gap-2">
+          <HighlightLetter size="text-lg" className="font-opendyslexic">
             Tareas
           </HighlightLetter>
         </li>

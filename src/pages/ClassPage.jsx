@@ -161,7 +161,7 @@ function ClassPage() {
                 >
                   <FaPlus className="absolute left-5 bottom-5" />
                   <span className="absolute bottom-full mb-2 w-20 left-1/2 -translate-x-1/2 bg-gray-800 text-white text-xs rounded py-1 px-2 opacity-0 transition-opacity duration-200 pointer-events-none group-hover:opacity-100">
-                    Unirse a una clase
+                    Unirse a una clase|
                   </span>
                 </button>
               </div>

@@ -78,7 +78,7 @@ function CommentsBox() {
   const currentPosts = posts?.slice(indexOfFirstPost, indexOfLastPost);
 
   return (
-    <div className="bg-pastelYellow p-5 rounded-lg shadow-md w-full min-h-96 border-l-4 border-yellow-400">
+    <div className="bg-pastelVeryLightYellow p-5 rounded-lg shadow-md w-full min-h-96 border-l-4 border-yellow-400">
       {/* HEADER */}
       <div className="flex flex-col gap-2 mb-4">
         <div className="flex justify-between items-center">
@@ -145,7 +145,7 @@ function CommentsBox() {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -15 }}
                     transition={{ duration: 0.3 }}
-                    className="grid grid-cols-12 items-start p-2 mb-4 bg-pastelVeryLightYellow rounded-lg shadow cursor-pointer hover:border-l-4 border-yellow-400 transition-all duration-100"
+                    className="grid grid-cols-12 items-start p-2 mb-4 bg-pastelYellow rounded-lg shadow cursor-pointer hover:border-l-4 border-yellow-400 transition-all duration-100 relative"
                   >
                     <div className='col-span-11 flex justify-between w-full'>
                       <HighlightLetter
@@ -167,7 +167,7 @@ function CommentsBox() {
 
                     {/* SOLO aparece si el post es del usuario logueado */}
                     {user?.id === post?.user?.id && (
-                      <div className='' onClick={(e) => e.stopPropagation()}>
+                      <div className='relative z-[9999]' onClick={(e) => e.stopPropagation()}>
                         <Dropdown
                           onAbandonClass={() => handleDeletePost(post.id)}
                           classId={classId}

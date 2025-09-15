@@ -46,7 +46,7 @@ export default function ClassCardStudent({ classes: initialClasses }) {
           <h1 className="mt-4 font-bold">NO EXISTEN CLASES</h1>
         </div>
       ) : (
-        <div className="flex flex-wrap justify-center h-fit gap-5">
+        <div className="flex flex-wrap justify-center h-fit gap-5 ">
           {localClasses &&
             localClasses.map((classItem, index) => {
               const bgColor = pastelColors[index % pastelColors.length];
@@ -57,30 +57,31 @@ export default function ClassCardStudent({ classes: initialClasses }) {
                   onClick={() =>
                     navigate(`/${classItem.id}/tasks`, { state: { bgColor } })
                   }
-                  className="card card-compact w-72 h-[280px] shadow-xl cursor-pointer hover:scale-105 transition-transform duration-200 flex flex-col"
+                  className="card card-compact w-72 h-[280px] shadow-xl cursor-pointer hover:scale-105 transition-transform duration-200 flex flex-col "
                   style={{ backgroundColor: bgColor }}
                 >
                   {/* Imagen superior */}
-                  <figure className="relative h-36 cursor-pointer overflow-hidden">
+                  <figure className="relative h-36 cursor-pointer">
                     <img
-                      className="w-full h-full object-cover"
+                      className="w-full h-full object-cover rounded-t-2xl"
                       src={bgClassCard}
                       alt="Fondo"
                     />
                     <div
-                      className="absolute top-2 right-2"
+                      className="absolute top-2 right-2 z-[9999]"
                       onClick={(e) => e.stopPropagation()}
                     >
                       <Dropdown
                         classId={classItem.id}
                         onAbandonClass={handleAbandonClass}
                         msg="Abandonar clase"
+                        
                       />
                     </div>
                   </figure>
 
                   {/* Contenido */}
-                  <div className="card-body flex flex-col justify-around tracking-very-wide font-opendyslexic overflow-hidden">
+                  <div className="card-body flex flex-col justify-around tracking-very-wide font-opendyslexic  ">
                     <HighlightLetter
                       color="blue"
                       size="text-lg"

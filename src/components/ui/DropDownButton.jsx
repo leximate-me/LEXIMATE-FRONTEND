@@ -30,7 +30,7 @@ const StaggeredDropDown = ({ classId, onAbandonClass, additionalParam, msg }) =>
   };
 
   return (
-    <div className="flex justify-end items-center">
+    <div className="flex justify-end items-center ">
       <motion.div
         ref={dropdownRef}
         animate={open ? 'open' : 'closed'}
@@ -48,8 +48,8 @@ const StaggeredDropDown = ({ classId, onAbandonClass, additionalParam, msg }) =>
         <motion.ul
           initial={wrapperVariants.closed}
           variants={wrapperVariants}
-          style={{ originY: 'top', translateX: '-50%' }}
-          className="flex flex-col gap-2 p-2 rounded-lg bg-white shadow-xl absolute top-[120%] left-[-80%] w-fit overflow-hidden border border-gray-300"
+          style={{ originY: 'top' }}
+          className="flex flex-col gap-2 p-2 rounded-lg bg-white shadow-xl absolute top-[calc(100%+5px)] right-0 w-fit border border-gray-300 z-[10000]"
         >
             <Option text={msg} onClick={handleAbandonClick} />
         </motion.ul>
@@ -63,7 +63,7 @@ const Option = ({ text, onClick }) => {
     <motion.li
       variants={itemVariants}
       onClick={onClick}
-      className="flex items-center w-full p-2 text-xs font-medium whitespace-nowrap rounded-md hover:bg-red-400 text-red-600 hover:text-white transition-colors duration-300 cursor-pointer"
+      className="flex items-center w-full p-2 text-xs font-medium whitespace-nowrap rounded-md hover:bg-red-400 text-red-600 hover:text-white transition-colors duration-300 cursor-pointer z-50"
     >
       <motion.span variants={actionIconVariants}></motion.span>
       <span>{text}</span>
