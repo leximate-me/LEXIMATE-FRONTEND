@@ -105,14 +105,16 @@ function NavBar() {
               className="text-md font-bold leading-normal hover:border-b-2 border-black dark:text-[#fffd92] dark:hover:border-b-[#fffd92]"
               to="/classes"
             >
-              Clases
+              <HighlightLetter color="blue" className='font-opendyslexic' size='text-xl'>
+                Clases
+              </HighlightLetter>
             </Link>
-            <Link
+            {/* <Link
               className="text-md font-bold leading-normal hover:border-b-2 border-black dark:text-[#fffd92] dark:hover:border-b-[#fffd92]"
               to="/games"
             >
               Juegos interactivos
-            </Link>
+            </Link> */}
           </div>
 
           {/* Botones de la Navbar */}
