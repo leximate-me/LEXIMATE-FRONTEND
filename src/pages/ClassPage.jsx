@@ -42,6 +42,8 @@ function ClassPage() {
   useEffect(() => {
     setClasses([]);
     getClasses();
+    console.log('classpage', classes)
+    console.log('class page user', user)
   }, [user]);
 
   return (
@@ -50,7 +52,7 @@ function ClassPage() {
         <>{Loading(isLoading ? 'Cargando clases...' : 'Creando clase...')}</>
       ) : (
         <>
-          {user && user.rol === 3 ? (
+          {user && user.rol === 'teacher' ? (
             <>
               {/* DOCENTE */}
               <div className="relative w-[90%] h-[520px] flex justify-center items-center">
@@ -110,7 +112,7 @@ function ClassPage() {
                 onClose={() => setShowModal(false)}
               />
             </>
-          ) : user && user.rol === 2 ? (
+          ) : user && user.rol === 'student' ? (
             <>
               {/* ESTUDIANTE */}
               <div className="relative w-[90%] h-[520px] flex justify-center items-center">

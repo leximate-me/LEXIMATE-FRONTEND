@@ -10,6 +10,8 @@ import dayjs from 'dayjs';
 import { FaCalendarAlt } from "react-icons/fa";
 import { MdOutlineComment } from "react-icons/md";
 import HighlightLetter from '../components/ui/HighlightLetter';
+import { FaUser } from "react-icons/fa";
+
 
 export default function CommentsPage({ posts: initialPosts }) {
   const { profile, user } = useAuth();
@@ -100,7 +102,7 @@ export default function CommentsPage({ posts: initialPosts }) {
         <>
           {/* Post */}
           {profile?.person && (
-            <div className="border-l-4 shadow-lg border-yellow-300  col-start-2 col-span-6 flex flex-col rounded-lg h-fit">
+            <div className="border-l-4 shadow-lg bg-white border-yellow-300  col-start-2 col-span-6 flex flex-col rounded-lg h-fit">
               <div className='flex flex-col bg-gradient-to-r from-yellow-300 to-amber-400 rounded-t-md p-2'>
                 <div className="flex gap-1">
                   <HighlightLetter className='font-opendyslexic' size='text-xl' color="blue">{post.user?.people?.first_name || 'Usuario'}</HighlightLetter>
@@ -129,13 +131,15 @@ export default function CommentsPage({ posts: initialPosts }) {
               </HighlightLetter>
             </div>
             <form onSubmit={handleSubmit} className="m-6 flex items-start gap-3">
-              <img
-                src={
-                  profile?.avatar?.file_url || "default-avatar-url.jpg"
-                }
-                alt="Tu avatar"
-                className="w-12 h-12 rounded-full object-cover border border-gray-500"
-              />
+              {profile?.avatar?.file_url ? (
+                <img
+                  src={profile.avatar.file_url}
+                  alt="Tu avatar"
+                  className="w-12 h-12 rounded-full object-cover border border-gray-500"
+                />
+              ) : (
+                <FaUser className="w-14 h-14 p-1 text-gray-500 border-2 border-gray-300 rounded-full " />
+              )}
               <div className="w-full flex flex-col items-end gap-2">
                 <textarea
                   className="w-full h-[80px] p-3 border border-gray-300 rounded-md focus:ring-2 focus:outline-none focus:ring-amber-400"
@@ -184,19 +188,20 @@ export default function CommentsPage({ posts: initialPosts }) {
               </div>
             ) : (
               <>
-                {user && user.rol === 2 ? (
+                {user && user.rol === 'student' ? (
                   <>
                     {currentComments.length > 0 ? (
                       currentComments.map((cmt) => (
                         <div className='grid grid-cols-[60px_repeat(11,minmax(0,1fr))] grid-rows-[120px] ml-4' key={cmt.id}>
-                          <img
-                            src={
-                              cmt.user?.fileUser?.[0]?.file_url ||
-                              'default-avatar-url.jpg'
-                            }
-                            alt="Avatar"
-                            className="w-12 h-12 rounded-full object-cover border border-gray-500"
-                          />
+                          {cmt.user?.fileUser?.[0]?.file_url ? (
+                            <img
+                              src={cmt.user?.fileUser?.[0]?.file_url}
+                              alt="Avatar"
+                              className="w-12 h-12 rounded-full object-cover border border-gray-500 col-start-1 row-start-1 self-start mt-2"
+                            />
+                          ) : (
+                            <FaUser className="w-10 h-10 p-1 text-gray-500 border-2 border-gray-300 rounded-full col-start-1 row-start-1 self-start mt-2" />
+                          )}
                           <div
                             key={cmt.id}
                             className="mb-5 col-start-2 col-span-10 row-span-1 bg-pastelVeryLightYellow rounded-md shadow-[0_3px_8px_0px_rgba(0,0,0,0.3)]"

@@ -2,7 +2,7 @@ import axios from './axios';
 
 const getClassesRequest = async () => {
   try {
-    const response = await axios.get(`/class/user`);
+    const response = await axios.get(`course/user`);
     return response;
   } catch (error) {
     console.error('Error during getClasses request:', error);
@@ -12,7 +12,7 @@ const getClassesRequest = async () => {
 
 const createClassesRequest = async (newClass) => {
   try {
-    const response = await axios.post(`/class/`, newClass);
+    const response = await axios.post(`course/`, newClass);
     return response;
   } catch (error) {
     console.error('Error during createClasses request:', error);
@@ -22,7 +22,7 @@ const createClassesRequest = async (newClass) => {
 
 const joinClassRequest = async (classCode) => {
   try {
-    const response = await axios.post(`/class/join`, classCode);
+    const response = await axios.post(`course/join`, classCode);
     return response;
   } catch (error) {
     console.log('Error during joinClass request:', error);
@@ -32,7 +32,7 @@ const joinClassRequest = async (classCode) => {
 
 const leaveClassRequest = async (classId) => {
   try {
-    const response = await axios.post(`/class/${classId}/leave`);
+    const response = await axios.post(`course/${classId}/leave`);
     return response;
   } catch (error) {
     console.log('Error during leaveClass request:', error);
@@ -42,7 +42,7 @@ const leaveClassRequest = async (classId) => {
 
 const deleteClassRequest = async (classId) => {
   try {
-    const response = await axios.delete(`/class/${classId}`);
+    const response = await axios.delete(`course/${classId}`);
     return response;
   } catch (error) {
     console.log('Error during deleteClass request:', error);
@@ -52,7 +52,7 @@ const deleteClassRequest = async (classId) => {
 
 const getUsersByClassRequest = async (classId) => {
   try {
-    const response = await axios.get(`/class/${classId}/user`);
+    const response = await axios.get(`course/${classId}/user`);
     return response;
   } catch (error) {
     console.error('Error during getUsersByClass request:', error);

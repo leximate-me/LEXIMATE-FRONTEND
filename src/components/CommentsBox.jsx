@@ -78,23 +78,22 @@ function CommentsBox() {
   const currentPosts = posts?.slice(indexOfFirstPost, indexOfLastPost);
 
   return (
-    <div className="bg-pastelVeryLightYellow p-5 rounded-lg shadow-md w-full min-h-96 border-l-4 border-yellow-400">
+    <div className="bg-pastelVeryLightYellow p-5 rounded-lg shadow-md w-full min-h-full border-l-4 border-yellow-400">
       {/* HEADER */}
       <div className="flex flex-col gap-2 mb-4">
         <div className="flex justify-between items-center">
           <HighlightLetter color='green' size='text-2xl' className="font-opendyslexic font-bold">
             Anuncios
           </HighlightLetter>
-          {user && user.rol === 2 && (
-            <button
-              onClick={() => setShowModal(true)}
-              className="px-4 py-2 bg-gradient-to-r from-yellow-300 to-amber-400 hover:scale-105 rounded-lg transition"
-            >
-              <HighlightLetter color='green' size='text-lg' className="text-black font-opendyslexic">
-                Nuevo Anuncio
-              </HighlightLetter>
-            </button>
-          )}
+
+          <button
+            onClick={() => setShowModal(true)}
+            className="px-4 py-2 bg-gradient-to-r from-yellow-300 to-amber-400 hover:scale-105 rounded-lg transition"
+          >
+            <HighlightLetter color='green' size='text-lg' className="text-black font-opendyslexic">
+              Nuevo Anuncio
+            </HighlightLetter>
+          </button>
         </div>
 
         {/* Paginación debajo del botón */}
@@ -145,24 +144,43 @@ function CommentsBox() {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -15 }}
                     transition={{ duration: 0.3 }}
-                    className="grid grid-cols-12 items-start p-2 mb-4 bg-pastelYellow rounded-lg shadow cursor-pointer hover:border-l-4 border-yellow-400 transition-all duration-100 relative"
+                    className="grid grid-cols-12 items-start p-2 mb-4 bg-white rounded-lg shadow cursor-pointer hover:border-l-4 border-yellow-400 transition-all duration-100 relative"
                   >
-                    <div className='col-span-11 flex justify-between w-full'>
-                      <HighlightLetter
-                        color="blue"
-                        size="text-lg"
-                        className="font-opendyslexic font-bold"
-                      >
-                        {post.title || 'Sin Título'}
-                      </HighlightLetter>
+                    <div className='col-span-11 max-h-24 flex flex-col gap-3 w-full'>
+                      <div className="flex gap-4">
+                        <HighlightLetter
+                          color="green"
+                          size="text-md"
+                          className="font-opendyslexic italic"
+                        >
+                          {post.user?.people?.first_name || 'Usuario'}
+                        </HighlightLetter>
+
+                        <HighlightLetter
+                          color="blue"
+                          size="text-md"
+                          className="font-opendyslexic italic"
+                        >
+                          {post.user?.people?.first_name || 'Usuario'}
+                        </HighlightLetter>
+                        <HighlightLetter
+                          color="red"
+                          size="text-sm"
+                          className="font-opendyslexic text-gray-600 dark:text-gray-400"
+                        >
+                          {dayjs(post.createdAt).format('DD/MM/YYYY HH:mm')}
+                        </HighlightLetter>
+                      </div>
+                      <div className='bg-pastelVeryLightYellow rounded-md p-3'>
+                        <HighlightLetter
+                          color="blue"
+                          size="text-lg"
+                          className="font-opendyslexic font-bold"
+                        >
+                          {post.title || 'Sin Título'}
+                        </HighlightLetter>
+                      </div>
                       <br />
-                      <HighlightLetter
-                        color="red"
-                        size="text-sm"
-                        className="font-opendyslexic text-gray-600 dark:text-gray-400"
-                      >
-                        {dayjs(post.createdAt).format('DD/MM/YYYY HH:mm')}
-                      </HighlightLetter>
                     </div>
 
                     {/* SOLO aparece si el post es del usuario logueado */}

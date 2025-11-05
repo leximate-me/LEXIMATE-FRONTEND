@@ -2,7 +2,7 @@ import axios from './axios';
 
 const getPostsRequest = async (classId) => {
   try {
-    const response = await axios.get(`/class/${classId}/post`);
+    const response = await axios.get(`course/${classId}/post`);
     return response;
   } catch (error) {
     console.error('Error during get posts request:', error);
@@ -12,7 +12,7 @@ const getPostsRequest = async (classId) => {
 
 const getPostByIdRequest = async (classId, postId) => {
   try {
-    const response = await axios.get(`/class/${classId}/post/${postId}`);
+    const response = await axios.get(`course/${classId}/post/${postId}`);
     return response;
   } catch (error) {
     console.error('Error during get post by id request:', error);
@@ -22,7 +22,7 @@ const getPostByIdRequest = async (classId, postId) => {
 
 const createPostRequest = async (classId, post) => {
   try {
-    const response = await axios.post(`/class/${classId}/post`, post);
+    const response = await axios.post(`course/${classId}/post`, post);
     console.log(response);
     return response;
   } catch (error) {
@@ -33,7 +33,7 @@ const createPostRequest = async (classId, post) => {
 
 const deletePostRequest = async (classId, postId) => {
   try {
-    const response = await axios.delete(`/class/${classId}/post/${postId}`);
+    const response = await axios.delete(`course/${classId}/post/${postId}`);
     return response;
   } catch (error) {
     console.error('Error during delete post request:', error);
@@ -43,7 +43,7 @@ const deletePostRequest = async (classId, postId) => {
 
 const getCommentsRequest = async (classId, postId) => {
   try {
-    const response = await axios.get(`/class/${classId}/post/${postId}/comment`);
+    const response = await axios.get(`course/${classId}/post/${postId}/comment`);
     return response;
   } catch (error) {
     console.error('Error during get comments request:', error);
@@ -53,7 +53,7 @@ const getCommentsRequest = async (classId, postId) => {
 
 const createCommentRequest = async (classId, postId, content) => {
   try {
-    const response = await axios.post(`/class/${classId}/post/${postId}/comment`, { content });
+    const response = await axios.post(`course/${classId}/post/${postId}/comment`, { content });
     return response;
   } catch (error) {
     console.error('Error during create comment request:', error);
@@ -64,7 +64,7 @@ const createCommentRequest = async (classId, postId, content) => {
 
 const deleteCommentRequest = async (classId, postId, commentId) => {
   try {
-    const response = await axios.delete(`/class/${classId}/post/${postId}/comment/${commentId}`);
+    const response = await axios.delete(`course/${classId}/post/${postId}/comment/${commentId}`);
     return response;
   } catch (error) {
     console.error('Error during delete comment request:', error);
