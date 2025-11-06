@@ -2,6 +2,9 @@ const colors = {
   blue: "text-blue-700",
   red: "text-red-700",
   green: "text-green-700",
+  lightGreen: "text-[#5eb0b8]",
+  lightYellow: "text-[#f7d654]",
+  lightRed: "text-[#f17c5a]",
 };
 
 // Mapeo de tamaños Tailwind → el siguiente más grande
@@ -30,7 +33,7 @@ function HighlightLetter({
 }) {
   let letters = children.split("");
 
-  // Buscar primer y último índice que NO sea espacio
+  // Buscar primer y último índice que NO sea espaciozz
   const firstCharIndex = letters.findIndex((l) => l.trim() !== "");
   const lastCharIndex = [...letters]
     .reverse()
@@ -42,22 +45,22 @@ function HighlightLetter({
     <span className={`${size} ${className}`}>
       {children
         ? letters.map((letter, index) => {
-            const isFirst = index === firstCharIndex;
-            const isLast = index === adjustedLastCharIndex;
+          const isFirst = index === firstCharIndex;
+          const isLast = index === adjustedLastCharIndex;
 
-            // Si es primera o última letra, subir un nivel de tamaño
-            const appliedSize =
-              isFirst || isLast ? sizeMap[size] || size : size;
+          // Si es primera o última letra, subir un nivel de tamaño
+          const appliedSize =
+            isFirst || isLast ? sizeMap[size] || size : size;
 
-            return (
-              <span
-                key={index}
-                className={`${isFirst || isLast ? `${colors[color]} font-bold tracking-normal-wide` : 'tracking-very-wide'} ${fontFamily} ${appliedSize}`}
-              >
-                {letter}
-              </span>
-            );
-          })
+          return (
+            <span
+              key={index}
+              className={`${isFirst || isLast ? `${colors[color]} font-bold tracking-normal-wide` : 'tracking-very-wide'} ${fontFamily} ${appliedSize}`}
+            >
+              {letter}
+            </span>
+          );
+        })
         : null}
     </span>
   );

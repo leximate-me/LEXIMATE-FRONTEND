@@ -60,7 +60,7 @@ function NavBar() {
   return (
     <header
       id="navbar"
-      className="fixed top-0 left-0 right-0 z-50 w-full flex flex-col md:flex-row items-center justify-between whitespace-nowrap border-b border-[#dbcf7f] transition duration-300 dark:border-b-[#fffd92] py-3 bg-primary dark:bg-[#1a1a1a]"
+      className="fixed top-0 left-0 right-0 z-50 w-full flex flex-col md:flex-row items-center backdrop-blur-sm justify-between whitespace-nowrap bg-pastelYellow/70 py-3 border-b-2 border-[#F7D654]"
     >
       {/* LOGO Y BOTÓN DE MENÚ */}
       <div className="flex items-center justify-between w-full md:w-fit px-5 z-50">
@@ -82,21 +82,21 @@ function NavBar() {
             </Link></>
         ) : (
           <>
-          <Link to="/">
-          <div className="flex items-center gap-4 text-[#181811] dark:text-[#fffd92]">
-            <div className="size-4 w-10 h-10">
-              <img
-                src={logo}
-                alt="Descripción de la imagen"
-                className="w-full h-full object-cover"
-              />
-            </div>
-            <HighlightLetter color="green" className='font-opendyslexic font-bold' size='text-2xl'>
-              LexiMate
-            </HighlightLetter>
-          </div>
-        </Link>
-        </>
+            <Link to="/">
+              <div className="flex items-center gap-4 text-[#181811] dark:text-[#fffd92]">
+                <div className="size-4 w-10 h-10">
+                  <img
+                    src={logo}
+                    alt="Descripción de la imagen"
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <HighlightLetter color="green" className='font-opendyslexic font-bold' size='text-2xl'>
+                  LexiMate
+                </HighlightLetter>
+              </div>
+            </Link>
+          </>
         )}
 
         {/* Botón de menú hamburguesa */}
@@ -194,14 +194,13 @@ function NavBar() {
         <>
           {location.pathname !== '/login' && (
             <div className="flex flex-col md:flex-row items-center gap-2 md:gap-8 order-2 md:order-1 px-4">
-              <ButtonLink
-                to='/login'
-                className="hover:border-b-[1px] rounded-md border-gray-700 hover:shadow-sm"
-              >
-                <HighlightLetter color="green" className='m-2 font-opendyslexic font-bold' size='text-xl'>
-                  Iniciar Sesión
-                </HighlightLetter>
-              </ButtonLink>
+              <Link to='/login'>
+                <button className="px-3 py-2 border-4 border-[#2d4654] text-[#2d4654] rounded-2xl hover:bg-[#2d4654] hover:text-white transition-all">
+                  <HighlightLetter color="blue" className='font-opendyslexic font-bold' size='text-xl'>
+                    Iniciar Sesión
+                  </HighlightLetter>
+                </button>
+              </Link>
               {/* <div className="flex items-center justify-center">
                 <ToggleTheme />
               </div> */}
