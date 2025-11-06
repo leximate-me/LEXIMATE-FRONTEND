@@ -47,7 +47,7 @@ function ClassPage() {
   }, [user]);
 
   return (
-    <div className="flex flex-col justify-center items-center h-[520px] p-2 m-5">
+    <div className="flex flex-col justify-center items-center h-[calc(100vh-60px)] p-2">
       {isLoading || isCreating ? (
         <>{Loading(isLoading ? 'Cargando clases...' : 'Creando clase...')}</>
       ) : (
@@ -60,18 +60,18 @@ function ClassPage() {
                 {currentPage > 1 && (
                   <button
                     onClick={handlePrev}
-                    className="absolute right-0 top-1/2 -translate-y-1/2 z-20 p-2 rounded-full shadow hover:bg-yellow-400 transition"
+                    className="absolute left-0 top-1/2 -translate-y-1/2 z-20 p-3 rounded-full  hover:bg-pastelYellow transition duration-150"
                   >
-                    <HiOutlineChevronDoubleLeft className="text-2xl" />
+                    <HiOutlineChevronDoubleLeft className="text-3xl" />
                   </button>
                 )}
                 {/* Flecha derecha */}
                 {currentPage < totalPages && (
                   <button
                     onClick={handleNext}
-                    className="absolute right-0 top-1/2 -translate-y-1/2 z-20 p-2 rounded-full shadow hover:bg-yellow-400 transition"
+                    className="absolute right-0 top-1/2 -translate-y-1/2 z-20 p-3 rounded-full  hover:bg-pastelYellow transition duration-150"
                   >
-                    <HiOutlineChevronDoubleRight className="text-2xl" />
+                    <HiOutlineChevronDoubleRight className="text-3xl" />
                   </button>
                 )}
 
@@ -88,7 +88,7 @@ function ClassPage() {
                     animate="center"
                     exit="exit"
                     transition={{ duration: 0.3 }}
-                    className="grid grid-cols-2 gap-5 absolute w-full h-full justify-center items-center"
+                    className="flex flex-wrap gap-10 absolute w-full h-full justify-center items-center"
                   >
                     <ClassCardTeacher classes={currentClasses} />
                   </motion.div>
@@ -150,7 +150,7 @@ function ClassPage() {
                     transition={{ duration: 0.3 }}
                     className="flex flex-wrap gap-10 absolute w-full h-full justify-center items-center"
                   >
-                      <ClassCardStudent classes={currentClasses} />
+                    <ClassCardStudent classes={currentClasses} />
                   </motion.div>
                 </AnimatePresence>
               </div>

@@ -22,7 +22,7 @@ function CommentsBox() {
 
   // PAGINADO
   const [currentPage, setCurrentPage] = useState(1);
-  const postsPerPage = 4;
+  const postsPerPage = 3;
   const totalPages = Math.ceil(posts?.length / postsPerPage || 1);
 
   const navigate = useNavigate();
@@ -78,7 +78,7 @@ function CommentsBox() {
   const currentPosts = posts?.slice(indexOfFirstPost, indexOfLastPost);
 
   return (
-    <div className="bg-pastelVeryLightYellow p-5 rounded-lg shadow-md w-full min-h-full border-l-4 border-yellow-400">
+    <div className="bg-pastelVeryLightYellow p-5 rounded-lg shadow-md w-full h-[390px] border-l-4 border-yellow-400 overflow-y-auto">
       {/* HEADER */}
       <div className="flex flex-col gap-2 mb-4">
         <div className="flex justify-between items-center">
@@ -123,7 +123,7 @@ function CommentsBox() {
       </div>
 
       {/* Lista de Comentarios con scroll y animación */}
-      <div className="w-full max-h-[400px] overflow-y-auto pr-2">
+      <div className="w-full max-h-[calc(390px-HeaderHeight)] pr-2">
         {isLoading || isCreating || isDeleting ? (
           <div className="flex justify-center">
             <Riple color="#cec702" size="large" />
@@ -204,7 +204,7 @@ function CommentsBox() {
 
       {/* Modal para crear anuncio */}
       {showModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+        <div className="fixed inset-0 z-50 backdrop-blur-sm flex items-center justify-center bg-black/50">
           <div className="bg-white dark:bg-[#1a1a1a] p-6 rounded-lg w-full max-w-md shadow-lg relative">
             <button
               onClick={() => setShowModal(false)}

@@ -62,7 +62,7 @@ function CreateTaskModal({ isOpen, onClose }) {
       {error && <ErrorModal error={error} clearError={clearError} />}
       {/* Fondo oscuro */}
       <div
-        className="fixed inset-0 bg-black bg-opacity-50 z-40 flex items-center justify-center"
+        className="fixed inset-0 bg-black backdrop-blur-sm bg-opacity-50 z-50 flex items-center justify-center"
         onClick={onClose} // Cierra el modal cuando haces clic en el fondo oscuro
       >
         {/* Contenedor del modal */}

@@ -98,7 +98,7 @@ function TaskPage() {
           <NavbarClass onSelect={setSelectedView} selectedView={selectedView} />
 
           {/* Contenido */}
-          <div className="col-start-3 col-span-7 row-start-3 row-span-1 ">
+          <div className="col-start-3 col-span-7 row-start-3 row-span-1">
             {renderContent()}
           </div>
 
@@ -138,7 +138,7 @@ function TaskPage() {
           </div>
 
           {/* Botón crear tarea */}
-          {user && user.rol === 3 && (
+          {user && user.rol === 'teacher' && (
             <div className="fixed bottom-8 right-8">
               <button
                 onClick={() => setShowModal(true)}

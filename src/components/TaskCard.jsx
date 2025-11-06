@@ -58,9 +58,9 @@ function TaskCard({ tasks: initialTasks }) {
       ) : (
         <>
           {tasks.length === 0 ? (
-            <div className="w-80 h-52 flex flex-col justify-center items-center border border-gray-300 rounded-md shadow-md">
+            <div className="w-80 h-52 flex flex-col justify-center items-center border bg-white rounded-md shadow-md">
               <img src={notFound} alt="No existen tareas" className="w-24 h-24 mb-4" />
-              <h1><b>NO EXISTEN TAREAS</b></h1>
+              <h1 className='font-opendyslexic tracking-more-wide'><b>NO EXISTEN TAREAS</b></h1>
             </div>
           ) : (
             <>

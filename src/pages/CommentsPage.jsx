@@ -11,6 +11,7 @@ import { FaCalendarAlt } from "react-icons/fa";
 import { MdOutlineComment } from "react-icons/md";
 import HighlightLetter from '../components/ui/HighlightLetter';
 import { FaUser } from "react-icons/fa";
+import { div } from 'framer-motion/client';
 
 
 export default function CommentsPage({ posts: initialPosts }) {
@@ -131,14 +132,14 @@ export default function CommentsPage({ posts: initialPosts }) {
               </HighlightLetter>
             </div>
             <form onSubmit={handleSubmit} className="m-6 flex items-start gap-3">
-              {profile?.avatar?.file_url ? (
+              {profile?.avatar ? (
                 <img
-                  src={profile.avatar.file_url}
+                  src={profile.avatar}
                   alt="Tu avatar"
-                  className="w-12 h-12 rounded-full object-cover border border-gray-500"
+                  className="w-12 h-12 rounded-full object-cover border border-gray-700"
                 />
               ) : (
-                <FaUser className="w-14 h-14 p-1 text-gray-500 border-2 border-gray-300 rounded-full " />
+                <FaUser className="w-14 h-14 p-1 text-gray-700 border border-gray-700 rounded-full " />
               )}
               <div className="w-full flex flex-col items-end gap-2">
                 <textarea
@@ -193,14 +194,14 @@ export default function CommentsPage({ posts: initialPosts }) {
                     {currentComments.length > 0 ? (
                       currentComments.map((cmt) => (
                         <div className='grid grid-cols-[60px_repeat(11,minmax(0,1fr))] grid-rows-[120px] ml-4' key={cmt.id}>
-                          {cmt.user?.fileUser?.[0]?.file_url ? (
+                          {cmt.user?.userFiles?.length > 0 ? (
                             <img
-                              src={cmt.user?.fileUser?.[0]?.file_url}
+                              src={cmt.user?.userFiles[0]?.file_url}
                               alt="Avatar"
-                              className="w-12 h-12 rounded-full object-cover border border-gray-500 col-start-1 row-start-1 self-start mt-2"
+                              className="w-12 h-12 rounded-full object-cover border border-gray-700 col-start-1 row-start-1 self-start mt-2"
                             />
                           ) : (
-                            <FaUser className="w-10 h-10 p-1 text-gray-500 border-2 border-gray-300 rounded-full col-start-1 row-start-1 self-start mt-2" />
+                            <FaUser className="w-10 h-10 p-1 text-gray-700 border-2 border-gray-700 rounded-full col-start-1 row-start-1 self-start mt-2" />
                           )}
                           <div
                             key={cmt.id}
@@ -240,34 +241,38 @@ export default function CommentsPage({ posts: initialPosts }) {
                   </>
                 ) : (
                   <>
+                    {/*DOCENTE*/}
                     {currentComments.length > 0 ? (
                       currentComments.map((cmt) => (
                         <div
                           key={cmt.id}
-                          className="mb-5 grid grid-cols-[50px,150px,auto] grid-rows-2 md:grid-rows-2 dark:bg-[#1a1a1a] bg-white p-4 rounded-md shadow-lg border border-gray-300 dark:border-gray-500"
+                          className="border-l-4 border-yellow-300 mb-5 m-4 grid grid-cols-[50px,150px,auto] grid-rows-2 md:grid-rows-2 dark:bg-[#1a1a1a] bg-white rounded-md shadow-lg dark:border-gray-500"
                         >
-                          <div className="col-start-1 col-span-1 md:col-span-1">
-                            <img
-                              src={
-                                cmt.user?.fileUser?.[0]?.file_url ||
-                                'default-avatar-url.jpg'
-                              }
-                              alt="Avatar"
-                              className="w-12 h-12 rounded-full object-cover border border-gray-500"
-                            />
-                          </div>
+                          <div className='p-2 bg-gradient-to-r from-yellow-300 to-amber-400 rounded-t col-span-8 flex justify-between'>
+                            <div className='flex items-center gap-2'>
+                                {cmt.user?.userFiles?.length > 0 ? (
+                                  <img
+                                    src={cmt.user?.userFiles[0]?.file_url}
+                                    alt="Avatar"
+                                    className="w-12 h-12 rounded-full object-cover border border-gray-500 col-start-1 row-start-1 self-start mt-2"
+                                  />
+                                ) : (
+                                    <FaUser className="w-10 h-10 rounded-full border border-gray-700 text-gray-700 p-1" />
+                                )}
 
-                          <div className='md:col-span-4 md:row-start-1 md:col-start-2 flex items-center flex-wrap'>
-                            <p className="mx-1 dark:text-white text-gray-800 truncate">
-                              {cmt.user?.people?.first_name || 'Usuario'}
-                            </p>
-                            <p className="mx-1 dark:text-white text-gray-800 truncate">
-                              {cmt.user?.people?.last_name || ''}
-                            </p>
-                            <p className='mx-2 italic text-gray-500'>
-                              {dayjs(cmt.createdAt).format('DD/MM/YYYY HH:mm')}
-                            </p>
-                            <div className="col-start-8 justify-self-end self-center">
+                              <div className='flex items-center flex-wrap'>
+                                <HighlightLetter className="mx-1 dark:text-white text-gray-800 truncate font-opendyslexic" size='text-lg' color="green">
+                                  {cmt.user?.people?.first_name || 'Usuario'}
+                                </HighlightLetter>
+                                <HighlightLetter className="mx-1 dark:text-white text-gray-800 truncate font-opendyslexic" size='text-lg' color="red">
+                                  {cmt.user?.people?.last_name || ''}
+                                </HighlightLetter>
+                                <p className='mx-2 italic text-gray-500'>
+                                  {dayjs(cmt.createdAt).format('DD/MM/YYYY HH:mm')}
+                                </p>
+                              </div>
+                            </div>
+                            <div>
                               <DropDown
                                 onAbandonClass={() => handleDelete(cmt.id)}
                                 classId={classId}
@@ -277,9 +282,11 @@ export default function CommentsPage({ posts: initialPosts }) {
                             </div>
                           </div>
 
-                          <p className="row-start-2 md:row-start-2 mt-2 text-gray-800 dark:text-white flex items-center col-start-1 col-span-8 break-words">
-                            {cmt.content}
-                          </p>
+                          <div className='m-3 col-span-8 bg-pastelYellow p-4 rounded'>
+                            <HighlightLetter className="mt-2 dark:text-white text-gray-800 font-opendyslexic" size='text-md' color="blue">
+                              {cmt.content}
+                            </HighlightLetter>
+                          </div>
                         </div>
                       ))
                     ) : (

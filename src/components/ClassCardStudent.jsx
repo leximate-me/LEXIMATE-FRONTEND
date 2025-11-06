@@ -41,9 +41,9 @@ export default function ClassCardStudent({ classes: initialClasses }) {
   return (
     <div className="h-fit w-fit">
       {localClasses && localClasses.length === 0 ? (
-        <div className="w-80 h-52 flex flex-col justify-center items-center m-5 border border-gray-300 rounded-md shadow-[0px_9px_15px_-7px_rgba(0,0,0,0.75)]">
+        <div className="w-80 h-52 flex flex-col justify-center items-center m-5 border bg-white rounded-md shadow-[0px_9px_15px_-7px_rgba(0,0,0,0.75)]">
           <img src={notFound} alt="No existen clases" className="w-24" />
-          <h1 className="mt-4 font-bold">NO EXISTEN CLASES</h1>
+          <h1 className="mt-4 font-bold font-opendyslexic tracking-more-wide">NO EXISTEN CLASES</h1>
         </div>
       ) : (
         <div className="flex flex-wrap justify-center h-fit gap-5 ">

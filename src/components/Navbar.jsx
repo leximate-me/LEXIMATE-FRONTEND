@@ -6,6 +6,7 @@ import ToggleTheme from './ToggleTheme';
 import logo from '../assets/logo-leximate.png';
 import { HiUser, HiBell, HiChatAlt } from 'react-icons/hi';
 import HighlightLetter from './ui/HighlightLetter';
+import { FaUser } from 'react-icons/fa';
 
 function NavBar() {
   const { isAuthenticated, logOut, user, getProfile, profile } = useAuth();
@@ -63,7 +64,25 @@ function NavBar() {
     >
       {/* LOGO Y BOTÓN DE MENÚ */}
       <div className="flex items-center justify-between w-full md:w-fit px-5 z-50">
-        <Link to="/classes">
+        {isAuthenticated ? (
+          <>
+            <Link to="/classes">
+              <div className="flex items-center gap-4 text-[#181811] dark:text-[#fffd92]">
+                <div className="size-4 w-10 h-10">
+                  <img
+                    src={logo}
+                    alt="Descripción de la imagen"
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <HighlightLetter color="green" className='font-opendyslexic font-bold' size='text-2xl'>
+                  LexiMate
+                </HighlightLetter>
+              </div>
+            </Link></>
+        ) : (
+          <>
+          <Link to="/">
           <div className="flex items-center gap-4 text-[#181811] dark:text-[#fffd92]">
             <div className="size-4 w-10 h-10">
               <img
@@ -77,6 +96,8 @@ function NavBar() {
             </HighlightLetter>
           </div>
         </Link>
+        </>
+        )}
 
         {/* Botón de menú hamburguesa */}
         {isAuthenticated && (
@@ -128,7 +149,7 @@ function NavBar() {
                 <div
                   ref={profileButtonRef}
                   onClick={() => setIsProfileOpen(!isProfileOpen)}
-                  className="rounded-full cursor-pointer"
+                  className="relative rounded-full cursor-pointer"
                 >
                   {profile && profile.avatar ? (
                     <img
@@ -137,15 +158,15 @@ function NavBar() {
                       className="w-10 h-10 rounded-full object-cover border border-gray-500"
                     />
                   ) : (
-                    <HiUser className="text-3xl" />
+                    <FaUser className="w-10 h-10 text-gray-700 border border-gray-700 rounded-full p-2" />
                   )}
 
                   {/* Contenedor de opciones de perfil */}
                   <div
                     ref={dropdownRef}
-                    className={`absolute right-28 md:right-44 mt-2 w-fit flex flex-col bg-white dark:bg-gray-800 rounded-lg shadow-lg p-3 transition-all duration-300 ease-out transform ${isProfileOpen
-                        ? 'opacity-100 scale-100'
-                        : 'opacity-0 scale-95 pointer-events-none'
+                    className={`absolute right-8 top-12 mt-2 w-fit flex flex-col bg-white dark:bg-gray-800 rounded-lg shadow-lg p-3 transition-all duration-300 ease-out transform ${isProfileOpen
+                      ? 'opacity-100 scale-100'
+                      : 'opacity-0 scale-95 pointer-events-none'
                       }`}
                   >
                     <Link to="/profile">
@@ -163,9 +184,9 @@ function NavBar() {
                 </div>
               </div>
 
-              <div className="flex items-center justify-center px-3">
+              {/* <div className="flex items-center justify-center px-3">
                 <ToggleTheme />
-              </div>
+              </div> */}
             </div>
           </div>
         </div>
