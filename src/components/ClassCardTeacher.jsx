@@ -80,15 +80,15 @@ export default function ClassCardTeacher({ classes: initialClasses }) {
                     alt="Fondo"
                   />
                   <div
-                    className="absolute top-2 right-2 z-[9999]"
-                    onClick={(e) => e.stopPropagation()}
-                  >
-                    <Dropdown
-                      classId={classItem.id}
-                      onAbandonClass={handleAbandonClass}
-                      msg="Eliminar clase"
-                    />
-                  </div>
+                      className="absolute top-2 right-2 z-[9999]"
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      <Dropdown
+                        classId={classItem.id}
+                        onAbandonClass={handleAbandonClass}
+                        msg="Eliminar clase"
+                      />
+                    </div>
                 </figure>
 
                 {/* Contenido */}

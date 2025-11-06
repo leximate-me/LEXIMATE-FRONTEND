@@ -1,4 +1,3 @@
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -17,7 +16,8 @@ div {
 
 /* Modo oscuro */
 .dark {
-  --icon-color: #fffd92; /* Color de los íconos en modo oscuro */
+  --icon-color: #fffd92;
+  /* Color de los íconos en modo oscuro */
 }
 
 /* Asegurarse de que los SVGs utilicen currentColor */
@@ -28,7 +28,8 @@ svg {
 @font-face {
   font-family: 'OpenDyslexic';
   src: url('./fonts/OpenDyslexic-Regular.otf') format('opentype');
-  font-weight: 400; /* Regular */
+  font-weight: 400;
+  /* Regular */
   font-style: normal;
   font-display: swap;
 }
@@ -36,7 +37,8 @@ svg {
 @font-face {
   font-family: 'OpenDyslexic';
   src: url('./fonts/OpenDyslexic-Bold.otf') format('opentype');
-  font-weight: 700; /* Negrita */
+  font-weight: 700;
+  /* Negrita */
   font-style: normal;
   font-display: swap;
 }
@@ -44,7 +46,8 @@ svg {
 @font-face {
   font-family: 'OpenDyslexic';
   src: url('./fonts/OpenDyslexic-Italic.otf') format('opentype');
-  font-weight: 400; /* Cursiva */
+  font-weight: 400;
+  /* Cursiva */
   font-style: italic;
   font-display: swap;
 }
@@ -57,4 +60,20 @@ svg {
   font-weight: 400;
   font-style: normal;
   font-display: swap;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.25s ease-out;
 }

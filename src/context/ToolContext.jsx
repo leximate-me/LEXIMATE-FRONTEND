@@ -1,5 +1,5 @@
     import { createContext, useContext, useState } from 'react';
-    import { extractTextRequest } from "../api/tool";
+    import { extractTextRequest, chatBotRequest } from "../api/tool";
 
     const ToolContext = createContext();
 
@@ -18,6 +18,7 @@
         const [error, setError] = useState(null);
         const [isExtracting, setisExtracting] = useState(false);
         const [extractedText, setExtractedText] = useState([]);
+        const [chatMsg, setChatMsg] = useState([]);
 
         const clearError = () => {
             setError(null);
@@ -37,9 +38,22 @@
             }
         }
 
+        const chatBot = async (message) => {
+            try {
+                const res = await chatBotRequest(message);
+                setChatMsg(res.data);
+            } catch (error) {
+                console.error('Error during chat bot request:', error);
+                setError(error.response?.data || 'Error chatting with bot');
+                throw error;
+            }
+        }
+
         return (
             <ToolContext.Provider
                 value={{
+                    chatMsg,
+                    chatBot,
                     error,
                     isExtracting,
                     extractedText,

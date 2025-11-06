@@ -10,6 +10,17 @@ const extractTextRequest = async (url) => {
     }
     }
 
+const chatBotRequest = async (message) => {
+    try {
+        const response = await axios.post('/tool/chat-bot-response', { message });
+        return response;
+    } catch (error) {
+        console.error('Error during chat bot request:', error);
+        throw error;
+    }
+}
+
 export {
     extractTextRequest,
+    chatBotRequest,
 };

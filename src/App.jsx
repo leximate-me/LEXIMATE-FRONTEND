@@ -25,7 +25,7 @@ function AppContent() {
   return (
     <div>
       <NavBar />
-      <main className="w-full h-[calc(screen-60px)] bg-[#fff9d8] dark:bg-[#1a1a1a]">
+      <main className="w-full h-screen bg-[#fff9d8] dark:bg-[#1a1a1a]">
         <div className="pt-[60px]">
           {user && !user.verify && <ModalVerification />}
           <Routes>

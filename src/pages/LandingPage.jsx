@@ -24,7 +24,7 @@ function LandingPage() {
   const visibleState = 'opacity-100 translate-y-0'; // Visible y en posición
 
   return (
-    <div className="flex flex-col flex-1 items-center max-w-full mt-5">
+    <div className="flex flex-col bg-[#FDF7D6] flex-1 items-center max-w-full mt-5">
       {/* <-- 5. Aplica el 'ref' y las clases condicionales a la tarjeta 
       */}
       <div
