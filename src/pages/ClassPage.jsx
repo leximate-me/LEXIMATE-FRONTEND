@@ -9,6 +9,8 @@ import JoinClassModal from '../components/JoinClass';
 import Loading from '../components/ui/Loading';
 import { HiOutlineChevronDoubleLeft, HiOutlineChevronDoubleRight } from "react-icons/hi2";
 import { motion, AnimatePresence } from "framer-motion";
+import { MessageCircleWarning } from 'lucide-react';
+import HighlightLetter from '../components/ui/HighlightLetter';
 
 function ClassPage() {
   const { getClasses, classes, isLoading, setClasses, isCreating } = useClass();
@@ -47,7 +49,7 @@ function ClassPage() {
   }, [user]);
 
   return (
-    <div className="flex flex-col justify-center items-center h-[calc(100vh-60px)] p-2">
+    <div className="flex flex-col justify-center items-center h-[calc(100vh-80px)] p-2">
       {isLoading || isCreating ? (
         <>{Loading(isLoading ? 'Cargando clases...' : 'Creando clase...')}</>
       ) : (
@@ -173,6 +175,20 @@ function ClassPage() {
               />
             </>
           ) : null}
+          {user.rol === 'guest' && (
+            <div className=" bg-pastelYellow w-fit rounded-lg p-5 shadow-md flex flex-col items-center">
+              <MessageCircleWarning size='150px' className="mx-auto mb-2" />
+              <HighlightLetter className="text-3xl font-semibold mb-4 font-opendyslexic">
+                Eres invitado
+              </HighlightLetter>
+              <br />
+              <div className='w-[600px] text-center'>
+                <HighlightLetter color='red' className="text-lg font-opendyslexic">
+                  Espera que el administrador te dé de alta para acceder a todas las funcionalidades
+                </HighlightLetter>
+              </div>
+            </div>
+          )}
         </>
       )}
     </div>

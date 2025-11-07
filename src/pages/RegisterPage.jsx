@@ -10,6 +10,8 @@ import utc from 'dayjs/plugin/utc';
 import dayjs from 'dayjs';
 import { ErrorModal } from '../components/ui/ErrorModal';
 import Loading from '../components/ui/Loading';
+import HighlightLetter from '../components/ui/HighlightLetter';
+import { User, Mail, Lock, Contact, CalendarFold, IdCard, Phone, GraduationCap} from 'lucide-react';
 dayjs.extend(utc);
 ////
 function RegisterPage() {
@@ -32,11 +34,10 @@ function RegisterPage() {
       dni: values.dni,
       institute: values.institute,
       phone_number: values.phone_number,
-      birth_date: dayjs(values.birth_date).utc().format(),
+      birth_date: dayjs(values.birth_date).format('YYYY-MM-DD'),
       user_name: values.user_name,
       email: values.email,
-      password: values.password,
-      role: values.role,
+      password: values.password
     };
 
     setIsLoading(true);
@@ -62,81 +63,43 @@ function RegisterPage() {
   });
 
   return (
-    <div className="grid grid-cols-6 grid-rows-6">
+    <div className="h-[calc(100vh-80px)] grid grid-cols-8 grid-rows-8">
       <ErrorModal error={error} clearError={clearError} />
-      <div className="mx-2 col-span-6 row-span-6 mt-20 md:mt-0">
+      <div className="col-start-3 col-span-4 row-span-7 p-5" >
         {isLoading ? (
           <div className="h-[500px] flex justify-center items-center mt-6">
             {Loading('Creando usuario...')}
           </div>
         ) : (
-          <Card className="md:h-[710px] min-w-[50%] md:min-w-fit m-7 flex flex-col md:flex-row items-center dark:bg-[#1a1a1a] dark:border-[#fffd92]">
-            <div className="flex justify-center md:items-center">
-              <img className="w-44 md:h-auto" src={logo} alt="" />
-            </div>
-            <div>
-              <h1 className="text-3xl font-semibold text-center py-5 dark:text-white">
-                Registrarse
-              </h1>
-              <form className="space-y-4" onSubmit={onSubmit}>
-                <Input
-                  type="text"
-                  register={register}
-                  name="first_name"
-                  rules={{ required: 'Este campo es requerido' }}
-                  placeholder="Nombre"
-                  error={errors.first_name?.message}
-                />
-                <Input
-                  type="text"
-                  register={register}
-                  name="last_name"
-                  rules={{ required: 'Este campo es requerido' }}
-                  placeholder="Apellido"
-                  error={errors.last_name?.message}
-                />
-                <Input
-                  type="text"
-                  register={register}
-                  name="dni"
-                  rules={{ required: 'Este campo es requerido' }}
-                  placeholder="DNI"
-                  error={errors.dni?.message}
-                />
-                <Input
-                  type="text"
-                  register={register}
-                  name="institute"
-                  rules={{ required: 'Este campo es requerido' }}
-                  placeholder="Institución"
-                  error={errors.institute?.message}
-                />
-                <Input
-                  type="text"
-                  register={register}
-                  name="phone_number"
-                  rules={{ required: 'Este campo es requerido' }}
-                  placeholder="Teléfono"
-                  error={errors.phone_number?.message}
-                />
-                <Input
-                  type="date"
-                  register={register}
-                  name="birth_date"
-                  rules={{ required: 'Este campo es requerido' }}
-                  placeholder="Fecha de nacimiento"
-                  error={errors.birth_date?.message}
-                />
-                <Input
-                  type="text"
-                  register={register}
-                  name="user_name"
-                  rules={{ required: 'Este campo es requerido' }}
-                  placeholder="Nombre de usuario"
-                  error={errors.user_name?.message}
-                />
+          <Card className="border-none w-full h-full bg-white animate-fadeIn">
+            <div className='min-h-full flex'>
+              <div className="w-[40%] rounded-l-lg bg-gradient-to-r from-yellow-300 to-amber-400 p-8 flex items-center">
+                <img src={logo} alt="" />
+              </div>
+              <form className="w-[60%] flex flex-col justify-between p-4" onSubmit={onSubmit}>
+                <div className='flex gap-3'>
+                  <Input
+                    type="text"
+                    icon={User}
+                    register={register}
+                    name="first_name"
+                    rules={{ required: 'Este campo es requerido' }}
+                    placeholder="Nombre"
+                    error={errors.first_name?.message}
+                  />
+                  <Input
+                    type="text"
+                    icon={User}
+                    register={register}
+                    name="last_name"
+                    rules={{ required: 'Este campo es requerido' }}
+                    placeholder="Apellido"
+                    error={errors.last_name?.message}
+                  />
+                </div>
                 <Input
                   type="email"
+                  icon={Mail}
                   register={register}
                   name="email"
                   rules={{
@@ -150,29 +113,84 @@ function RegisterPage() {
                   error={errors.email?.message}
                 />
                 <Input
-                  type="password"
+                  type="text"
+                  icon={Contact}
                   register={register}
-                  name="password"
+                  name="user_name"
                   rules={{ required: 'Este campo es requerido' }}
-                  placeholder="Contraseña"
-                  error={errors.password?.message}
+                  placeholder="Nombre de usuario"
+                  error={errors.user_name?.message}
                 />
-                <select
-                  className={`w-full bg-[#e5e5e5] text-black px-4 py-2 rounded-lg ${
-                    errors.role ? 'border-red-500' : ''
-                  } focus:outline-none`}
-                  {...register('role', { required: 'Este campo es requerido' })}
+                <div className='flex gap-3'>
+                  <Input
+                    type="date"
+                    icon={CalendarFold}
+                    register={register}
+                    name="birth_date"
+                    rules={{ required: 'Este campo es requerido' }}
+                    placeholder="Fecha de nacimiento"
+                    error={errors.birth_date?.message}
+                  />
+                  <Input
+                    type="text"
+                    icon={IdCard}
+                    register={register}
+                    name="dni"
+                    rules={{ required: 'Este campo es requerido' }}
+                    placeholder="Número de Documento"
+                    error={errors.dni?.message}
+                  />
+                </div>
+                <Input
+                  type="text"
+                  icon={Phone}
+                  register={register}
+                  name="phone_number"
+                  rules={{ required: 'Este campo es requerido' }}
+                  placeholder="Teléfono"
+                  error={errors.phone_number?.message}
+                />
+                <Input
+                  type="text"
+                  icon={GraduationCap}
+                  register={register}
+                  name="institute"
+                  rules={{ required: 'Este campo es requerido' }}
+                  placeholder="Institución"
+                  error={errors.institute?.message}
+                />
+                <div className='flex gap-3'>
+                  <Input
+                    type="password"
+                    icon={Lock}
+                    register={register}
+                    name="password"
+                    rules={{ required: 'Este campo es requerido' }}
+                    placeholder="Contraseña"
+                    error={errors.password?.message}
+                  />
+                  {errors.role && (
+                    <span className="text-red-500">{errors.role.message}</span>
+                  )}
+                  <Input
+                    type="password"
+                    icon={Lock}
+                    register={register}
+                    name="password"
+                    rules={{ required: 'Este campo es requerido' }}
+                    placeholder="Repetir Contraseña"
+                    error={errors.password?.message}
+                    className="flex-1 min-w-0 truncate"
+                  />
+                </div>
+                <button
+                  type="submit"
+                  className="w-full bg-gradient-to-r from-yellow-400 to-amber-500 font-semibold py-4 rounded-2xl hover:from-yellow-500 hover:to-amber-600 transform hover:scale-[1.02] transition-all duration-200 shadow-lg hover:shadow-xl"
                 >
-                  <option value="" disabled>
-                    Selecciona tu rol
-                  </option>
-                  <option value="Student">Estudiante</option>
-                  <option value="Teacher">Profesor</option>
-                </select>
-                {errors.role && (
-                  <span className="text-red-500">{errors.role.message}</span>
-                )}
-                <Button type="submit">Hecho</Button>
+                  <HighlightLetter color="green" className='font-opendyslexic' size='text-xl'>
+                    Hecho
+                  </HighlightLetter>
+                </button>
               </form>
             </div>
           </Card>
