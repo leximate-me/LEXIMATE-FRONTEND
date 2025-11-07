@@ -2,6 +2,8 @@ import React, { useEffect, useRef, useState } from "react";
 import { useTool } from "../context/ToolContext";
 import { Square, Send } from "lucide-react";
 import ReactMarkdown from "react-markdown";
+import { Bot } from 'lucide-react';
+import HighlightLetter from "./ui/HighlightLetter";
 
 
 const ChatbotModal = ({ onClose }) => {
@@ -48,27 +50,31 @@ const ChatbotModal = ({ onClose }) => {
 
     return (
         <div className={`fixed inset-0 flex items-center justify-center bg-black/40 z-[99999] transition-opacity duration-500 ${isVisible ? "opacity-100" : "opacity-0"}`}>
-            <div className={`fixed bottom-6 right-6 bg-[#fdf7d6] w-[350px] h-[500px] rounded-2xl shadow-xl p-5 flex flex-col justify-between transition-all duration-300 ${isVisible ? "translate-y-0 translate-x-0 opacity-100" : "translate-x-10 translate-y-10 opacity-0"}`}>
+            <div className={`fixed bottom-6 right-6 bg-[#fdf7d6] w-[350px] h-[500px] rounded-2xl shadow-xl flex flex-col justify-between transition-all duration-300 ${isVisible ? "translate-y-0 translate-x-0 opacity-100" : "translate-x-10 translate-y-10 opacity-0"}`}>
 
                 <div>
-                    {/* Botón cerrar */}
-                    <button
-                        onClick={handleClose}
-                        className="absolute top-3 right-3 text-gray-700 hover:text-black text-lg font-semibold"
-                    >
-                        ✕
-                    </button>
+                    <div className="bg-yellow-300 rounded-t-lg">
+                        {/* Botón cerrar */}
+                        <button
+                            onClick={handleClose}
+                            className="absolute top-3 right-3 text-gray-700 hover:text-black text-lg font-semibold"
+                        >
+                            ✕
+                        </button>
 
-                    {/* Encabezado */}
-                    <div className="flex items-center gap-3 border-b border-yellow-200 pb-3">
-                        <div className="bg-yellow-300 rounded-full p-2">🤖</div>
-                        <h2 className="text-lg font-semibold text-gray-800">
-                            Asistente Virtual
-                        </h2>
+                        {/* Encabezado */}
+                        <div className="flex items-center gap-3 border-b border-yellow-200 p-2">
+                            <div className="bg-gray-700 rounded-full p-2">
+                                <Bot className="text-white" />
+                            </div>
+                            <HighlightLetter className="h-full font-opendyslexic font-bold" size="text-md" color="green">
+                                Asistente Virtual
+                            </HighlightLetter>
+                        </div>
                     </div>
 
                     {/* Mensajes */}
-                    <div ref={messagesContainerRef} className="mt-4 max-h-80 overflow-y-auto space-y-3">
+                    <div ref={messagesContainerRef} className="m-4 max-h-80 overflow-y-auto space-y-3">
                         {chatMessages.map((msg, index) => (
                             <div
                                 key={index}
@@ -107,11 +113,11 @@ const ChatbotModal = ({ onClose }) => {
                 </div>
 
                 {/* Input */}
-                <div className="mt-4 flex items-center border border-yellow-300 rounded-xl overflow-hidden">
+                <div className="m-4 flex items-center border border-yellow-300 rounded-xl overflow-hidden">
                     <input
                         type="text"
                         placeholder="Escribe un mensaje..."
-                        className="flex-1 px-3 py-2 text-sm bg-transparent focus:outline-none"
+                        className="flex-1 m-2 px-3 py-2 text-sm bg-transparent focus:outline-none"
                         value={inputValue}
                         onChange={(e) => setInputValue(e.target.value)}
                         onKeyDown={(e) => e.key === "Enter" && handleSend()}
@@ -119,7 +125,7 @@ const ChatbotModal = ({ onClose }) => {
                     <button
                         onClick={handleSend}
                         disabled={isWriting}
-                        className="bg-yellow-300 hover:bg-yellow-400 px-4 py-2 text-gray-800 font-semibold transition"
+                        className="bg-yellow-300 m-2 rounded-lg hover:bg-yellow-400 px-4 py-2 text-gray-800 font-semibold transition"
                     >
                         {isWriting ? <Square /> : <Send />}
                     </button>

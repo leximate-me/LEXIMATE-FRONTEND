@@ -24,9 +24,10 @@ const ToolProvider = ({ children }) => {
         try {
             const res = await getProfileRequest();
             setProfile(res.data);
+            console.log('context', profile)
             // Agrega el saludo del bot **solo después de obtener el profile**
             setChatMessages([
-                { sender: 'bot', text: `¡Hola! ${profile?.user?.person?.first_name || ''} 👋 ¿En qué puedo ayudarte hoy?` }
+                { sender: 'bot', text: `¡Hola! ${profile?.user?.person?.first_name || 'Usuario'} 👋 ¿En qué puedo ayudarte hoy?` }
             ]);
         } catch (error) {
             console.error('Error fetching profile:', error);

@@ -57,7 +57,7 @@ function TaskPage({ tasks: initialTasks }) {
   }, [taskId, classId, setExtractedText]);
 
   return (
-    <div className="container mx-auto p-6 ">
+    <div className="container mx-auto p-6">
       {isLoading || isExtracting ? (
         <div className="h-[500px] flex justify-center items-center">
           {Loading(isLoading ? 'Cargando tarea...' : 'Extrayendo texto...')}
