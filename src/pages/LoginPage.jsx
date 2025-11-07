@@ -39,7 +39,7 @@ function LoginPage() {
           <>{Loading('Iniciando sesión...')}</>
         ) : (
           <>
-            <Card className="m-7 border-none bg-white">
+            <Card className="m-7 border-none bg-white animate-fadeIn">
               {/* header */}
               <div className="rounded-t-lg bg-gradient-to-r from-yellow-300 to-amber-400 p-8 text-center">
                 <HighlightLetter color="blue" className='font-opendyslexic' size='text-3xl'>

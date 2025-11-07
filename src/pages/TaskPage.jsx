@@ -6,7 +6,7 @@ import { useTool } from '../context/ToolContext';
 import '../styles/fonts.css'; // Fuente OpenDyslexic
 import HighlightLetter from '../components/ui/HighlightLetter';
 import CardExtractedText from '../components/CardExtractedText';
-import { FaBook } from "react-icons/fa6";
+import { FaBook, FaFilePdf, FaFileWord, FaFileImage, FaFileAlt } from "react-icons/fa";
 import NotFound from '../assets/not-found.svg';
 
 function TaskPage({ tasks: initialTasks }) {
@@ -29,6 +29,15 @@ function TaskPage({ tasks: initialTasks }) {
     }
   };
 
+  // Función para obtener ícono según tipo de archivo (React Icons)
+  const getFileIcon = (fileType) => {
+    if (!fileType) return <FaFileAlt size={40} className="text-gray-600" />;
+    if (fileType.includes('pdf')) return <FaFilePdf size={40} className="text-red-600" />;
+    if (fileType.includes('word') || fileType.includes('msword') || fileType.includes('officedocument')) return <FaFileWord size={40} className="text-blue-600" />;
+    if (fileType.includes('image')) return <FaFileImage size={40} className="text-green-600" />;
+    return <FaFileAlt size={40} className="text-gray-600" />;
+  };
+
   useEffect(() => {
     const loadTask = async () => {
       try {
@@ -47,6 +56,8 @@ function TaskPage({ tasks: initialTasks }) {
     setExtractedText([]);
   }, [taskId, classId, setExtractedText]);
 
+  console.log('task files', task.files[0].file_url)
+
   return (
     <div className="container mx-auto p-6 ">
       {isLoading || isExtracting ? (
@@ -58,7 +69,7 @@ function TaskPage({ tasks: initialTasks }) {
           {task ? (
             <div className="grid grid-cols-8 grid-rows-[190px] gap-4">
 
-              {/* Información (fila 1, col 1-4, menos alta) */}
+              {/* Información (fila 1, col 1-6) */}
               <div className="col-span-6 row-span-1 bg-white rounded-lg shadow-md flex flex-col">
                 <div className='p-3 rounded-t-lg flex justify-between bg-gradient-to-r from-yellow-300 to-amber-400'>
                   <HighlightLetter size="text-2xl" className="font-opendyslexic mb-2">
@@ -76,7 +87,7 @@ function TaskPage({ tasks: initialTasks }) {
                 </div>
               </div>
 
-              {/* Materiales (fila 1-2, col 5-6, más alta) */}
+              {/* Materiales (fila 1-2, col 7-8) */}
               {task.files && task.files.length > 0 && (
                 <div className="h-fit col-start-7 col-span-2 row-span-2 bg-white rounded-lg shadow-md flex flex-col">
                   <div className='p-3 rounded-t-lg bg-gradient-to-r from-yellow-300 to-amber-400'>
@@ -86,18 +97,17 @@ function TaskPage({ tasks: initialTasks }) {
                   </div>
                   <div className="flex flex-col gap-3 p-3">
                     {task.files.map((file) => (
-                      <div key={file._id} className="flex flex-col items-center gap-2">
+                      <div key={file.id} className="flex flex-col items-center gap-2">
                         <a
-                          href={file.file_url}
+                          href={`http://localhost:8080${file.file_url}`}
                           target="_blank"
                           rel="noopener noreferrer"
-                          download
+                          className="flex flex-col items-center gap-1"
                         >
-                          <img
-                            src={file.file_url}
-                            alt="Archivo adjunto"
-                            className="h-[150px] md:h-[180px] object-cover rounded-lg shadow-lg hover:opacity-80 transition"
-                          />
+                          {getFileIcon(file.file_type)}
+                          <p className="text-sm text-gray-700 truncate max-w-[150px] text-center">
+                            {file.file_id}
+                          </p>
                         </a>
                         <button
                           onClick={() => handleExtractText(file.file_url)}
@@ -113,7 +123,7 @@ function TaskPage({ tasks: initialTasks }) {
                 </div>
               )}
 
-              {/* Texto extraído (fila 3-6, col 1-6) */}
+              {/* Texto extraído (fila 2-6, col 1-6) */}
               {extractedText && extractedText.length > 0 && (
                 <div className="col-span-6 row-start-2 row-span-4">
                   <CardExtractedText extractedText={extractedText} />
@@ -124,7 +134,7 @@ function TaskPage({ tasks: initialTasks }) {
           ) : (
             <div className='flex flex-col justify-center items-center'>
               <div className='bg-pastelYellow p-10 rounded-lg shadow-md flex flex-col justify-center items-center'>
-                <img src={NotFound} alt="Tarea no encontrada"   />
+                <img src={NotFound} alt="Tarea no encontrada" />
                 <HighlightLetter color='red' size="text-lg" className="font-opendyslexic mt-4">
                   Tarea no encontrada
                 </HighlightLetter>

@@ -1,22 +1,23 @@
 import React, { useState } from 'react';
-import { HiLockClosed } from 'react-icons/hi2';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
-import { MdOutlineEmail } from "react-icons/md";
 
-export const Input = ({ type, register, name, rules, placeholder, error }) => {
-  // Elegir icono según tipo de input
-
+export const Input = ({
+  type,
+  register,
+  name,
+  rules,
+  placeholder,
+  error,
+  icon: Icon, // 👈 nuevo prop
+}) => {
   const [showPassword, setShowPassword] = useState(false);
 
-  let Icon = null;
-  if (type === 'password') Icon = HiLockClosed;
-  else if (type === 'email') Icon = MdOutlineEmail;
-
-  const typeInput = type === 'password' ? (showPassword ? 'text' : 'password') : type;
+  const typeInput =
+    type === 'password' ? (showPassword ? 'text' : 'password') : type;
 
   return (
     <div className="relative w-full">
-      {/* Icono */}
+      {/* Icono pasado por props */}
       {Icon && (
         <Icon
           className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
@@ -36,7 +37,7 @@ export const Input = ({ type, register, name, rules, placeholder, error }) => {
 
       {type === 'password' && (
         <button
-          type='button'
+          type="button"
           className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 cursor-pointer"
           onClick={() => setShowPassword(!showPassword)}
         >

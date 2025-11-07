@@ -130,7 +130,7 @@ function TaskPage() {
           </button>
 
           {/* Sidebar escritorio (IMPORTANTE: ahora le PASAMOS props) */}
-          <div className="hidden md:block fixed top-[65px] min-h-fit p-2 left-0 z-20 w-1/5">
+          <div className="col-span-2">
             <SideBar
               selectedClassId={selectedClassId}
               onSelect={(id) => setSelectedClassId(String(id))}

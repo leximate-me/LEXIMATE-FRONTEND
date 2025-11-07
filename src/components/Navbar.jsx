@@ -126,12 +126,13 @@ function NavBar() {
                 } md:flex`}
             >
               <Link
-                className="text-md font-bold leading-normal hover:border-b-2 border-black dark:text-[#fffd92] dark:hover:border-b-[#fffd92]"
                 to="/classes"
               >
-                <HighlightLetter color="blue" className='font-opendyslexic' size='text-xl'>
-                  Clases
-                </HighlightLetter>
+                <button className="px-3 py-2 text-[#2d4654] rounded-2xl hover:bg-[#2d4654] hover:text-white transition-all">
+                  <HighlightLetter color='lightGreen' className='font-opendyslexic font-bold' size='text-xl'>
+                    Clases
+                  </HighlightLetter>
+                </button>
               </Link>
               {/* <Link
               className="text-md font-bold leading-normal hover:border-b-2 border-black dark:text-[#fffd92] dark:hover:border-b-[#fffd92]"
@@ -148,11 +149,14 @@ function NavBar() {
             >
               <div className="flex flex-col gap-5 md:flex-row items-center">
                 <div className="flex gap-2 px-3">
-                  <div className='w-fit h-fit relative rounded-full cursor-pointer'>
-                    <button onClick={() => setShowChatbot(!showChatbot)}>
-                      <Bot className="w-11 h-11 text-gray-700 border border-gray-700 rounded-full p-2 hover:bg-gray-700 hover:text-white transition duration-300" />
-                    </button>
-                  </div>
+                  {user.rol !== 'guest' && (
+                    <div className='w-fit h-fit relative rounded-full cursor-pointer'>
+                      <button onClick={() => setShowChatbot(!showChatbot)}>
+                        <Bot className="w-11 h-11 text-gray-700 border border-gray-700 rounded-full p-2 hover:bg-gray-700 hover:text-white transition duration-300" />
+                      </button>
+                    </div>
+                  )}
+
                   {/* Botón de perfil */}
                   <div
                     ref={profileButtonRef}
@@ -163,7 +167,7 @@ function NavBar() {
                       <img
                         src={profile.avatar.file_url}
                         alt="Avatar del usuario"
-                        className="w-10 h-10 rounded-full object-cover border border-gray-500"
+                        className="w-11 h-11 rounded-full object-cover border border-gray-500 hover:bg-gray-700 hover:text-white transition duration-300"
                       />
                     ) : (
                       <FaUser className="w-11 h-11 text-gray-700 border border-gray-700 rounded-full p-2 hover:bg-gray-700 hover:text-white transition duration-300" />
@@ -203,8 +207,8 @@ function NavBar() {
             {location.pathname !== '/login' && (
               <div className="flex flex-col md:flex-row items-center gap-2 md:gap-8 order-2 md:order-1 px-4">
                 <Link to='/login'>
-                  <button className="px-3 py-2 border-4 border-[#2d4654] text-[#2d4654] rounded-2xl hover:bg-[#2d4654] hover:text-white transition-all">
-                    <HighlightLetter color="blue" className='font-opendyslexic font-bold' size='text-xl'>
+                  <button className="px-3 py-2 text-[#2d4654] rounded-2xl hover:bg-[#2d4654] hover:text-white transition-all">
+                    <HighlightLetter color="lightGreen" className='font-opendyslexic font-bold' size='text-xl'>
                       Iniciar Sesión
                     </HighlightLetter>
                   </button>
@@ -217,7 +221,7 @@ function NavBar() {
           </>
         )}
       </header>
-      {showChatbot && <ChatbotModal onClose={() => setShowChatbot(false)} />} 
+      {showChatbot && <ChatbotModal onClose={() => setShowChatbot(false)} />}
     </>
   );
 }

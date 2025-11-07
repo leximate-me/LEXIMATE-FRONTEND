@@ -26,8 +26,8 @@ function AppContent() {
     <div>
       <NavBar />
       <main className="w-full h-screen bg-[#fff9d8] dark:bg-[#1a1a1a]">
-        <div className="pt-[60px]">
-          {user && !user.verify && <ModalVerification />}
+        <div className="pt-[80px]">
+          {/* {user && !user.verify && <ModalVerification />} */}
           <Routes>
             <Route path="/games" element={<GamesPage />} />
             <Route path="/games/memory" element={<MemoryGame />} />

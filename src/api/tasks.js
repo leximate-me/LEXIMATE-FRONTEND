@@ -2,7 +2,7 @@ import axios from './axios';
 
 const getTasksRequest = async (classId) => {
   try {
-    const response = await axios.get(`/class/${classId}/task`);
+    const response = await axios.get(`/course/${classId}/task`);
     return response;
   } catch (error) {
     console.error('Error during get tasks request:', error);
@@ -12,7 +12,7 @@ const getTasksRequest = async (classId) => {
 
 const getTaskRequest = async (classId, taskId) => {
   try {
-    const response = await axios.get(`/class/${classId}/task/${taskId}`);
+    const response = await axios.get(`/course/${classId}/task/${taskId}`);
     return response;
   } catch (error) {
     console.error('Error during get task request:', error);
@@ -22,7 +22,7 @@ const getTaskRequest = async (classId, taskId) => {
 
 const createTaskRequest = async (task, classaId) => {
   try {
-    const response = await axios.post(`/class/${classaId}/task`, task);
+    const response = await axios.post(`/course/${classaId}/task`, task);
     return response;
   } catch (error) {
     console.error('Error during create task request:', error);
@@ -32,7 +32,7 @@ const createTaskRequest = async (task, classaId) => {
 
 const updateTaskRequest = async (id, task) => {
   try {
-    const response = await axios.put(`/class/${classCode}/tasks/${id}`, task);
+    const response = await axios.put(`/course/${classCode}/tasks/${id}`, task);
     return response;
   } catch (error) {
     console.error('Error during update task request:', error);
@@ -42,7 +42,7 @@ const updateTaskRequest = async (id, task) => {
 
 const deleteTaskRequest = async (classCode, id) => {
   try {
-    const response = await axios.delete(`/class/${classCode}/task/${id}`);
+    const response = await axios.delete(`/course/${classCode}/task/${id}`);
     return response;
   } catch (error) {
     console.error('Error during delete task request:', error);
