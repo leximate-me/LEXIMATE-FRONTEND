@@ -55,7 +55,7 @@ function HighlightLetter({
           return (
             <span
               key={index}
-              className={`${isFirst || isLast ? `${colors[color]} font-bold tracking-normal-wide` : 'tracking-very-wide'} ${fontFamily} ${appliedSize}`}
+              className={`${isFirst || isLast ? `${colors[color]} font-bold tracking-more-wide` : 'tracking-more-wide'} ${fontFamily} ${appliedSize}`}
             >
               {letter}
             </span>

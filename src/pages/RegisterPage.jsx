@@ -11,7 +11,7 @@ import dayjs from 'dayjs';
 import { ErrorModal } from '../components/ui/ErrorModal';
 import Loading from '../components/ui/Loading';
 import HighlightLetter from '../components/ui/HighlightLetter';
-import { User, Mail, Lock, Contact, CalendarFold, IdCard, Phone, GraduationCap} from 'lucide-react';
+import { User, Mail, Lock, Contact, CalendarFold, IdCard, Phone, GraduationCap } from 'lucide-react';
 dayjs.extend(utc);
 ////
 function RegisterPage() {
@@ -73,8 +73,13 @@ function RegisterPage() {
         ) : (
           <Card className="border-none w-full h-full bg-white animate-fadeIn">
             <div className='min-h-full flex'>
-              <div className="w-[40%] rounded-l-lg bg-gradient-to-r from-yellow-300 to-amber-400 p-8 flex items-center">
-                <img src={logo} alt="" />
+              <div className="w-[40%] flex rounded-l-lg bg-gradient-to-r from-yellow-300 to-amber-400 p-8 items-center">
+                <div className='text-center'>
+                  <img src={logo} alt="" />
+                  <HighlightLetter color="green" className='font-bold font-opendyslexic' size='text-xl'>
+                    Únete a Leximate y transforma tu aprendizaje hoy mismo.
+                  </HighlightLetter>
+                </div>
               </div>
               <form className="w-[60%] flex flex-col justify-between p-4" onSubmit={onSubmit}>
                 <div className='flex gap-3'>

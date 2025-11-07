@@ -1,7 +1,8 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { extractTextRequest, chatBotRequest } from "../api/tool";
 import { getProfileRequest } from '../api/auth';
-import { progress } from 'framer-motion';
+import { useAuth } from './AuthContext';
+
 
 const ToolContext = createContext();
 
@@ -17,6 +18,7 @@ const ToolProvider = ({ children }) => {
     const [extractedText, setExtractedText] = useState([]);
     const [profile, setProfile] = useState(null);
     const [chatMessages, setChatMessages] = useState([]);
+    const { isAuthenticated } = useAuth();  
 
     const clearError = () => setError(null);
 
@@ -24,10 +26,10 @@ const ToolProvider = ({ children }) => {
         try {
             const res = await getProfileRequest();
             setProfile(res.data);
-            console.log('context', profile)
             // Agrega el saludo del bot **solo después de obtener el profile**
+            const name = res.data?.user?.person?.first_name || 'Usuario';
             setChatMessages([
-                { sender: 'bot', text: `¡Hola! ${profile?.user?.person?.first_name || 'Usuario'} 👋 ¿En qué puedo ayudarte hoy?` }
+                { sender: 'bot', text: `¡Hola! ${name} 👋 ¿En qué puedo ayudarte hoy?` }
             ]);
         } catch (error) {
             console.error('Error fetching profile:', error);
@@ -69,6 +71,19 @@ const ToolProvider = ({ children }) => {
     useEffect(() => {
         fetchProfile();
     }, []);
+
+    useEffect(() => {
+        if (isAuthenticated) {
+            // Si el usuario está logueado, carga su perfil
+            // y el saludo inicial (esto reinicia el chat).
+            fetchProfile();
+        } else {
+            // Si el usuario no está logueado (o cerró sesión),
+            // vacía el historial de mensajes.
+            setChatMessages([]);
+            setProfile(null); // También limpia el perfil
+        }
+    }, [isAuthenticated]);
 
     return (
         <ToolContext.Provider
