@@ -3,6 +3,7 @@ import { useTool } from "../context/ToolContext";
 import { Square, Send } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 
+
 const ChatbotModal = ({ onClose }) => {
     const { chatMessages, chatBot } = useTool();
     const [inputValue, setInputValue] = useState("");

@@ -1,5 +1,7 @@
-import { createContext, useContext, useState } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 import { extractTextRequest, chatBotRequest } from "../api/tool";
+import { getProfileRequest } from '../api/auth';
+import { progress } from 'framer-motion';
 
 const ToolContext = createContext();
 
@@ -13,17 +15,30 @@ const ToolProvider = ({ children }) => {
     const [error, setError] = useState(null);
     const [isExtracting, setIsExtracting] = useState(false);
     const [extractedText, setExtractedText] = useState([]);
-    const [chatMessages, setChatMessages] = useState([
-        { sender: 'bot', text: '¡Hola! 👋 ¿En qué puedo ayudarte hoy?' }
-    ]);
+    const [profile, setProfile] = useState(null);
+    const [chatMessages, setChatMessages] = useState([]);
 
     const clearError = () => setError(null);
+
+    const fetchProfile = async () => {
+        try {
+            const res = await getProfileRequest();
+            setProfile(res.data);
+            // Agrega el saludo del bot **solo después de obtener el profile**
+            setChatMessages([
+                { sender: 'bot', text: `¡Hola! ${profile?.user?.person?.first_name || ''} 👋 ¿En qué puedo ayudarte hoy?` }
+            ]);
+        } catch (error) {
+            console.error('Error fetching profile:', error);
+            setError(error.response?.data || 'Error fetching profile');
+        }
+    };
 
     const extractText = async (url) => {
         setIsExtracting(true);
         try {
             const res = await extractTextRequest(url);
-            setExtractedText(res.data);
+            setExtractedText([res]);
         } catch (error) {
             console.error('Error during extract text request:', error);
             setError(error.response?.data || 'Error extracting text');
@@ -39,7 +54,6 @@ const ToolProvider = ({ children }) => {
 
         try {
             const res = await chatBotRequest(message);
-            // res.data.response es la respuesta del bot según tu ToolController
             const botResponse = res.data.response.output || 'No hay respuesta';
             setChatMessages(prev => [...prev, { sender: 'bot', text: botResponse }]);
         } catch (error) {
@@ -49,6 +63,11 @@ const ToolProvider = ({ children }) => {
             throw error;
         }
     }
+
+    // Traer el profile al montar el provider
+    useEffect(() => {
+        fetchProfile();
+    }, []);
 
     return (
         <ToolContext.Provider

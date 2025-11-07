@@ -2,9 +2,10 @@ import axios from './axios.js'
 
 const extractTextRequest = async (url) => {
     try {
-        const response = await axios.post(`/tool/extract-text-from-img?imageUrl=${url}`);
-        return response;
-    } catch (error) {
+        const realUrl = url.split('/').pop();
+        const response = await axios.post(`/tool/extract-text?localUrl=public/${realUrl}`);
+        return response.data;
+    } catch (error) {   
         console.error('Error during extract text request:', error);
         throw error;
     }

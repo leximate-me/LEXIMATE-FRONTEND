@@ -56,8 +56,6 @@ function TaskPage({ tasks: initialTasks }) {
     setExtractedText([]);
   }, [taskId, classId, setExtractedText]);
 
-  console.log('task files', task.files[0].file_url)
-
   return (
     <div className="container mx-auto p-6 ">
       {isLoading || isExtracting ? (
