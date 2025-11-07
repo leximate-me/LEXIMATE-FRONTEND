@@ -73,8 +73,11 @@ function RegisterPage() {
         ) : (
           <Card className="border-none w-full h-full bg-white animate-fadeIn">
             <div className='min-h-full flex'>
-              <div className="w-[40%] rounded-l-lg bg-gradient-to-r from-yellow-300 to-amber-400 p-8 flex items-center">
+              <div className="w-[40%] flex flex-col rounded-l-lg bg-gradient-to-r from-yellow-300 to-amber-400 p-8 items-center">
                 <img src={logo} alt="" />
+                <HighlightLetter color="green" className='text-center font-opendyslexic ml-4' size='text-xl'>
+                  Únete a Leximate y transforma tu aprendizaje hoy mismo.
+                </HighlightLetter>
               </div>
               <form className="w-[60%] flex flex-col justify-between p-4" onSubmit={onSubmit}>
                 <div className='flex gap-3'>

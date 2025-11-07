@@ -24,14 +24,13 @@ function LandingPage() {
   const visibleState = 'opacity-100 translate-y-0'; // Visible y en posición
 
   return (
-    <div className="flex flex-col bg-[#FDF7D6] flex-1 items-center max-w-full mt-5">
+    <div className="flex flex-col flex-1 items-center max-w-full">
       {/* <-- 5. Aplica el 'ref' y las clases condicionales a la tarjeta 
       */}
       <div
         ref={cardRef} // <-- Asigna la referencia aquí
-        className={`bg-white max-w-[1200px] max-h-[600px] rounded-[3rem] p-10 mt-4 shadow-2xl border-8 border-[#f7d654] ${transitionClasses} ${
-          cardInView ? visibleState : hiddenState
-        }`}
+        className={`bg-white max-w-[1200px] max-h-[600px] rounded-[3rem] p-10 mt-4 shadow-2xl border-8 border-[#f7d654] ${transitionClasses} ${cardInView ? visibleState : hiddenState
+          }`}
       >
         <div className="grid md:grid-cols-2 gap-16 items-center">
           <div>
@@ -115,9 +114,8 @@ function LandingPage() {
       */}
       <div
         ref={ctaRef} // <-- Asigna la referencia aquí
-        className={`text-center flex flex-col bg-gradient-to-r from-[#5eb0b8] to-[#4a9ba3] rounded-3xl p-5 text-white mb-8 mt-8 ${transitionClasses} ${
-          ctaInView ? visibleState : hiddenState
-        }`}
+        className={`text-center flex flex-col bg-gradient-to-r from-[#5eb0b8] to-[#4a9ba3] rounded-3xl p-5 text-white mb-8 mt-8 ${transitionClasses} ${ctaInView ? visibleState : hiddenState
+          }`}
       >
         <HighlightLetter
           color="lightRed"
@@ -137,7 +135,9 @@ function LandingPage() {
         <br />
         <Link to="/register">
           <button className="w-fit p-4 self-center bg-[#f7d654] text-[#2d4654] text-2xl font-bold rounded-full hover:bg-white transition-all shadow-2xl">
-            Registrarse ahora
+            <HighlightLetter color="green" className='font-opendyslexic' size='text-xl'>
+              Regístrate
+            </HighlightLetter>
           </button>
         </Link>
       </div>
