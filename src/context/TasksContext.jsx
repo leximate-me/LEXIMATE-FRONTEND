@@ -6,6 +6,8 @@ import {
   deleteTaskRequest,
   getTaskRequest,
   updateTaskRequest,
+  createSubmitTaskRequest,
+  getSubmittedTasksRequest
 } from '../api/tasks';
 
 const TaskContext = createContext();
@@ -91,6 +93,34 @@ const TaskProvider = ({ children }) => {
     }
   };
 
+  const submitTask = async (classId, taskId, submitData) => {
+    setIsLoading(true);
+    try {
+      const res = await createSubmitTaskRequest(classId, taskId, submitData);
+      setIsLoading(false);
+      return res.data;
+    } catch (error) {
+      console.log(error);
+      setError(error.response.data);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const getSubmittedTasks = async (classId, taskId) => {
+    setIsLoading(true);
+    try {
+      const res = await getSubmittedTasksRequest(classId, taskId);
+      setIsLoading(false);
+      return res.data;
+    } catch (error) {
+      console.log(error);
+      setError(error.response.data);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <TaskContext.Provider
       value={{
@@ -104,6 +134,8 @@ const TaskProvider = ({ children }) => {
         isCreating,
         clearError,
         error,
+        submitTask,
+        getSubmittedTasks
       }}
     >
       {children}

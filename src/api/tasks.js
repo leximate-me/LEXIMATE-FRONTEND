@@ -50,10 +50,42 @@ const deleteTaskRequest = async (classCode, id) => {
   }
 };
 
+const createSubmitTaskRequest = async (classId, taskId, submitData) => {
+  try {
+    const response = await axios.post(`/course/${classId}/task/${taskId}/submissions`, submitData);
+    return response;
+  } catch (error) {
+    console.error('Error during create submit task request:', error);
+    throw error;
+  }
+};
+
+const getSubmittedTasksRequest = async (classId, taskId) => {
+  try {
+    const response = await axios.get(`/course/${classId}/task/${taskId}/submissions`);
+    return response;
+  } catch (error) {
+    console.error('Error during get submitted tasks request:', error);
+    throw error;
+  }
+};
+
+const deleteSubmittedTaskRequest = async (classId, taskId, submissionId) => {
+  try {
+    const response = await axios.delete(`/course/${classId}/task/${taskId}/submissions/${submissionId}`);
+    return response;
+  } catch (error) {
+    console.error('Error during delete submitted task request:', error);
+    throw error;
+  }
+};
+
 export {
   getTasksRequest,
   getTaskRequest,
   createTaskRequest,
   updateTaskRequest,
   deleteTaskRequest,
+  createSubmitTaskRequest,
+  getSubmittedTasksRequest,
 };

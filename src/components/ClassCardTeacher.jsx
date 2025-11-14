@@ -80,7 +80,7 @@ export default function ClassCardTeacher({ classes: initialClasses }) {
                     alt="Fondo"
                   />
                   <div
-                      className="absolute top-2 right-2 z-[9999]"
+                      className="absolute top-2 right-2 z-40"
                       onClick={(e) => e.stopPropagation()}
                     >
                       <Dropdown
