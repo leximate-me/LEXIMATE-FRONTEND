@@ -8,15 +8,19 @@ import { useTool } from '../context/ToolContext';
 import '../styles/fonts.css'; // Fuente OpenDyslexic
 import HighlightLetter from '../components/ui/HighlightLetter';
 import CardExtractedText from '../components/CardExtractedText';
+import { Riple } from 'react-loading-indicators';
 import { FaBook, FaFilePdf, FaFileWord, FaFileImage, FaFileAlt } from "react-icons/fa";
 import NotFound from '../assets/not-found.svg';
-import { useForm } from 'react-hook-form';
+import { set, useForm } from 'react-hook-form';
+import { FaRegClock } from "react-icons/fa6";
+import { IoWarningOutline } from "react-icons/io5";
+import FileInput from '../components/ui/FileInput';
 import QualifyTaskModal from '../components/ui/QualifyTaskModal';
 
 function TaskPage({ tasks: initialTasks }) {
   const { classId, taskId } = useParams();
   const { user } = useAuth();
-  const { getTask, submitTask, getSubmittedTasks, qualifyTask } = useTask();
+  const { getTask, submitTask, getSubmittedTasks, qualifyTask, deleteSubmittedTask } = useTask();
   const { getUsersByClass } = useClass();
   const [task, setTask] = useState(initialTasks);
   const [taskLoading, setTaskLoading] = useState(true);
@@ -24,15 +28,24 @@ function TaskPage({ tasks: initialTasks }) {
   const [submittedLoading, setSubmittedLoading] = useState(true);
   const [students, setStudents] = useState([]);
   const [pendingCount, setPendingCount] = useState(0);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
   const { extractText, extractedText, isExtracting, setExtractedText } = useTool();
-  const { register, handleSubmit, formState: { errors } } = useForm();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    setValue,
+  } = useForm();
   const [qualifyModalOpen, setQualifyModalOpen] = useState(false);
   const [selectedSubmission, setSelectedSubmission] = useState(null);
   const [mySubmission, setMySubmission] = useState(null);
 
   const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    return `${date.getFullYear()}/${String(date.getMonth() + 1).padStart(2, '0')}/${String(date.getDate()).padStart(2, '0')}`;
+    // Tomar solo la parte de la fecha antes de la T
+    const datePart = dateString.split('T')[0]; // "2025-11-15"
+    const [year, month, day] = datePart.split('-');
+    return `${year}/${month}/${day}`;
   };
 
   const handleExtractText = async (url) => {
@@ -130,6 +143,7 @@ function TaskPage({ tasks: initialTasks }) {
   }, [taskId, classId, setExtractedText]);
 
   const handleOnSubmit = handleSubmit(async (data) => {
+    setIsSubmitting(true);
     try {
       const formData = new FormData();
       formData.append('file', data.file[0]);
@@ -144,14 +158,67 @@ function TaskPage({ tasks: initialTasks }) {
         !refreshedSubmitted.some(sub => sub.user.id === s.id)
       ).length;
       setPendingCount(pending);
-
+      setIsSubmitting(false);
     } catch (error) {
       console.error('Error al enviar la tarea:', error);
+      setIsSubmitting(false);
+    } finally {
+      setIsSubmitting(false);
     }
   });
 
+  const handleDeteleSubmission = async (submissionId) => {
+    setIsDeleting(true);
+    try {
+      await deleteSubmittedTask(classId, taskId, submissionId);
+
+      // Refrescar entregas
+      const refreshedSubmitted = await getSubmittedTasks(classId, taskId);
+      setSubmittedTasks(refreshedSubmitted);
+
+      // Actualizar pendientes
+      const pending = students.filter(s =>
+        !refreshedSubmitted.some(sub => sub.user.id === s.id)
+      ).length;
+      setPendingCount(pending);
+      setIsDeleting(false);
+    } catch (error) {
+      console.error('Error al eliminar la entrega:', error);
+      setIsDeleting(false);
+    } finally {
+      setIsDeleting(false);
+    }
+  };
 
   const isLoading = taskLoading || submittedLoading || isExtracting;
+
+  // Determinar si la fecha límite ya pasó
+  const isPastDue = () => {
+    if (!task?.due_date) return false;
+
+    // Tomamos solo la fecha sin hora para comparar
+    const due = new Date(task.due_date);
+    const today = new Date();
+
+    // Ignorar hora, solo comparar año/mes/día
+    due.setHours(0, 0, 0, 0);
+    today.setHours(0, 0, 0, 0);
+
+    return today > due;
+  };
+
+  // Dentro del componente TaskPage
+
+  // Crear array combinado de entregas y estudiantes
+  const studentsWithSubmissions = students.map((student) => {
+    const submission = submittedTasks.find(sub => sub.user.id === student.id) || null;
+    return {
+      student,
+      submission
+    };
+  });
+
+  console.log('submitted', studentsWithSubmissions);
 
   return (
     <div className="container mx-auto p-6">
@@ -226,40 +293,71 @@ function TaskPage({ tasks: initialTasks }) {
                         Entrega:
                       </HighlightLetter>
                     </div>
-                    <div className="p-3">
-                      {submittedTasks && submittedTasks.length > 0 ? (
-                        submittedTasks.map((sub) => (
-                          <div key={sub.id} className="flex flex-col items-center gap-2">
-                            <a
-                              href={`http://localhost:8080${sub.files[0]?.file_url}`}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="flex flex-col items-center gap-1"
-                            >
-                              {getFileIcon(sub.files[0]?.file_type)}
-                              <p className="text-sm text-gray-700 truncate max-w-[150px] text-center">
-                                {sub.files[0]?.file_id}
-                              </p>
-                            </a>
-                          </div>
-                        ))
-                      ) : (
-                        <form onSubmit={handleOnSubmit} className="flex flex-col items-center">
-                          <div className="flex flex-col gap-3 w-full">
-                            <input
-                              type="file"
-                              name="file"
-                              className="w-full p-2 border border-gray-300 rounded mb-4"
-                              {...register('file', { required: true })}
-                            />
-                            {errors.file && <span className="text-red-500">Este campo es requerido</span>}
-                          </div>
-                          <button type="submit" className="w-1/2 bg-blue-600 text-white rounded p-2 mt-3">
-                            Subir archivo
-                          </button>
-                        </form>
-                      )}
-                    </div>
+                    {isSubmitting || isDeleting ? (
+                      <div className="flex justify-center items-center h-32">
+                        <Riple color="#fbbf24" size={60} />
+                      </div>
+                    ) : (
+                      <div className="p-3">
+                        {submittedTasks && submittedTasks.length > 0 ? (
+                          submittedTasks.map((sub) => (
+                            <div key={sub.id} className="flex flex-col items-center gap-2">
+                              {sub.submissionFiles.length > 0 ? (
+                                <a
+                                  href={`http://localhost:8080${sub.submissionFiles[0]?.file_url}`}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="flex flex-col items-center gap-1"
+                                >
+
+                                  {getFileIcon(sub.submissionFiles[0]?.file_type)}
+                                  <p className="text-sm text-gray-700 truncate max-w-[150px] text-center">
+                                    {sub.submissionFiles[0]?.file_id}
+                                  </p>
+
+                                </a>
+                              ) : (
+                                <HighlightLetter color='red' size="text-sm" className="mt-4 font-opendyslexic">
+                                  No entregado
+                                </HighlightLetter>
+                              )
+                              }
+                              {sub.qualification === null ? (
+                                <button onClick={() => handleDeteleSubmission(sub.id)} className="w-1/2 bg-gray-300 rounded p-1 mt-1 hover:bg-gray-400 transition-all">
+                                  <HighlightLetter size='text-sm' color='red' className='font-opendyslexic'>Anular entrega</HighlightLetter>
+                                </button>
+                              ) : (null)
+                              }
+                            </div>
+                          ))
+                        ) : (
+                          <>
+                            {!isPastDue() ? (
+                              <form onSubmit={handleOnSubmit} className="flex flex-col items-center">
+                                <div className="flex flex-col gap-3 w-full">
+                                  <HighlightLetter colo r='red' size="text-md" className='font-opendyslexic tracking-more-wide'>
+                                    Pendiente de entrega
+                                  </HighlightLetter>
+                                  <FileInput
+                                    register={register}
+                                    errors={errors}
+                                    setValue={setValue}
+                                  />
+                                </div>
+                                <button type="submit" className="w-1/2 bg-[#89dfbf] hover:bg-[#78c4a8] transition-all rounded p-2 mt-3">
+                                  <HighlightLetter color='green' size='text-sm' className='font-opendyslexic'>Subir archivo</HighlightLetter>
+                                </button>
+                              </form>
+                            ) : (
+                              <HighlightLetter color='red' size="text-sm" className="mt-4 font-opendyslexic">
+                                No entregado
+                              </HighlightLetter>
+                            )}
+
+                          </>
+                        )}
+                      </div>
+                    )}
 
                     {/* AQUI agregamos la nota y comentario */}
                     {mySubmission && mySubmission.qualification !== null && (
@@ -303,9 +401,13 @@ function TaskPage({ tasks: initialTasks }) {
                           Entregas pendientes:
                         </HighlightLetter>
                       </div>
-                      <p className="font-semibold m-2 text-center">
-                        {pendingCount} / {students.length}
-                      </p>
+                      {students.length === 0 ? (
+                        <p className="font-semibold m-2 text-center">No hay estudiantes en esta clase.</p>
+                      ) : (
+                        <p className="font-semibold m-2 text-center">
+                          {pendingCount} / {students.length}
+                        </p>
+                      )}
                     </div>
 
                     <div className='bg-white rounded-t-lg h-1/2 shadow-md'>
@@ -314,49 +416,89 @@ function TaskPage({ tasks: initialTasks }) {
                           Entregas calificadas:
                         </HighlightLetter>
                       </div>
-                      <p className="font-semibold m-2 text-center">
-                        {submittedTasks.filter(sub => sub.qualification !== null).length} / {students.length}
-                      </p>
+                      {students.length === 0 ? (
+                        <p className="font-semibold m-2 text-center">No hay estudiantes en esta clase</p>
+                      ) : (
+                        <>
+                          <p className="font-semibold m-2 text-center">
+                            {submittedTasks.filter(sub => sub.qualification !== null).length} / {students.length}
+                          </p>
+                        </>
+                      )}
                     </div>
                   </div>
 
                   <div className='col-span-6 h-fit max-h-[500px] row-start-2 row-span-4'>
-                    {submittedTasks && submittedTasks.length > 0 ? (
+                    {studentsWithSubmissions.length > 0 ? (
                       <div className="border-8 border-[#f7d654] rounded-3xl p-3 bg-white h-full shadow-md overflow-auto tracking-more-wide">
                         <HighlightLetter size="text-2xl" className="font-opendyslexic mb-4">
                           Entregas:
                         </HighlightLetter>
-                        {submittedTasks.map((sub) => (
-                          <div key={sub.id} className="m-2 flex items-center justify-between bg-pastelVeryLightYellow rounded-lg p-3 mb-3">
+                        {studentsWithSubmissions.map(({ student, submission }) => (
+                          <div key={student.id} className="m-2 flex items-center justify-between bg-pastelVeryLightYellow rounded-lg p-3 mb-3">
                             <div className="flex items-center gap-4">
                               <p className="font-opendyslexic font-semibold">
-                                {sub.user?.people?.first_name} {sub.user?.people?.last_name}
+                                {student.people.first_name} {student.people.last_name}
                               </p>
                             </div>
                             <div className='flex gap-2'>
-                              <a
-                                href={`http://localhost:8080${sub.files[0]?.file_url}`}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="self-center border-2 border-[#2d4654] hover:bg-[#2d4654] hover:text-white transition-all  p-2 rounded-2xl"
-                              >
-                                Ver archivo
-                              </a>
-                              <button
-                                className='px-3 py-2 text-white bg-[#2d4654] rounded-2xl hover:bg-[#22343f] transition-all'
-                                onClick={() => {
-                                  setSelectedSubmission(sub);
-                                  setQualifyModalOpen(true);
-                                }}
-                              >
-                                Calificar
-                              </button>
+                              {submission ? (
+                                <a
+                                  href={`http://localhost:8080${submission.submissionFiles[0]?.file_url}`}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="self-center border-2 border-[#2d4654] hover:bg-[#2d4654] hover:text-white transition-all  p-2 rounded-2xl"
+                                >
+                                  Ver archivo
+                                </a>
+                              ) : (
+                                <>
+                                  {isPastDue() ? (
+                                    <div className='flex gap-2 border-2 border-red-600 items-center p-2 rounded-2xl'>
+                                      <HighlightLetter size='text-sm' color='red' className='self-center'>
+                                        No entregado
+                                      </HighlightLetter>
+                                      <IoWarningOutline className="text-lg text-red-600" />
+                                    </div>
+                                  ) : (
+                                    <div className='flex gap-2 border-2 border-green-600 items-center p-2 rounded-2xl'>
+                                      <HighlightLetter size='text-sm' color='green' className=''>
+                                        Pendiente
+                                      </HighlightLetter>
+                                      <FaRegClock className="text-lg text-green-600" />
+                                    </div>
+                                  )}
+                                </>
+                              )}
+
+                              {(!submission || submission.qualification === null) && (
+                                <button
+                                  className='px-3 py-2 text-white bg-[#2d4654] rounded-2xl hover:bg-[#22343f] transition-all'
+                                  onClick={() => {
+                                    setSelectedSubmission(submission || { user: student });
+                                    setQualifyModalOpen(true);
+                                  }}
+                                >
+                                  Calificar
+                                </button>
+                              )}
+
+                              {submission && submission.qualification !== null && (
+                                <div className="m-2 p-2">
+                                  <p className="text-xl font-bold">{submission.qualification} / 10</p>
+                                </div>
+                              )}
                             </div>
                           </div>
                         ))}
                       </div>
                     ) : (
-                      <p className="text-center">No hay entregas.</p>
+                      <div className='flex justify-center'>
+                        <div className="w-80 h-52 flex flex-col justify-center items-center border bg-white rounded-md shadow-md">
+                          <img src={NotFound} alt="No existen tareas" className="w-24 h-24 mb-4" />
+                          <HighlightLetter size="text-lg" className='font-opendyslexic tracking-more-wide'>Aún no hay entregas</HighlightLetter>
+                        </div>
+                      </div>
                     )}
                   </div>
                 </>

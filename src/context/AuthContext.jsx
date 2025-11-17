@@ -31,27 +31,41 @@ const AuthProvider = ({ children }) => {
 
   const signUp = async (user) => {
     try {
-      await registerRequest(user); // Sólo realiza el registro
-      await updateUserFromToken(); // Actualiza el usuario con el token
-      await getProfile(); // Obtiene el perfil del usuario
-      return true; // Retorna true si todo salió bien
+      await registerRequest(user);
+      await updateUserFromToken();
+      await getProfile();
+      setError(null);
+      return true;
     } catch (error) {
-      console.log(error.response.data);
-      setError(error.response.data);
-      return false; // Retorna false si ocurrió un error
+      const backendMessage =
+        error?.response?.data?.message || "Ocurrió un error al registrarte.";
+      setError(backendMessage);
+      return false;
     }
   };
+
 
   const signIn = async (user) => {
     try {
       await loginRequest(user);
       await updateUserFromToken();
       await getProfile();
+      setError(null);
     } catch (error) {
-      console.log('context', error);
-      setError(error.response.data);
+      const backendErrorCode= error?.status;
+
+      // Si el backend dice "Invalid credentials"
+      if (backendErrorCode === 401 || backendErrorCode === 400) {
+        setError("Credenciales inválidas"); // lo que va al modal
+        return;
+      }
+
+      // Otros errores del backend
+      setError("Ocurrió un error. Intenta nuevamente.");
     }
   };
+
+
 
   const logOut = async () => {
     try {
@@ -59,11 +73,14 @@ const AuthProvider = ({ children }) => {
       setUser(null);
       setProfile(null);
       setIsAuthenticated(false);
+      setError(null);
     } catch (error) {
-      console.log(error);
-      setError(error.response.data);
+      const backendMessage =
+        error?.response?.data?.message || "No se pudo cerrar sesión.";
+      setError(backendMessage);
     }
   };
+
 
   const verifyEmail = async () => {
     try {

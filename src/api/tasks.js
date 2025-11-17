@@ -102,4 +102,5 @@ export {
   createSubmitTaskRequest,
   getSubmittedTasksRequest,
   qualifySubmittedTaskRequest,
+  deleteSubmittedTaskRequest,
 };

@@ -44,8 +44,6 @@ function ClassPage() {
   useEffect(() => {
     setClasses([]);
     getClasses();
-    console.log('classpage', classes)
-    console.log('class page user', user)
   }, [user]);
 
   return (

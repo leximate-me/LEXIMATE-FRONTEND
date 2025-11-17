@@ -8,6 +8,7 @@ import {
   createSubmitTaskRequest,
   getSubmittedTasksRequest,
   qualifySubmittedTaskRequest,
+  deleteSubmittedTaskRequest,
 } from '../api/tasks';
 
 const TaskContext = createContext();
@@ -121,6 +122,18 @@ const TaskProvider = ({ children }) => {
     }
   }, []);
 
+  const deleteSubmittedTask = useCallback(async (classId, taskId, submissionId) => {
+    setIsLoading(true);
+    try {
+      const res = await deleteSubmittedTaskRequest(classId, taskId, submissionId);
+      return res.data;
+    } catch (error) {
+      setError(error.response?.data);
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
+
   return (
     <TaskContext.Provider
       value={{
@@ -137,6 +150,8 @@ const TaskProvider = ({ children }) => {
         submitTask,
         getSubmittedTasks,
         qualifyTask,
+        deleteSubmittedTask,
+        isLoading
       }}
     >
       {children}

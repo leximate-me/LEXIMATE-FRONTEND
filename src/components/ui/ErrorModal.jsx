@@ -2,18 +2,12 @@ import { useEffect } from 'react';
 import swal from 'sweetalert';
 
 export function ErrorModal({ error, clearError }) {
-  useEffect(() => {
+   useEffect(() => {
     if (error) {
-      let messages;
-      if (Array.isArray(error.error)) {
-        messages = error.error.map((err) => err).join('\n');
-      } else {
-        messages = error.error || error.message || null;
-      }
 
       swal({
         title: 'ERROR!',
-        text: messages,
+        text: error,
         icon: 'error',
         buttons: {
           confirm: {

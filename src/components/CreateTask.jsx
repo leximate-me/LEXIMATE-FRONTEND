@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import { useTask } from '../context/TasksContext';
 import { useRef, useEffect } from 'react';
 import { ErrorModal } from './ui/ErrorModal';
+import FileInput from './ui/FileInput';
 
 function CreateTaskModal({ isOpen, onClose }) {
   const { classId } = useParams();
@@ -11,6 +12,7 @@ function CreateTaskModal({ isOpen, onClose }) {
     register,
     handleSubmit,
     formState: { errors },
+    setValue,
   } = useForm();
 
   // Accedemos a las funciones createTask y getTasks desde el contexto
@@ -106,17 +108,13 @@ function CreateTaskModal({ isOpen, onClose }) {
             )}
             {/* Campo para cargar archivo */}
             <label className="block mb-2">Cargar archivo:</label>
-            <input
-              type="file"
-              name="file"
-              className="w-full p-2 border border-gray-300 rounded mb-4"
-              {...register('file', { required: true })}
+            <FileInput
+              register={register}
+              errors={errors}
+              setValue={setValue}
             />
-            {errors.file && (
-              <span className="text-red-500">Este campo es requerido</span>
-            )}
             {/* Botones para cancelar o enviar */}
-            <div className="flex justify-end">
+            <div className="flex justify-end mt-2">
               <button
                 type="button"
                 onClick={onClose}
