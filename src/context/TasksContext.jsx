@@ -1,5 +1,4 @@
-import { createContext, useContext } from 'react';
-import { useState } from 'react';
+import { createContext, useContext, useState, useCallback } from 'react';
 import {
   createTaskRequest,
   getTasksRequest,
@@ -7,18 +6,15 @@ import {
   getTaskRequest,
   updateTaskRequest,
   createSubmitTaskRequest,
-  getSubmittedTasksRequest
+  getSubmittedTasksRequest,
+  qualifySubmittedTaskRequest,
 } from '../api/tasks';
 
 const TaskContext = createContext();
 
 const useTask = () => {
   const context = useContext(TaskContext);
-
-  if (!context) {
-    throw new Error('useTask must be used within a TaskProvider');
-  }
-
+  if (!context) throw new Error('useTask must be used within a TaskProvider');
   return context;
 };
 
@@ -28,98 +24,102 @@ const TaskProvider = ({ children }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isCreating, setIsCreating] = useState(false);
 
-  const clearError = () => {
+  const clearError = useCallback(() => {
     setError(null);
-  };
+  }, []);
 
-  const getTasks = async (classId) => {
+  const getTasks = useCallback(async (classId) => {
     setIsLoading(true);
     try {
       const res = await getTasksRequest(classId);
       setTasks(res.data);
-      setIsLoading(false);
     } catch (error) {
       console.error('Error during get tasks request:', error);
-      setError(error.response.data);
-      setIsLoading(false);
+      setError(error.response?.data);
       throw error;
+    } finally {
+      setIsLoading(false);
     }
-  };
+  }, []);
 
-  const createTask = async (task, classId) => {
+  const createTask = useCallback(async (task, classId) => {
     try {
       setIsCreating(true);
       const res = await createTaskRequest(task, classId);
       return res;
     } catch (error) {
       console.log('Error during create task request:', error);
-      setError(error.response.data);
+      setError(error.response?.data);
       throw error;
-    }finally {
+    } finally {
       setIsCreating(false);
     }
-  };
+  }, []);
 
-  const updateTask = async (id, task) => {
+  const updateTask = useCallback(async (id, task) => {
     try {
       await updateTaskRequest(id, task);
     } catch (error) {
-      console.log(error);
-      setError(error.response.data);
+      setError(error.response?.data);
     }
-  };
+  }, []);
 
-  const deleteTask = async (classCode, id) => {
+  const deleteTask = useCallback(async (classCode, id) => {
     try {
       const res = await deleteTaskRequest(classCode, id);
       if (res.status === 204) {
-        setTasks(tasks.filter((task) => task._id !== id));
+        setTasks(prev => prev.filter(task => task._id !== id));
       }
-      console.log(res);
       return res;
     } catch (error) {
-      console.log(error);
-      setError(error.response.data);
+      setError(error.response?.data);
     }
-  };
+  }, []);
 
-  const getTask = async (classId, taskId) => {
+  const getTask = useCallback(async (classId, taskId) => {
     try {
       const res = await getTaskRequest(classId, taskId);
       return res.data;
     } catch (error) {
-      console.log(error);
-      setError(error.response.data);
+      setError(error.response?.data);
     }
-  };
+  }, []);
 
-  const submitTask = async (classId, taskId, submitData) => {
+  const submitTask = useCallback(async (classId, taskId, submitData) => {
     setIsLoading(true);
     try {
       const res = await createSubmitTaskRequest(classId, taskId, submitData);
-      setIsLoading(false);
       return res.data;
     } catch (error) {
-      console.log(error);
-      setError(error.response.data);
+      setError(error.response?.data);
     } finally {
       setIsLoading(false);
     }
-  };
+  }, []);
 
-  const getSubmittedTasks = async (classId, taskId) => {
+  const getSubmittedTasks = useCallback(async (classId, taskId) => {
     setIsLoading(true);
     try {
       const res = await getSubmittedTasksRequest(classId, taskId);
-      setIsLoading(false);
       return res.data;
     } catch (error) {
-      console.log(error);
-      setError(error.response.data);
+      setError(error.response?.data);
     } finally {
       setIsLoading(false);
     }
-  };
+  }, []);
+
+  const qualifyTask = useCallback(async (classId, taskId, userId, data) => {
+    setIsLoading(true);
+    try {
+      const res = await qualifySubmittedTaskRequest(classId, taskId, userId, data);
+      return res.data;
+    } catch (error) {
+      setError(error.response?.data);
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
 
   return (
     <TaskContext.Provider
@@ -135,7 +135,8 @@ const TaskProvider = ({ children }) => {
         clearError,
         error,
         submitTask,
-        getSubmittedTasks
+        getSubmittedTasks,
+        qualifyTask,
       }}
     >
       {children}

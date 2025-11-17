@@ -70,6 +70,19 @@ const getSubmittedTasksRequest = async (classId, taskId) => {
   }
 };
 
+const qualifySubmittedTaskRequest = async (classId, taskId, userId, data) => {
+  try {
+    const response = await axios.patch(
+      `/course/${classId}/task/${taskId}/submissions/${userId}/qualify`,
+      data
+    );
+    return response;
+  } catch (error) {
+    console.error('Error during qualify submitted task request:', error);
+    throw error;
+  }
+};
+
 const deleteSubmittedTaskRequest = async (classId, taskId, submissionId) => {
   try {
     const response = await axios.delete(`/course/${classId}/task/${taskId}/submissions/${submissionId}`);
@@ -88,4 +101,5 @@ export {
   deleteTaskRequest,
   createSubmitTaskRequest,
   getSubmittedTasksRequest,
+  qualifySubmittedTaskRequest,
 };

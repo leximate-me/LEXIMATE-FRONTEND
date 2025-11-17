@@ -97,7 +97,7 @@ function TaskCard({ tasks: initialTasks }) {
                         </p>
                       </div>
 
-                      {user && user.rol === 3 && (
+                      {user && user.rol === 'teacher' && (
                         <div
                           className="absolute top-2 right-2"
                           onClick={(e) => e.stopPropagation()}
