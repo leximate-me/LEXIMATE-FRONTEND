@@ -60,11 +60,12 @@ export default function CommentsPage({ posts: initialPosts }) {
   // Real-time updates
   useRealTimeUpdates('comment_created', (data) => {
     // Check if comment belongs to this post (commentId is actually postId in params)
-    if (String(data.comment.postId) === String(commentId)) {
+    console.log('New comment data received:', data);
+    if (String(data.postId) === String(commentId)) {
       setComments((prev) => {
         // Avoid duplicates
-        if (prev.some((c) => c.id === data.comment.id)) return prev;
-        return [data.comment, ...prev];
+        if (prev.some((c) => c.id === data.id)) return prev;
+        return [data, ...prev];
       });
     }
   });
@@ -75,9 +76,9 @@ export default function CommentsPage({ posts: initialPosts }) {
   });
 
   useRealTimeUpdates('comment_updated', (data) => {
-    if (String(data.comment.postId) === String(commentId)) {
+    if (String(data.postId) === String(commentId)) {
       setComments((prev) =>
-        prev.map((c) => (c.id === data.comment.id ? data.comment : c))
+        prev.map((c) => (c.id === data.comment.id ? data : c))
       );
     }
   });
