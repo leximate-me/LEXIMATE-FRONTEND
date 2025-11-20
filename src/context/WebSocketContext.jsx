@@ -30,10 +30,8 @@ export const WebSocketProvider = ({ children }) => {
 
     // Determine WebSocket URL based on environment
     const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-    const host = import.meta.env.DEV
-      ? 'localhost:8080' // Development with Vite proxy
-      : window.location.host;
-    const wsUrl = `${protocol}//${host}/api/ws`;
+    const host = 'localhost';
+    const wsUrl = `${protocol}//${host}/ws`;
 
     console.log('🔌 Connecting to WebSocket:', wsUrl);
 
