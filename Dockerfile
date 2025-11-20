@@ -1,23 +1,28 @@
-# Utiliza una imagen base de Node.js
-FROM node:23.0.0-alpine3.20
+# Etapa 1: Build de la aplicación
+FROM node:23.0.0-alpine3.20 AS builder
 
-# Establece el directorio de trabajo en el contenedor
 WORKDIR /app
 
-# Copia el package.json y el package-lock.json al contenedor
+# Copia archivos de dependencias
 COPY package*.json ./
 
-# Instala las dependencias del proyecto
-RUN npm install
+# Instala todas las dependencias (incluidas devDependencies para el build)
+RUN npm ci
 
-# Copia el resto de los archivos del proyecto al contenedor
+# Copia el código fuente
 COPY . .
 
 # Construye la aplicación para producción
 RUN npm run build
 
-# Expone el puerto en el que la aplicación se ejecutará
-EXPOSE 4173
+# Etapa 2: Imagen ligera solo con los archivos build
+FROM alpine:3.20
 
-# Comando para ejecutar la aplicación
-CMD ["npm", "run", "preview"]
+WORKDIR /app
+
+# Copia los archivos build desde la etapa anterior
+COPY --from=builder /app/dist ./dist
+
+# Comando que mantiene el contenedor activo
+# (los archivos se copiarán al volumen compartido con nginx)
+CMD ["tail", "-f", "/dev/null"]
