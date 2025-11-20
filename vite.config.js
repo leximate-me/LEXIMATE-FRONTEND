@@ -5,14 +5,14 @@ export default defineConfig({
   base: '/',
   plugins: [react()],
   server: {
-    host: '0.0.0.0',
+    host: 'localhost',
     port: 5173,
     watch: {
       usePolling: true,
     },
     proxy: {
       '/api': {
-        target: 'http://backend:8080',
+        target: 'http://localhost:8080',
         changeOrigin: true,
       }
     }
