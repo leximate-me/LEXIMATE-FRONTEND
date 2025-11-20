@@ -39,14 +39,26 @@ const ChatInterface = ({ chat, onBack }) => {
   }, [chat.id]);
 
   // Listen for new messages
-  useRealTimeUpdates('chat_message', (message) => {
-    if (message.chatId === chat.id) {
-      setMessages((prev) => [...prev, message]);
+useRealTimeUpdates('chat_message', (payload) => {
+    console.log('📦 Socket Payload:', payload);
+
+    // 🔥 CORRECCIÓN 2: Desempaquetar la propiedad 'data'
+    // El backend envía { type: '...', data: {...} }
+    const message = payload.data || payload; 
+
+    console.log('Mensaje procesado:', message);
+
+    // Usar '==' para ser flexible con string/number
+    if (message.chatId == chat.id) {
+      setMessages((prev) => {
+        // Evitar duplicados por si acaso
+        if (prev.some(m => m.id === message.id)) return prev;
+        return [...prev, message];
+      });
       scrollToBottom();
     }
-  });
+  }, [chat.id]); // No olvides la dependencia que añadimos antes
 
-  // Scroll on new messages
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
