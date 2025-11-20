@@ -48,7 +48,6 @@ function AppContent() {
           </Routes>
         </div>
       </main>
-      {user && <ChatWindow />}
     </div>
   );
 }

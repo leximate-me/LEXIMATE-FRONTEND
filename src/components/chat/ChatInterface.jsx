@@ -4,6 +4,7 @@ import ChatMessage from './ChatMessage';
 import { useRealTimeUpdates } from '../../hooks/useRealTimeUpdates';
 import { chatService } from '../../api/chat';
 import { useAuth } from '../../context/AuthContext';
+import HighlightLetter from '../ui/HighlightLetter';
 
 const ChatInterface = ({ chat, onBack }) => {
   const { user } = useAuth();
@@ -84,14 +85,6 @@ const ChatInterface = ({ chat, onBack }) => {
 
     try {
       const sentMessage = await chatService.sendMessage(chat.id, content);
-      // If the socket event comes back fast, we might get a duplicate if we append here too.
-      // Usually better to wait for socket or append if we want optimistic UI.
-      // For now, let's rely on the socket event or the response.
-      // Let's append manually to be snappy, and handle dedup if needed (or rely on socket)
-      // Actually, if we append here, and then socket comes, we get double.
-      // A common pattern is to append optimistically with a temp ID, then replace.
-      // For simplicity, let's just append the response since it's the confirmed message.
-
       // Check if message already added by socket (race condition)
       setMessages((prev) => {
         if (prev.some((m) => m.id === sentMessage.id)) return prev;
@@ -108,11 +101,11 @@ const ChatInterface = ({ chat, onBack }) => {
   return (
     <div className="flex flex-col h-full bg-gray-50 dark:bg-gray-900">
       {/* Header */}
-      <div className="flex items-center justify-between px-4 py-3 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 shadow-sm">
+      <div className="flex items-center justify-between px-4 py-3 bg-pastelYellow shadow-sm">
         <div className="flex items-center gap-3">
           <button
             onClick={onBack}
-            className="p-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-600 dark:text-gray-300"
+            className="p-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-600 dark:text-gray-300 transition-all"
           >
             <ArrowLeft className="w-5 h-5" />
           </button>
@@ -122,7 +115,7 @@ const ChatInterface = ({ chat, onBack }) => {
               <img
                 src={otherUser.avatar}
                 alt={otherUser.name}
-                className="w-8 h-8 rounded-full object-cover"
+                className="border border-gray-500 w-8 h-8 rounded-full object-cover"
               />
             ) : (
               <div className="w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-900 flex items-center justify-center text-blue-600 dark:text-blue-300 font-bold text-sm">
@@ -130,9 +123,9 @@ const ChatInterface = ({ chat, onBack }) => {
               </div>
             )}
             <div>
-              <h3 className="text-sm font-semibold text-gray-900 dark:text-white">
+              <HighlightLetter size='text-lg' className="font-opendyslexic text-sm font-semibold">
                 {otherUser.name}
-              </h3>
+              </HighlightLetter>
               <span className="text-xs text-green-500 flex items-center gap-1">
                 <span className="w-1.5 h-1.5 bg-green-500 rounded-full"></span>
                 En línea
@@ -141,9 +134,9 @@ const ChatInterface = ({ chat, onBack }) => {
           </div>
         </div>
 
-        <button className="p-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
+        {/* <button className="p-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
           <MoreVertical className="w-5 h-5" />
-        </button>
+        </button> */}
       </div>
 
       {/* Messages Area */}
