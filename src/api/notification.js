@@ -5,7 +5,7 @@ export const notificationService = {
    * Get all notifications for the current user
    */
   getAll: async () => {
-    const response = await axios.get('/notification/user');
+    const response = await axios.get('/notification');
     return response.data;
   },
 

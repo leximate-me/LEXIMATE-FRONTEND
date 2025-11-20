@@ -1,4 +1,11 @@
-import { createContext, useContext, useEffect, useState, useCallback, useRef } from 'react';
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  useCallback,
+  useRef,
+} from 'react';
 import { websocketService } from '../services/websocket.service';
 
 const WebSocketContext = createContext(null);
@@ -6,7 +13,9 @@ const WebSocketContext = createContext(null);
 export const useWebSocketContext = () => {
   const context = useContext(WebSocketContext);
   if (!context) {
-    throw new Error('useWebSocketContext must be used within WebSocketProvider');
+    throw new Error(
+      'useWebSocketContext must be used within WebSocketProvider'
+    );
   }
   return context;
 };
@@ -18,11 +27,11 @@ export const WebSocketProvider = ({ children }) => {
 
   useEffect(() => {
     if (wsInitialized.current) return;
-    
+
     // Determine WebSocket URL based on environment
     const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-    const host = import.meta.env.DEV 
-      ? 'localhost:5173'  // Development with Vite proxy
+    const host = import.meta.env.DEV
+      ? 'localhost:8080' // Development with Vite proxy
       : window.location.host;
     const wsUrl = `${protocol}//${host}/api/ws`;
 
@@ -43,7 +52,9 @@ export const WebSocketProvider = ({ children }) => {
     const handleMaxReconnectAttempts = () => {
       setConnected(false);
       setReconnecting(false);
-      console.error('❌ Failed to reconnect to WebSocket after maximum attempts');
+      console.error(
+        '❌ Failed to reconnect to WebSocket after maximum attempts'
+      );
     };
 
     // Subscribe to connection events
@@ -67,7 +78,10 @@ export const WebSocketProvider = ({ children }) => {
       clearInterval(pingInterval);
       websocketService.off('connected', handleConnected);
       websocketService.off('disconnected', handleDisconnected);
-      websocketService.off('max_reconnect_attempts', handleMaxReconnectAttempts);
+      websocketService.off(
+        'max_reconnect_attempts',
+        handleMaxReconnectAttempts
+      );
       websocketService.disconnect();
       wsInitialized.current = false;
     };

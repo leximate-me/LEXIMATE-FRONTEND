@@ -39,25 +39,37 @@ const ChatInterface = ({ chat, onBack }) => {
   }, [chat.id]);
 
   // Listen for new messages
-useRealTimeUpdates('chat_message', (payload) => {
-    console.log('📦 Socket Payload:', payload);
+  useRealTimeUpdates(
+    'chat_message',
+    (payload) => {
+      console.log('📦 Socket Payload:', payload);
 
-    // 🔥 CORRECCIÓN 2: Desempaquetar la propiedad 'data'
-    // El backend envía { type: '...', data: {...} }
-    const message = payload.data || payload; 
+      // 🔥 CORRECCIÓN 2: Desempaquetar la propiedad 'data'
+      // El backend envía { type: '...', data: {...} }
+      const message = payload.data || payload;
 
-    console.log('Mensaje procesado:', message);
+      console.log('Mensaje procesado:', message);
+      console.log(
+        'Comparación - chatId:',
+        message.chatId,
+        'vs chat.id:',
+        chat.id,
+        'iguales:',
+        String(message.chatId) === String(chat.id)
+      );
 
-    // Usar '==' para ser flexible con string/number
-    if (message.chatId == chat.id) {
-      setMessages((prev) => {
-        // Evitar duplicados por si acaso
-        if (prev.some(m => m.id === message.id)) return prev;
-        return [...prev, message];
-      });
-      scrollToBottom();
-    }
-  }, [chat.id]); // No olvides la dependencia que añadimos antes
+      // Usar '==' para ser flexible con string/number
+      if (message.chatId == chat.id) {
+        setMessages((prev) => {
+          // Evitar duplicados por si acaso
+          if (prev.some((m) => m.id === message.id)) return prev;
+          return [...prev, message];
+        });
+        scrollToBottom();
+      }
+    },
+    [chat.id]
+  ); // No olvides la dependencia que añadimos antes
 
   useEffect(() => {
     scrollToBottom();
@@ -79,13 +91,13 @@ useRealTimeUpdates('chat_message', (payload) => {
       // Actually, if we append here, and then socket comes, we get double.
       // A common pattern is to append optimistically with a temp ID, then replace.
       // For simplicity, let's just append the response since it's the confirmed message.
-      
+
       // Check if message already added by socket (race condition)
       setMessages((prev) => {
-        if (prev.some(m => m.id === sentMessage.id)) return prev;
+        if (prev.some((m) => m.id === sentMessage.id)) return prev;
         return [...prev, sentMessage];
       });
-      
+
       inputRef.current?.focus();
     } catch (error) {
       console.error('Error sending message:', error);
@@ -98,18 +110,18 @@ useRealTimeUpdates('chat_message', (payload) => {
       {/* Header */}
       <div className="flex items-center justify-between px-4 py-3 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 shadow-sm">
         <div className="flex items-center gap-3">
-          <button 
+          <button
             onClick={onBack}
             className="p-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-600 dark:text-gray-300"
           >
             <ArrowLeft className="w-5 h-5" />
           </button>
-          
+
           <div className="flex items-center gap-2">
             {otherUser.avatar ? (
-              <img 
-                src={otherUser.avatar} 
-                alt={otherUser.name} 
+              <img
+                src={otherUser.avatar}
+                alt={otherUser.name}
                 className="w-8 h-8 rounded-full object-cover"
               />
             ) : (
@@ -128,7 +140,7 @@ useRealTimeUpdates('chat_message', (payload) => {
             </div>
           </div>
         </div>
-        
+
         <button className="p-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
           <MoreVertical className="w-5 h-5" />
         </button>
@@ -149,10 +161,10 @@ useRealTimeUpdates('chat_message', (payload) => {
               </div>
             )}
             {messages.map((msg) => (
-              <ChatMessage 
-                key={msg.id} 
-                message={msg} 
-                isOwn={msg.senderId === user.id} 
+              <ChatMessage
+                key={msg.id}
+                message={msg}
+                isOwn={msg.senderId === user.id}
               />
             ))}
             <div ref={messagesEndRef} />
@@ -161,7 +173,10 @@ useRealTimeUpdates('chat_message', (payload) => {
       </div>
 
       {/* Input Area */}
-      <form onSubmit={handleSend} className="p-3 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700">
+      <form
+        onSubmit={handleSend}
+        className="p-3 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700"
+      >
         <div className="flex items-center gap-2">
           <input
             ref={inputRef}
