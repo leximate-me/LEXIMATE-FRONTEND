@@ -133,6 +133,7 @@ const PostProvider = ({ children }) => {
         createComment,
         getPostById,
         deleteComment,
+        setPosts,
       }}
     >
       {children}

@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "axios": "^1.7.5",
+    "date-fns": "^4.1.0",
     "dayjs": "^1.11.13",
     "flowbite-react": "^0.12.10",
     "framer-motion": "^11.11.9",

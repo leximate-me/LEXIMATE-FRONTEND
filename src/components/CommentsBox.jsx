@@ -9,11 +9,12 @@ import dayjs from 'dayjs';
 import { HiOutlineChevronDoubleLeft, HiOutlineChevronDoubleRight } from "react-icons/hi2";
 import HighlightLetter from './ui/HighlightLetter';
 import { motion, AnimatePresence } from "framer-motion";
+import { useRealTimeUpdates } from '../hooks/useRealTimeUpdates';
 
 function CommentsBox() {
   const { classId } = useParams();
   const { handleSubmit, register, formState: { errors }, reset } = useForm();
-  const { createPost, getPosts, deletePost, posts } = usePost();
+  const { createPost, getPosts, deletePost, posts, setPosts } = usePost();
   const { user } = useAuth();
   const [isLoading, setIsLoading] = useState(true);
   const [isCreating, setIsCreating] = useState(false);
@@ -43,6 +44,29 @@ function CommentsBox() {
     };
     fetchPosts();
   }, [classId, getPosts]);
+
+  // Real-time updates
+  // Real-time updates
+  useRealTimeUpdates('post_created', (data) => {
+    if (String(data.post.courseId) === String(classId)) {
+      setPosts((prev) => {
+         // Avoid duplicates
+         if (prev.some(p => p.id === data.post.id)) return prev;
+         return [data.post, ...prev];
+      });
+    }
+  });
+
+  useRealTimeUpdates('post_deleted', (data) => {
+    const deletedId = data.postId || data.id || data;
+    setPosts((prev) => prev.filter((p) => p.id !== deletedId));
+  });
+
+  useRealTimeUpdates('post_updated', (data) => {
+    if (String(data.post.courseId) === String(classId)) {
+      setPosts((prev) => prev.map((p) => (p.id === data.post.id ? data.post : p)));
+    }
+  });
 
   const onSubmit = handleSubmit(async (data) => {
     setIsCreating(true);

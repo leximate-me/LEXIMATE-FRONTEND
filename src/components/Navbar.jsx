@@ -7,6 +7,7 @@ import HighlightLetter from './ui/HighlightLetter';
 import { FaUser } from 'react-icons/fa';
 import { Bot } from 'lucide-react';
 import ChatbotModal from './ChatBotModal';
+import NotificationBell from './NotificationBell';
 
 function NavBar() {
   const { isAuthenticated, logOut, user, getProfile, profile } = useAuth();
@@ -155,6 +156,11 @@ function NavBar() {
                         <Bot className="w-11 h-11 text-gray-700 border border-gray-700 rounded-full p-2 hover:bg-gray-700 hover:text-white transition duration-300" />
                       </button>
                     </div>
+                  )}
+
+                  {/* Notification Bell */}
+                  {user.rol !== 'guest' && (
+                    <NotificationBell />
                   )}
 
                   {/* Botón de perfil */}

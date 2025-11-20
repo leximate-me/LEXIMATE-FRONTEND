@@ -16,6 +16,7 @@ import { FaRegClock } from "react-icons/fa6";
 import { IoWarningOutline } from "react-icons/io5";
 import FileInput from '../components/ui/FileInput';
 import QualifyTaskModal from '../components/ui/QualifyTaskModal';
+import { useRealTimeUpdates } from '../hooks/useRealTimeUpdates';
 
 function TaskPage({ tasks: initialTasks }) {
   const { classId, taskId } = useParams();
@@ -27,7 +28,6 @@ function TaskPage({ tasks: initialTasks }) {
   const [submittedTasks, setSubmittedTasks] = useState([]);
   const [submittedLoading, setSubmittedLoading] = useState(true);
   const [students, setStudents] = useState([]);
-  const [pendingCount, setPendingCount] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const { extractText, extractedText, isExtracting, setExtractedText } = useTool();
@@ -39,7 +39,38 @@ function TaskPage({ tasks: initialTasks }) {
   } = useForm();
   const [qualifyModalOpen, setQualifyModalOpen] = useState(false);
   const [selectedSubmission, setSelectedSubmission] = useState(null);
-  const [mySubmission, setMySubmission] = useState(null);
+
+  // Derived state
+  const pendingCount = students.filter(s => !submittedTasks.some(sub => sub.user.id === s.id)).length;
+  const mySubmission = submittedTasks.find(sub => sub.user.id === user.id);
+
+  // Real-time updates
+  // Real-time updates
+  useRealTimeUpdates('task_submitted', (data) => {
+    if (String(data.submission.taskId) === String(taskId)) {
+      setSubmittedTasks((prev) => {
+        if (prev.some(s => s.id === data.submission.id)) return prev;
+        return [...prev, data.submission];
+      });
+    }
+  });
+
+  useRealTimeUpdates('submission_qualified', (data) => {
+    if (String(data.submission.taskId) === String(taskId)) {
+      setSubmittedTasks((prev) => prev.map((s) => (s.id === data.submission.id ? data.submission : s)));
+    }
+  });
+
+  useRealTimeUpdates('submission_updated', (data) => {
+    if (String(data.submission.taskId) === String(taskId)) {
+      setSubmittedTasks((prev) => prev.map((s) => (s.id === data.submission.id ? data.submission : s)));
+    }
+  });
+
+  useRealTimeUpdates('submission_deleted', (data) => {
+    const deletedId = data.submissionId || data.id || data;
+    setSubmittedTasks((prev) => prev.filter((s) => s.id !== deletedId));
+  });
 
   const formatDate = (dateString) => {
     // Tomar solo la parte de la fecha antes de la T
@@ -79,7 +110,7 @@ function TaskPage({ tasks: initialTasks }) {
     loadTask();
   }, [classId, taskId, getTask]);
 
-  // Cargar entregas y estudiantes, calcular pendientes
+  // Cargar entregas y estudiantes
   useEffect(() => {
     const loadSubmittedAndStudents = async () => {
       if (!task) return;
@@ -91,11 +122,6 @@ function TaskPage({ tasks: initialTasks }) {
 
         const submitted = await getSubmittedTasks(classId, taskId);
         setSubmittedTasks(submitted);
-
-        const pending = studentsOnly.filter(s =>
-          !submitted.some(sub => sub.user.id === s.id)
-        ).length;
-        setPendingCount(pending);
       } catch (error) {
         console.error('Error al cargar pendientes:', error);
       } finally {
@@ -105,36 +131,6 @@ function TaskPage({ tasks: initialTasks }) {
 
     loadSubmittedAndStudents();
   }, [task, classId, taskId, getUsersByClass, getSubmittedTasks]);
-
-  useEffect(() => {
-    const loadSubmittedAndStudents = async () => {
-      if (!task) return;
-
-      try {
-        const users = await getUsersByClass(classId);
-        const studentsOnly = users.filter(u => u.role.name === 'student');
-        setStudents(studentsOnly);
-
-        const submitted = await getSubmittedTasks(classId, taskId);
-        setSubmittedTasks(submitted);
-
-        // Para el alumno
-        const mySub = submitted.find(sub => sub.user.id === user.id);
-        setMySubmission(mySub);
-
-        const pending = studentsOnly.filter(s =>
-          !submitted.some(sub => sub.user.id === s.id)
-        ).length;
-        setPendingCount(pending);
-      } catch (error) {
-        console.error('Error al cargar pendientes:', error);
-      } finally {
-        setSubmittedLoading(false);
-      }
-    };
-
-    loadSubmittedAndStudents();
-  }, [task, classId, taskId, getUsersByClass, getSubmittedTasks, user.id]);
 
 
   // Limpiar texto extraído al cambiar de tarea
@@ -153,11 +149,6 @@ function TaskPage({ tasks: initialTasks }) {
       const refreshedSubmitted = await getSubmittedTasks(classId, taskId);
       setSubmittedTasks(refreshedSubmitted);
 
-      // Actualizar pendientes
-      const pending = students.filter(s =>
-        !refreshedSubmitted.some(sub => sub.user.id === s.id)
-      ).length;
-      setPendingCount(pending);
       setIsSubmitting(false);
     } catch (error) {
       console.error('Error al enviar la tarea:', error);
@@ -176,11 +167,6 @@ function TaskPage({ tasks: initialTasks }) {
       const refreshedSubmitted = await getSubmittedTasks(classId, taskId);
       setSubmittedTasks(refreshedSubmitted);
 
-      // Actualizar pendientes
-      const pending = students.filter(s =>
-        !refreshedSubmitted.some(sub => sub.user.id === s.id)
-      ).length;
-      setPendingCount(pending);
       setIsDeleting(false);
     } catch (error) {
       console.error('Error al eliminar la entrega:', error);

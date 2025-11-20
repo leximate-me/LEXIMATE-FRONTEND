@@ -1,5 +1,7 @@
 import { HashRouter, Routes, Route } from 'react-router-dom';
 import { AuthProvider, useAuth } from '../src/context/AuthContext'; // Asegúrate de importar correctamente
+import { WebSocketProvider } from './context/WebSocketContext';
+import { ChatProvider } from './context/ChatContext';
 import RegisterPage from './pages/RegisterPage';
 import LoginPage from './pages/LoginPage';
 import HomePage from './pages/HomePage';
@@ -18,6 +20,7 @@ import TaskPage from './pages/TaskPage';
 import CommentsPage from './pages/CommentsPage';
 import { ToolProvider } from './context/ToolContext';
 import ModalVerification from './components/ui/ModalVerification';
+import ChatWindow from './components/chat/ChatWindow';
 
 function AppContent() {
   const { user } = useAuth();
@@ -45,6 +48,7 @@ function AppContent() {
           </Routes>
         </div>
       </main>
+      {user && <ChatWindow />}
     </div>
   );
 }
@@ -52,19 +56,24 @@ function AppContent() {
 function App() {
   return (
     <AuthProvider>
-      <ClassProvider>
-        <PostProvider>
-          <TaskProvider>
-            <ToolProvider>
-              <HashRouter>
-                <AppContent />
-              </HashRouter>
-            </ToolProvider>
-          </TaskProvider>
-        </PostProvider>
-      </ClassProvider>
+      <WebSocketProvider>
+        <ChatProvider>
+          <ClassProvider>
+            <PostProvider>
+              <TaskProvider>
+                <ToolProvider>
+                  <HashRouter>
+                    <AppContent />
+                  </HashRouter>
+                </ToolProvider>
+              </TaskProvider>
+            </PostProvider>
+          </ClassProvider>
+        </ChatProvider>
+      </WebSocketProvider>
     </AuthProvider>
   );
 }
 
 export default App;
+

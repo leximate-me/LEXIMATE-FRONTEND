@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useTask } from '../context/TasksContext';
 import { useParams, useNavigate } from 'react-router-dom';
 import notFound from '../assets/not-found.svg';
@@ -8,6 +8,7 @@ import { useAuth } from '../context/AuthContext';
 import HighlightLetter from './ui/HighlightLetter';
 import { HiOutlineChevronDoubleLeft, HiOutlineChevronDoubleRight } from "react-icons/hi";
 import { motion, AnimatePresence } from "framer-motion";
+import { useRealTimeUpdates } from '../hooks/useRealTimeUpdates';
 
 function TaskCard({ tasks: initialTasks }) {
   const navigate = useNavigate();
@@ -19,6 +20,43 @@ function TaskCard({ tasks: initialTasks }) {
   const [isDeleting, setIsDeleting] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 3;
+
+  // Update local state when props change
+  useEffect(() => {
+    setTasks(initialTasks);
+  }, [initialTasks]);
+
+  // Real-time updates
+  // Real-time updates
+  useRealTimeUpdates('task_created', (data) => {
+    if (String(data.task.courseId) === String(classId)) {
+      const newTask = data.task;
+      if (newTask.due_date) {
+        let dateSplit = newTask.due_date.split('');
+        newTask.date = dateSplit.slice(0, 10).join('');
+      }
+      setTasks((prev) => {
+        if (prev.some((t) => t.id === newTask.id)) return prev;
+        return [newTask, ...prev];
+      });
+    }
+  });
+
+  useRealTimeUpdates('task_deleted', (data) => {
+    const deletedId = data.taskId || data.id || data;
+    setTasks((prev) => prev.filter((t) => t.id !== deletedId));
+  });
+
+  useRealTimeUpdates('task_updated', (data) => {
+    if (String(data.task.courseId) === String(classId)) {
+      const updatedTask = data.task;
+      if (updatedTask.due_date) {
+        let dateSplit = updatedTask.due_date.split('');
+        updatedTask.date = dateSplit.slice(0, 10).join('');
+      }
+      setTasks((prev) => prev.map((t) => (t.id === updatedTask.id ? updatedTask : t)));
+    }
+  });
 
   // Calcular paginación
   const totalPages = Math.ceil(tasks.length / itemsPerPage);
@@ -41,6 +79,8 @@ function TaskCard({ tasks: initialTasks }) {
     setIsDeleting(true);
     try {
       await deleteTask(classId, taskId);
+      // Optimistic update handled by local state, but also by real-time event if broadcasted
+      // We'll keep manual update here for immediate feedback
       setTasks((prevTasks) => prevTasks.filter((t) => t.id !== taskId));
     } catch (error) {
       console.log('Error al eliminar tarea:', error);

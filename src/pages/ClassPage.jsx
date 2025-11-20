@@ -11,6 +11,7 @@ import { HiOutlineChevronDoubleLeft, HiOutlineChevronDoubleRight } from "react-i
 import { motion, AnimatePresence } from "framer-motion";
 import { MessageCircleWarning } from 'lucide-react';
 import HighlightLetter from '../components/ui/HighlightLetter';
+import { useRealTimeUpdates } from '../hooks/useRealTimeUpdates';
 
 function ClassPage() {
   const { getClasses, classes, isLoading, setClasses, isCreating } = useClass();
@@ -45,6 +46,27 @@ function ClassPage() {
     setClasses([]);
     getClasses();
   }, [user]);
+
+  // Real-time updates
+  // Real-time updates
+  useRealTimeUpdates('course_created', (data) => {
+    // Check if the user is involved (e.g. teacher created it, or student added?)
+    // For simplicity, if we receive the event, we assume we should see it 
+    // (backend should filter who receives the event)
+    setClasses((prev) => {
+      if (prev.some(c => c.id === data.course.id)) return prev;
+      return [data.course, ...prev];
+    });
+  });
+
+  useRealTimeUpdates('course_deleted', (data) => {
+    const deletedId = data.courseId || data.id || data;
+    setClasses((prev) => prev.filter((c) => c.id !== deletedId));
+  });
+
+  useRealTimeUpdates('course_updated', (data) => {
+    setClasses((prev) => prev.map((c) => (c.id === data.course.id ? data.course : c)));
+  });
 
   return (
     <div className="flex flex-col justify-center items-center h-[calc(100vh-80px)] p-2">

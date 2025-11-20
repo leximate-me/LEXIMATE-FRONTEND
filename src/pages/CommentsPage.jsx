@@ -12,6 +12,7 @@ import { MdOutlineComment } from "react-icons/md";
 import HighlightLetter from '../components/ui/HighlightLetter';
 import { FaUser } from "react-icons/fa";
 import { div } from 'framer-motion/client';
+import { useRealTimeUpdates } from '../hooks/useRealTimeUpdates';
 
 
 export default function CommentsPage({ posts: initialPosts }) {
@@ -55,6 +56,30 @@ export default function CommentsPage({ posts: initialPosts }) {
     };
     fetchData();
   }, [classId, commentId, getComments, getPostById, commentsByPost, post]);
+
+  // Real-time updates
+  // Real-time updates
+  useRealTimeUpdates('comment_created', (data) => {
+    // Check if comment belongs to this post (commentId is actually postId in params)
+    if (String(data.comment.postId) === String(commentId)) {
+      setComments((prev) => {
+        // Avoid duplicates
+        if (prev.some(c => c.id === data.comment.id)) return prev;
+        return [data.comment, ...prev];
+      });
+    }
+  });
+
+  useRealTimeUpdates('comment_deleted', (data) => {
+    const deletedId = data.commentId || data.id || data;
+    setComments((prev) => prev.filter((c) => c.id !== deletedId));
+  });
+
+  useRealTimeUpdates('comment_updated', (data) => {
+    if (String(data.comment.postId) === String(commentId)) {
+      setComments((prev) => prev.map((c) => (c.id === data.comment.id ? data.comment : c)));
+    }
+  });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
