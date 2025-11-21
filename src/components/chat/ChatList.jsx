@@ -31,7 +31,6 @@ const ChatList = ({ chats, activeChat, onSelectChat, loading }) => {
         const currentUserId = chat.users[0].id;
         const otherUser = chat.otherUser || { name: "Usuario", avatar: null };
         const lastMessage = chat.messages[chat.messages.length - 1];
-        console.log("last message", lastMessage.senderId);
 
         return (
           <div

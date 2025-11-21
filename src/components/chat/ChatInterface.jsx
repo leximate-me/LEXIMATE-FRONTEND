@@ -1,100 +1,55 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { Send, ArrowLeft, MoreVertical } from 'lucide-react';
-import ChatMessage from './ChatMessage';
-import { useRealTimeUpdates } from '../../hooks/useRealTimeUpdates';
-import { chatService } from '../../api/chat';
-import { useAuth } from '../../context/AuthContext';
-import HighlightLetter from '../ui/HighlightLetter';
+import React, { useState, useEffect, useRef } from "react";
+import { Send, ArrowLeft } from "lucide-react";
+import ChatMessage from "./ChatMessage";
+import HighlightLetter from "../ui/HighlightLetter";
+import { useChat } from "../../context/ChatContext";
+import { useAuth } from "../../context/AuthContext";
 
-const ChatInterface = ({ chat, onBack }) => {
+const ChatInterface = ({ onBack }) => {
   const { user } = useAuth();
-  const [messages, setMessages] = useState([]);
-  const [newMessage, setNewMessage] = useState('');
-  const [loading, setLoading] = useState(true);
+  const {
+    activeChat,
+    loadingChats,
+    sendMessage,
+    setMessages
+  } = useChat();
+
+  const [newMessage, setNewMessage] = useState("");
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
 
-  const otherUser = chat.otherUser || { name: 'Usuario' };
+  // Evita crash si no hay chat activo
+  if (!activeChat) return null;
 
-  // Scroll to bottom
+  const otherUser = activeChat?.otherUser || { name: "Usuario" };
+
+
+  // Scroll automático al final
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
-
-  // Fetch messages on mount
-  useEffect(() => {
-    const fetchMessages = async () => {
-      try {
-        setLoading(true);
-        const data = await chatService.getMessages(chat.id);
-        setMessages(data);
-        scrollToBottom();
-      } catch (error) {
-        console.error('Error fetching messages:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchMessages();
-  }, [chat.id]);
-
-  // Listen for new messages
-  useRealTimeUpdates(
-    'chat_message',
-    (payload) => {
-      console.log('📦 Socket Payload:', payload);
-
-      // 🔥 CORRECCIÓN 2: Desempaquetar la propiedad 'data'
-      // El backend envía { type: '...', data: {...} }
-      const message = payload.data || payload;
-
-      console.log('Mensaje procesado:', message);
-      console.log(
-        'Comparación - chatId:',
-        message.chatId,
-        'vs chat.id:',
-        chat.id,
-        'iguales:',
-        String(message.chatId) === String(chat.id)
-      );
-
-      // Usar '==' para ser flexible con string/number
-      if (message.chatId == chat.id) {
-        setMessages((prev) => {
-          // Evitar duplicados por si acaso
-          if (prev.some((m) => m.id === message.id)) return prev;
-          return [...prev, message];
-        });
-        scrollToBottom();
-      }
-    },
-    [chat.id]
-  ); // No olvides la dependencia que añadimos antes
 
   useEffect(() => {
     scrollToBottom();
-  }, [messages]);
+  }, [activeChat.messages]);
 
   const handleSend = async (e) => {
     e.preventDefault();
     if (!newMessage.trim()) return;
 
     const content = newMessage.trim();
-    setNewMessage(''); // Optimistic clear
+    setNewMessage("");
 
     try {
-      const sentMessage = await chatService.sendMessage(chat.id, content);
-      // Check if message already added by socket (race condition)
+      const sentMessage = await sendMessage(activeChat.id, content);
       setMessages((prev) => {
+        if (!Array.isArray(prev)) return [sentMessage];
         if (prev.some((m) => m.id === sentMessage.id)) return prev;
         return [...prev, sentMessage];
       });
-
       inputRef.current?.focus();
     } catch (error) {
-      console.error('Error sending message:', error);
-      // TODO: Show error toast
+      console.error("Error sending message:", error);
     }
   };
 
@@ -123,7 +78,10 @@ const ChatInterface = ({ chat, onBack }) => {
               </div>
             )}
             <div>
-              <HighlightLetter size='text-lg' className="font-opendyslexic text-sm font-semibold">
+              <HighlightLetter
+                size="text-lg"
+                className="font-opendyslexic text-sm font-semibold"
+              >
                 {otherUser.name}
               </HighlightLetter>
               <span className="text-xs text-green-500 flex items-center gap-1">
@@ -133,31 +91,26 @@ const ChatInterface = ({ chat, onBack }) => {
             </div>
           </div>
         </div>
-
-        {/* <button className="p-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
-          <MoreVertical className="w-5 h-5" />
-        </button> */}
       </div>
 
       {/* Messages Area */}
       <div className="flex-1 overflow-y-auto p-4 space-y-4">
-        {loading ? (
+        {loadingChats ? (
           <div className="flex justify-center py-10">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
           </div>
+        ) : activeChat.messages.length === 0 ? (
+          <div className="text-center text-gray-500 py-10">
+            <p>No hay mensajes aún.</p>
+            <p className="text-sm">¡Envía un saludo!</p>
+          </div>
         ) : (
           <>
-            {messages.length === 0 && (
-              <div className="text-center text-gray-500 py-10">
-                <p>No hay mensajes aún.</p>
-                <p className="text-sm">¡Envía un saludo!</p>
-              </div>
-            )}
-            {messages.map((msg) => (
+            {activeChat.messages.map((msg) => (
               <ChatMessage
-                key={msg.id}
+                key={msg?.id || Math.random()}
                 message={msg}
-                isOwn={msg.senderId === user.id}
+                isOwn={msg?.senderId === user?.id}
               />
             ))}
             <div ref={messagesEndRef} />
