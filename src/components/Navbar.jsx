@@ -74,7 +74,7 @@ function NavBar() {
         <div className="flex items-center justify-between w-full md:w-fit px-5 z-50">
           {isAuthenticated ? (
             <>
-              <Link to="/classes">
+              <Link to="/courses">
                 <div className="flex items-center gap-4 text-[#181811] dark:text-[#fffd92]">
                   <div className="size-4 w-10 h-10">
                     <img
@@ -145,7 +145,7 @@ function NavBar() {
                 isOpen ? "flex" : "hidden"
               } md:flex`}
             >
-              <Link to="/classes">
+              <Link to="/courses">
                 <button className="px-3 py-2 text-[#2d4654] rounded-2xl hover:bg-[#2d4654] hover:text-white transition-all">
                   <HighlightLetter
                     color="lightGreen"

@@ -10,7 +10,7 @@ export default function SideBar({ selectedClassId = '', onSelect = () => { }, on
 
   const handleChangeClass = (classId) => {
     // Navega y notifica al padre cuál quedó seleccionado, luego cierra el sidebar si corresponde
-    navigate(`/${classId}/tasks`);
+    navigate(`/course/${classId}/tasks`);
     onSelect(String(classId));
     if (typeof onClose === 'function') onClose();
   };

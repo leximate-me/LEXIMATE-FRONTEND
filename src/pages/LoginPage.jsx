@@ -27,7 +27,7 @@ function LoginPage() {
 
   useEffect(() => {
     if (isAuthenticated) {
-      navigate('/classes');
+      navigate('/courses');
     }
   }, [isAuthenticated, navigate]);
 

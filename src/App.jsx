@@ -39,11 +39,11 @@ function AppContent() {
             <Route path="/register" element={<RegisterPage />} />
             <Route element={<ProtetedRoutes />}>
               <Route path="/home" element={<HomePage />} />
-              <Route path="/:classId/tasks" element={<TaskByClassPage />} />
-              <Route path="/classes" element={<ClassPage />} />
+              <Route path="/courses/:courseId/tasks" element={<TaskByClassPage />} />
+              <Route path="/courses" element={<ClassPage />} />
               <Route path="/profile" element={<ProfilePage />} />
-              <Route path="/:classId/task/:taskId" element={<TaskPage />} />
-              <Route path="/courses/:classId/post/:commentId" element={<CommentsPage />} />
+              <Route path="/courses/:courseId/task/:taskId" element={<TaskPage />} />
+              <Route path="/courses/:courseId/post/:commentId" element={<CommentsPage />} />
             </Route>
           </Routes>
         </div>

@@ -6,7 +6,7 @@ import { ErrorModal } from "./ui/ErrorModal";
 import FileInput from "./ui/FileInput";
 
 function CreateTaskModal({ isOpen, onClose }) {
-  const { classId } = useParams();
+  const { courseId: classId } = useParams();
 
   const {
     register,

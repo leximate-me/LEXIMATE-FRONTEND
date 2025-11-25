@@ -10,7 +10,7 @@ import { MessageCircle } from "lucide-react";
 import { useRealTimeUpdates } from "../hooks/useRealTimeUpdates";
 
 function People() {
-  const { classId } = useParams();
+  const { courseId: classId } = useParams();
   const { getUsersByClass } = useClass();
   const [isLoading, setIsLoading] = useState(true);
   const [people, setPeople] = useState();

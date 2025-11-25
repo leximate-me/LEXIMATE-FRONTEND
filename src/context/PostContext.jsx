@@ -130,11 +130,23 @@ const PostProvider = ({ children }) => {
 
   // NUEVO: Manejo de eventos de WebSocket para comentarios
   useEffect(() => {
-    const handleCommentCreated = (data) => {
+    const handleCommentCreated = (payload) => {
+      console.log("PostContext: handleCommentCreated triggered", payload);
+      
+      // Handle nested payload from backend (data.comment)
+      const data = payload.comment || payload;
+
       // Mapear 'author' a 'user' para estructura de renderizado
       const newComment = {
         ...data,
-        user: data.author || data.user, 
+        user: data.author || data.user || {
+            id: data.authorId,
+            people: {
+                first_name: data.authorName,
+                last_name: ""
+            },
+            userFiles: []
+        }, 
       };
       const postId = newComment.postId;
 
@@ -142,10 +154,12 @@ const PostProvider = ({ children }) => {
         const currentComments = prev[postId] || [];
         
         // Evitar duplicados (esencial para clientes con y sin loopback)
-        if (currentComments.some((c) => c.id === newComment.id)) {
+        if (currentComments.some((c) => String(c.id) === String(newComment.id))) {
+          console.log("PostContext: Duplicate comment ignored", newComment.id);
           return prev;
         }
-
+        
+        console.log("PostContext: Adding new comment to state", newComment);
         return {
           ...prev,
           [postId]: [newComment, ...currentComments], // Añade el nuevo comentario al inicio
@@ -153,7 +167,8 @@ const PostProvider = ({ children }) => {
       });
     };
 
-    const handleCommentDeleted = (data) => {
+    const handleCommentDeleted = (payload) => {
+      const data = payload.comment || payload;
       const deletedId = data.commentId || data.id || data;
       const postId = data.postId;
 
@@ -161,7 +176,7 @@ const PostProvider = ({ children }) => {
 
       setCommentsByPost((prev) => ({
         ...prev,
-        [postId]: prev[postId].filter((c) => c.id !== deletedId),
+        [postId]: prev[postId].filter((c) => String(c.id) !== String(deletedId)),
       }));
     };
 

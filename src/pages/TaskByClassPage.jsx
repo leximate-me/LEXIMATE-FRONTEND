@@ -15,9 +15,10 @@ import NavbarClass from '../components/NavbarClass';
 import People from '../components/People';
 import { MdOutlineSchool } from "react-icons/md";
 import HighlightLetter from '../components/ui/HighlightLetter';
+import { useRealTimeUpdates } from '../hooks/useRealTimeUpdates';
 
 function TaskPage() {
-  const { classId } = useParams();
+  const { courseId: classId } = useParams();
   const [currentClass, setCurrentClass] = useState(null);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [showModal, setShowModal] = useState(false);
@@ -29,29 +30,29 @@ function TaskPage() {
 
   useEffect(() => {
     getTasks(classId);
-  }, [classId]);
-
-  useEffect(() => {
     getClasses();
-  }, [user]);
-
-  // sincronizar currentClass cuando cambian classes o classId
-  useEffect(() => {
-    const foundClass = classes?.find((clase) => String(clase.id) === String(classId));
-    setCurrentClass(foundClass || null);
-  }, [classes, classId]);
-
-  // sincronizar selectedClassId cuando cambia la ruta (classId)
-  useEffect(() => {
-    setSelectedClassId(String(classId || ''));
   }, [classId]);
 
   const toggleSidebar = () => {
     setIsSidebarOpen((prev) => !prev);
   };
 
-  const location = useLocation();
-  const bgColor = location.state?.bgColor || "#fef195"; // fallback
+  // Real-time updates
+  useRealTimeUpdates('task_created', (data) => {
+    if (String(data.classId) === String(classId)) {
+      getTasks(classId); 
+    }
+  });
+
+  useRealTimeUpdates('task_updated', (data) => {
+    if (String(data.classId) === String(classId)) {
+      getTasks(classId);
+    }
+  });
+
+  useRealTimeUpdates('task_deleted', (data) => {
+    getTasks(classId);
+  });
 
   const renderContent = () => {
     switch (selectedView) {

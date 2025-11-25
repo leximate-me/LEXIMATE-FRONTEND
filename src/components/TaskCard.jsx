@@ -13,7 +13,7 @@ import { useRealTimeUpdates } from '../hooks/useRealTimeUpdates';
 function TaskCard({ tasks: initialTasks }) {
   const navigate = useNavigate();
   const { updateTask, deleteTask } = useTask();
-  const { classId } = useParams();
+  const { courseId: classId } = useParams();
   const { user } = useAuth();
 
   const [tasks, setTasks] = useState(initialTasks);
@@ -72,7 +72,7 @@ function TaskCard({ tasks: initialTasks }) {
   });
 
   const handleSelectTask = (taskId) => {
-    navigate(`/${classId}/task/${taskId}`);
+    navigate(`/course/${classId}/task/${taskId}`);
   };
 
   const handleDeleteTask = async (classId, taskId) => {

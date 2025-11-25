@@ -55,7 +55,7 @@ export default function ClassCardStudent({ classes: initialClasses }) {
                 <div
                   key={index}
                   onClick={() =>
-                    navigate(`/${classItem.id}/tasks`, { state: { bgColor } })
+                    navigate(`/course/${classItem.id}/tasks`, { state: { bgColor } })
                   }
                   className="card card-compact w-72 h-[280px] shadow-xl cursor-pointer hover:scale-105 transition-transform duration-200 flex flex-col "
                   style={{ backgroundColor: bgColor }}

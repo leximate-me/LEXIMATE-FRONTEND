@@ -24,7 +24,7 @@ export default function CommentsPage({ posts: initialPosts }) {
     getComments,
     deleteComment,
   } = usePost();
-  const { classId, commentId } = useParams();
+  const { courseId: classId, commentId } = useParams();
 
   const [post, setPost] = useState(initialPosts);
   const [loading, setLoading] = useState(true);
@@ -38,7 +38,10 @@ export default function CommentsPage({ posts: initialPosts }) {
 
   useEffect(() => {
     const fetchData = async () => {
-      setLoading(true);
+      // Only set loading if we don't have data yet
+      if (!post || !commentsByPost[commentId]) {
+        setLoading(true);
+      }
       try {
         if (!commentsByPost[commentId]) {
           await getComments(classId, commentId);
@@ -47,7 +50,6 @@ export default function CommentsPage({ posts: initialPosts }) {
           const fetchedPost = await getPostById(classId, commentId);
           setPost(fetchedPost);
         }
-        setComments(commentsByPost[commentId] || []);
       } catch (error) {
         console.error("Error fetching data:", error);
       } finally {
@@ -55,31 +57,44 @@ export default function CommentsPage({ posts: initialPosts }) {
       }
     };
     fetchData();
-  }, [classId, commentId, getComments, getPostById, commentsByPost, post]);
+  }, [classId, commentId, getComments, getPostById]); // Removed commentsByPost and post from dependencies to avoid loop/re-fetch
 
-  // Real-time updates
-  // Real-time updates
-  useRealTimeUpdates("comment_created", async (data) => {
-    if (String(data.postId) === String(commentId)) {
-      try {
-        // Refresca los comentarios para que tengan toda la info del usuario
-        await getComments(classId, commentId);
-        setComments(commentsByPost[commentId] || []);
-      } catch (error) {
-        console.error("Error refreshing comments:", error);
-      }
+  // Sync comments when commentsByPost changes
+  useEffect(() => {
+    if (commentsByPost[commentId]) {
+      console.log("CommentsPage: Syncing comments from Context", commentsByPost[commentId]);
+      setComments(commentsByPost[commentId]);
     }
+  }, [commentsByPost, commentId]);
+
+  // Real-time updates
+  // Real-time updates
+  useRealTimeUpdates("comment_created", (payload) => {
+    console.log("CommentsPage: comment_created event received (handled by PostContext)", payload);
+    
+    // Show loading state to hide the "Usuario" glitch (missing avatar)
+    // This replaces the list with the Riple loader temporarily
+    setIsProcessing(true);
+    
+    // Short delay to ensure backend consistency before fetching full data
+    setTimeout(async () => {
+      console.log("CommentsPage: Fetching updated comments (delayed) to get avatars...");
+      await getComments(classId, commentId);
+      setIsProcessing(false);
+    }, 500);
   });
 
-  useRealTimeUpdates("comment_deleted", (data) => {
+  useRealTimeUpdates("comment_deleted", (payload) => {
+    const data = payload.comment || payload;
     const deletedId = data.commentId || data.id || data;
-    setComments((prev) => prev.filter((c) => c.id !== deletedId));
+    setComments((prev) => prev.filter((c) => String(c.id) !== String(deletedId)));
   });
 
-  useRealTimeUpdates("comment_updated", (data) => {
+  useRealTimeUpdates("comment_updated", (payload) => {
+    const data = payload.comment || payload;
     if (String(data.postId) === String(commentId)) {
       setComments((prev) =>
-        prev.map((c) => (c.id === data.comment.id ? data : c)),
+        prev.map((c) => (String(c.id) === String(data.id) ? data : c)),
       );
     }
   });

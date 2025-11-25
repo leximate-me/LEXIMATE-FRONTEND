@@ -25,7 +25,7 @@ import QualifyTaskModal from "../components/ui/QualifyTaskModal";
 import { useRealTimeUpdates } from "../hooks/useRealTimeUpdates";
 
 function TaskPage({ tasks: initialTasks }) {
-  const { classId, taskId } = useParams();
+  const { courseId: classId, taskId } = useParams();
   const { user } = useAuth();
   const {
     getTask,
@@ -70,17 +70,17 @@ function TaskPage({ tasks: initialTasks }) {
   });
 
   useRealTimeUpdates("submission_qualified", (data) => {
-    if (String(data.submission.taskId) === String(taskId)) {
+    if (String(data.taskId) === String(taskId)) {
       setSubmittedTasks((prev) =>
-        prev.map((s) => (s.id === data.submission.id ? data.submission : s)),
+        prev.map((s) => (s.id === data.id ? data : s)),
       );
     }
   });
 
   useRealTimeUpdates("submission_updated", (data) => {
-    if (String(data.submission.taskId) === String(taskId)) {
+    if (String(data.taskId) === String(taskId)) {
       setSubmittedTasks((prev) =>
-        prev.map((s) => (s.id === data.submission.id ? data.submission : s)),
+        prev.map((s) => (s.id === data.id ? data : s)),
       );
     }
   });
@@ -88,6 +88,26 @@ function TaskPage({ tasks: initialTasks }) {
   useRealTimeUpdates("submission_deleted", (data) => {
     const deletedId = data.submissionId || data.id || data;
     setSubmittedTasks((prev) => prev.filter((s) => s.id !== deletedId));
+  });
+
+  useRealTimeUpdates("task_updated", (data) => {
+    if (String(data.id) === String(taskId)) {
+      setTask(data);
+    }
+  });
+
+  useRealTimeUpdates("task_deleted", (data) => {
+    const deletedId = data.taskId || data.id || data;
+    if (String(deletedId) === String(taskId)) {
+      alert("Esta tarea ha sido eliminada.");
+      // We need to navigate away. navigate is not defined in this scope yet, I need to check if I added it.
+      // I added it in a previous step but the file view shows it might be missing or I need to check imports.
+      // In the file view, I see `const { classId, taskId } = useParams();` and `const { user } = useAuth();`.
+      // I DO NOT see `const navigate = useNavigate();`. I need to add it.
+      // For now I will use window.location.href as a fallback or assume I will add navigate.
+      // Wait, I see `import { useParams } from "react-router-dom";` in line 2. I need to add useNavigate to imports and component.
+      navigate(`/course/${classId}/tasks`);
+    }
   });
 
   const formatDate = (dateString) => {

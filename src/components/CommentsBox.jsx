@@ -12,7 +12,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useRealTimeUpdates } from '../hooks/useRealTimeUpdates';
 
 function CommentsBox() {
-  const { classId } = useParams();
+  const { courseId: classId } = useParams();
   const { handleSubmit, register, formState: { errors }, reset } = useForm();
   const { createPost, getPosts, deletePost, posts, setPosts } = usePost();
   const { user } = useAuth();
@@ -29,7 +29,7 @@ function CommentsBox() {
   const navigate = useNavigate();
 
   const handleSelectTask = (commentId) => {
-    navigate(`/courses/${classId}/post/${commentId}`);
+    navigate(`/course/${classId}/post/${commentId}`);
   };
 
   useEffect(() => {
@@ -48,23 +48,19 @@ function CommentsBox() {
   // Real-time updates
   // Real-time updates
   useRealTimeUpdates('post_created', (data) => {
-    if (String(data.post.courseId) === String(classId)) {
-      setPosts((prev) => {
-         // Avoid duplicates
-         if (prev.some(p => p.id === data.post.id)) return prev;
-         return [data.post, ...prev];
-      });
+    if (String(data.courseId) === String(classId)) {
+      getPosts(classId);
     }
   });
 
   useRealTimeUpdates('post_deleted', (data) => {
     const deletedId = data.postId || data.id || data;
-    setPosts((prev) => prev.filter((p) => p.id !== deletedId));
+    setPosts((prev) => prev.filter((p) => String(p.id) !== String(deletedId)));
   });
 
   useRealTimeUpdates('post_updated', (data) => {
-    if (String(data.post.courseId) === String(classId)) {
-      setPosts((prev) => prev.map((p) => (p.id === data.post.id ? data.post : p)));
+    if (String(data.courseId) === String(classId)) {
+      setPosts((prev) => prev.map((p) => (String(p.id) === String(data.id) ? data : p)));
     }
   });
 
@@ -186,7 +182,7 @@ function CommentsBox() {
                           size="text-md"
                           className="font-opendyslexic italic"
                         >
-                          {post.user?.people?.first_name || 'Usuario'}
+                          {post.user?.people?.last_name || ''}
                         </HighlightLetter>
                         <HighlightLetter
                           color="red"
