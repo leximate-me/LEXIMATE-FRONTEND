@@ -16,6 +16,7 @@ import People from '../components/People';
 import { MdOutlineSchool } from "react-icons/md";
 import HighlightLetter from '../components/ui/HighlightLetter';
 import { useRealTimeUpdates } from '../hooks/useRealTimeUpdates';
+import { use } from 'react';
 
 function TaskPage() {
   const { courseId: classId } = useParams();
@@ -42,7 +43,7 @@ function TaskPage() {
     // The payload uses courseId, not classId
     const incomingClassId = data.courseId || data.classId;
     if (String(incomingClassId) === String(classId)) {
-      getTasks(classId); 
+      getTasks(classId);
     }
   });
 
@@ -71,13 +72,6 @@ function TaskPage() {
         return null;
     }
   };
-
-  useEffect(() => {
-    if (classes && selectedClassId) {
-      const foundClass = classes.find(c => String(c.id) === String(selectedClassId));
-      setCurrentClass(foundClass || null);
-    }
-  }, [classes, selectedClassId]);
 
   return (
     <div className="grid grid-cols-8 grid-rows-[150px_40px,390px] gap-4 p-4">
