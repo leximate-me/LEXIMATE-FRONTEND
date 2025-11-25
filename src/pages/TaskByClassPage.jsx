@@ -39,13 +39,16 @@ function TaskPage() {
 
   // Real-time updates
   useRealTimeUpdates('task_created', (data) => {
-    if (String(data.classId) === String(classId)) {
+    // The payload uses courseId, not classId
+    const incomingClassId = data.courseId || data.classId;
+    if (String(incomingClassId) === String(classId)) {
       getTasks(classId); 
     }
   });
 
   useRealTimeUpdates('task_updated', (data) => {
-    if (String(data.classId) === String(classId)) {
+    const incomingClassId = data.courseId || data.classId;
+    if (String(incomingClassId) === String(classId)) {
       getTasks(classId);
     }
   });

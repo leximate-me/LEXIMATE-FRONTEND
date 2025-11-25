@@ -29,8 +29,11 @@ function TaskCard({ tasks: initialTasks }) {
   // Real-time updates
   // Real-time updates
   useRealTimeUpdates('task_created', (data) => {
-    if (String(data.task.courseId) === String(classId)) {
-      const newTask = data.task;
+    // Handle both flat and nested payloads
+    const newTask = data.task || data;
+    const incomingClassId = newTask.courseId || newTask.classId;
+
+    if (String(incomingClassId) === String(classId)) {
       if (newTask.due_date) {
         let dateSplit = newTask.due_date.split('');
         newTask.date = dateSplit.slice(0, 10).join('');
@@ -48,8 +51,10 @@ function TaskCard({ tasks: initialTasks }) {
   });
 
   useRealTimeUpdates('task_updated', (data) => {
-    if (String(data.task.courseId) === String(classId)) {
-      const updatedTask = data.task;
+    const updatedTask = data.task || data;
+    const incomingClassId = updatedTask.courseId || updatedTask.classId;
+
+    if (String(incomingClassId) === String(classId)) {
       if (updatedTask.due_date) {
         let dateSplit = updatedTask.due_date.split('');
         updatedTask.date = dateSplit.slice(0, 10).join('');
