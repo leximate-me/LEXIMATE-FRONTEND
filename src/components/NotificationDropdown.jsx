@@ -1,10 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
-import { Trash2 } from 'lucide-react';
+import { Trash2, BellIcon } from 'lucide-react';
 import { useNotifications } from '../hooks/useNotifications';
 import { useNavigate } from 'react-router-dom';
-import { BellIcon } from 'lucide-react';
 
-export default function NotificationDropdown({ onClose }) {
+export default function NotificationDropdown({ onClose, onReadAll, onRead }) {
   const navigate = useNavigate();
   const dropdownRef = useRef(null);
   const [isVisible, setIsVisible] = useState(false);
@@ -22,6 +21,7 @@ export default function NotificationDropdown({ onClose }) {
     setIsVisible(true);
   }, []);
 
+  // Click afuera para cerrar
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
@@ -35,13 +35,20 @@ export default function NotificationDropdown({ onClose }) {
 
   const handleNotificationClick = (notification) => {
     if (!notification.read) markAsRead(notification.id);
-
-    if (notification.data.url) {
-      navigate(`${notification.data.url}`);
-    } 
+    if (notification.data.url) navigate(notification.data.url);
 
     setIsVisible(false);
     setTimeout(onClose, 200);
+  };
+
+  const handleMarkAllAsRead = async () => {
+    await markAllAsRead();
+    if (onReadAll) onReadAll(); // actualizar badge en NavBar
+  };
+
+  const handleMarkAsRead = async (notId) => {
+    await markAsRead(notId);
+    if (onRead) onRead(); // actualizar badge en NavBar
   };
 
   const getTimeAgo = (timestamp) => {
@@ -74,14 +81,13 @@ export default function NotificationDropdown({ onClose }) {
       className={`absolute right-4 top-16 w-80 bg-white dark:bg-gray-800 rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 z-[99998] transition-all duration-300
         ${isVisible ? "opacity-100 scale-100" : "opacity-0 scale-95"}`}
     >
-      {/* Header */}
       <div className="px-4 py-3 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center">
         <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
           Notificaciones ({unreadCount})
         </h3>
         {notifications.length > 0 && (
           <button
-            onClick={markAllAsRead}
+            onClick={handleMarkAllAsRead}
             className="text-sm text-blue-600 dark:text-blue-400 hover:underline"
           >
             Marcar todas
@@ -89,7 +95,6 @@ export default function NotificationDropdown({ onClose }) {
         )}
       </div>
 
-      {/* Content */}
       <div className="max-h-[400px] overflow-y-auto">
         {loading ? (
           <div className="p-4 text-center text-gray-500">Cargando...</div>
@@ -102,7 +107,10 @@ export default function NotificationDropdown({ onClose }) {
           notifications.map((n) => (
             <div
               key={n.id}
-              onClick={() => handleNotificationClick(n)}
+              onClick={() => {
+                handleNotificationClick(n)
+                handleMarkAsRead(n.id)
+              }}
               className={`px-4 py-3 border-b border-gray-100 dark:border-gray-700 
                 hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer transition
                 ${!n.read ? "bg-blue-50 dark:bg-blue-900/20" : ""}`}
@@ -110,16 +118,10 @@ export default function NotificationDropdown({ onClose }) {
               <div className="flex items-start gap-3">
                 <span className="text-2xl">{getNotificationIcon(n.type)}</span>
                 <div className="flex-1">
-                  <p className={`text-sm font-medium dark:text-white`}>
-                    {n.title}
-                  </p>
-                  <p className="text-sm text-gray-600 dark:text-gray-400 mt-1 line-clamp-2">
-                    {n.message}
-                  </p>
+                  <p className="text-sm font-medium dark:text-white">{n.title}</p>
+                  <p className="text-sm text-gray-600 dark:text-gray-400 mt-1 line-clamp-2">{n.message}</p>
                   <div className="flex justify-between items-center mt-2">
-                    <span className="text-xs text-gray-500 dark:text-gray-400">
-                      {getTimeAgo(n.createdAt)}
-                    </span>
+                    <span className="text-xs text-gray-500 dark:text-gray-400">{getTimeAgo(n.createdAt)}</span>
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
