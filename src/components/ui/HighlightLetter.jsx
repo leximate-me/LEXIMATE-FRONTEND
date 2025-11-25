@@ -21,8 +21,26 @@ const sizeMap = {
   "text-6xl": "text-7xl",
   "text-7xl": "text-8xl",
   "text-8xl": "text-9xl",
-  "text-9xl": "text-9xl", // límite
+  "text-9xl": "text-9xl",
 };
+
+// 🔥 NUEVO: convierte cualquier "children" a string seguro
+function normalizeChildren(children) {
+  if (typeof children === "string") return children;
+
+  if (Array.isArray(children)) {
+    return children.map(normalizeChildren).join("");
+  }
+
+  if (typeof children === "object" && children !== null) {
+    if (children.props && children.props.children) {
+      return normalizeChildren(children.props.children);
+    }
+    if (children.value) return String(children.value);
+  }
+
+  return String(children ?? "");
+}
 
 function HighlightLetter({
   children,
@@ -31,37 +49,34 @@ function HighlightLetter({
   className = "",
   fontFamily = "opendyslexic",
 }) {
-  let letters = children.split("");
+  const text = normalizeChildren(children);
 
-  // Buscar primer y último índice que NO sea espaciozz
+  let letters = text.split("");
+
   const firstCharIndex = letters.findIndex((l) => l.trim() !== "");
-  const lastCharIndex = [...letters]
-    .reverse()
-    .findIndex((l) => l.trim() !== "");
-  const adjustedLastCharIndex =
-    lastCharIndex === -1 ? -1 : letters.length - 1 - lastCharIndex;
+  const lastCharIndex =
+    letters.length -
+    [...letters].reverse().findIndex((l) => l.trim() !== "") -
+    1;
 
   return (
-    <span className={`${size} ${className}`}>
-      {children
-        ? letters.map((letter, index) => {
-          const isFirst = index === firstCharIndex;
-          const isLast = index === adjustedLastCharIndex;
+    <span className={`${size} ${className}`} style={{ fontFamily }}>
+      {letters.map((letter, index) => {
+        const isFirst = index === firstCharIndex;
+        const isLast = index === lastCharIndex;
 
-          // Si es primera o última letra, subir un nivel de tamaño
-          const appliedSize =
-            isFirst || isLast ? sizeMap[size] || size : size;
+        const appliedSize =
+          isFirst || isLast ? sizeMap[size] || size : size;
 
-          return (
-            <span
-              key={index}
-              className={`${isFirst || isLast ? `${colors[color]} font-bold tracking-more-wide` : 'tracking-more-wide'} ${fontFamily} ${appliedSize}`}
-            >
-              {letter}
-            </span>
-          );
-        })
-        : null}
+        return (
+          <span
+            key={index}
+            className={`${isFirst || isLast ? `${colors[color]} font-bold tracking-more-wide` : "tracking-more-wide"} ${appliedSize}`}
+          >
+            {letter}
+          </span>
+        );
+      })}
     </span>
   );
 }

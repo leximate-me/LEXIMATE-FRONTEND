@@ -79,10 +79,6 @@ export default function FileInput({ register, errors, setValue }) {
         ref={fileInputRef}
         onChange={handleChange}
       />
-
-      {errors.file && (
-        <span className="text-red-500 text-sm">Este campo es requerido</span>
-      )}
     </div>
   );
 }

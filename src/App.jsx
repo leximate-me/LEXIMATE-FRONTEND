@@ -43,7 +43,7 @@ function AppContent() {
               <Route path="/classes" element={<ClassPage />} />
               <Route path="/profile" element={<ProfilePage />} />
               <Route path="/:classId/task/:taskId" element={<TaskPage />} />
-              <Route path="/:classId/task/post/:commentId" element={<CommentsPage />} />
+              <Route path="/courses/:classId/post/:commentId" element={<CommentsPage />} />
             </Route>
           </Routes>
         </div>

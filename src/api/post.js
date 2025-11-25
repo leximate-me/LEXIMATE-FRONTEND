@@ -52,6 +52,7 @@ const getCommentsRequest = async (classId, postId) => {
 };
 
 const createCommentRequest = async (classId, postId, content) => {
+  console.log(content)
   try {
     const response = await axios.post(`course/${classId}/post/${postId}/comment`, { content });
     return response;

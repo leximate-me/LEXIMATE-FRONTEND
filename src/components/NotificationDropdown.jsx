@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Trash2 } from 'lucide-react';
 import { useNotifications } from '../hooks/useNotifications';
 import { useNavigate } from 'react-router-dom';
+import { BellIcon } from 'lucide-react';
 
 export default function NotificationDropdown({ onClose }) {
   const navigate = useNavigate();
@@ -33,15 +34,13 @@ export default function NotificationDropdown({ onClose }) {
   }, [onClose]);
 
   const handleNotificationClick = (notification) => {
+    console.log(notification)
     if (!notification.read) markAsRead(notification.id);
 
-    if (notification.data?.courseId) {
-      navigate(`/${notification.data.courseId}/tasks`);
-    } else if (notification.data?.taskId) {
-      navigate(`/${notification.data.courseId}/task/${notification.data.taskId}`);
-    } else if (notification.data?.postId) {
-      navigate(`/${notification.data.courseId}/task/post/${notification.data.postId}`);
-    }
+    if (notification.data.url) {
+      console.log(notification.data.url)
+      navigate(`${notification.data.url}`);
+    } 
 
     setIsVisible(false);
     setTimeout(onClose, 200);

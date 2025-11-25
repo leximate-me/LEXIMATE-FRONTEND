@@ -2,7 +2,6 @@ import axios from "./axios.js";
 
 const extractTextRequest = async (url) => {
   const newUrl = url.replace(/^\/public\//, "/");
-  console.log("Extracting text from:", newUrl);
   try {
     const response = await axios.get(
       `/tool/extract-text-from-local-url?localUrl=${newUrl}`,

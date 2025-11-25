@@ -1,9 +1,9 @@
-import { useForm } from 'react-hook-form';
-import { useParams } from 'react-router-dom';
-import { useTask } from '../context/TasksContext';
-import { useRef, useEffect } from 'react';
-import { ErrorModal } from './ui/ErrorModal';
-import FileInput from './ui/FileInput';
+import { useForm } from "react-hook-form";
+import { useParams } from "react-router-dom";
+import { useTask } from "../context/TasksContext";
+import { useRef, useEffect } from "react";
+import { ErrorModal } from "./ui/ErrorModal";
+import FileInput from "./ui/FileInput";
 
 function CreateTaskModal({ isOpen, onClose }) {
   const { classId } = useParams();
@@ -28,31 +28,29 @@ function CreateTaskModal({ isOpen, onClose }) {
 
   useEffect(() => {
     // Agrega el evento de clic en el documento
-    document.addEventListener('mousedown', handleOutsideClick);
+    document.addEventListener("mousedown", handleOutsideClick);
 
     // Limpia el evento cuando el componente se desmonte
     return () => {
-      document.removeEventListener('mousedown', handleOutsideClick);
+      document.removeEventListener("mousedown", handleOutsideClick);
     };
   }, []);
 
   // Función para manejar el envío del formulario
   const onSubmit = handleSubmit(async (data) => {
-    console.log(data.file[0]);
+    console.log('formdata', data)
     try {
       const formData = new FormData();
-      formData.append('title', data.name);
-      formData.append('description', data.description);
-      formData.append('due_date', data.dueDate);
-      formData.append('file', data.file[0]);
+      formData.append("title", data.name);
+      formData.append("description", data.description);
+      formData.append("due_date", data.dueDate);
+      formData.append("file", data.file[0]);
+      
       await createTask(formData, classId);
-      // Recargar las tareas desde el backend después de crear una nueva tarea
       await getTasks(classId);
-
-      // Cerrar el modal
       onClose();
     } catch (error) {
-      console.error('Error al crear la tarea:', error);
+      console.error("Error al crear la tarea:", error);
     }
   });
 
@@ -81,7 +79,7 @@ function CreateTaskModal({ isOpen, onClose }) {
               type="text"
               className="w-full p-2 border border-gray-300 rounded mb-4"
               placeholder="Nombre de la tarea"
-              {...register('name', { required: true })}
+              {...register("name", { required: true })}
             />
             {errors.name && (
               <span className="text-red-500">Este campo es requerido</span>
@@ -91,7 +89,7 @@ function CreateTaskModal({ isOpen, onClose }) {
             <textarea
               className="w-full p-2 border border-gray-300 rounded mb-4"
               placeholder="Descripción de la tarea"
-              {...register('description', { required: true })}
+              {...register("description", { required: true })}
             ></textarea>
             {errors.description && (
               <span className="text-red-500">Este campo es requerido</span>
@@ -101,18 +99,14 @@ function CreateTaskModal({ isOpen, onClose }) {
             <input
               type="date"
               className="w-full p-2 border border-gray-300 rounded mb-4"
-              {...register('dueDate', { required: true })}
+              {...register("dueDate", { required: true })}
             />
             {errors.dueDate && (
               <span className="text-red-500">Este campo es requerido</span>
             )}
             {/* Campo para cargar archivo */}
             <label className="block mb-2">Cargar archivo:</label>
-            <FileInput
-              register={register}
-              errors={errors}
-              setValue={setValue}
-            />
+            <FileInput register={register} setValue={setValue} />
             {/* Botones para cancelar o enviar */}
             <div className="flex justify-end mt-2">
               <button

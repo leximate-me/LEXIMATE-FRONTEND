@@ -1,63 +1,141 @@
 import React, { useState, useEffect } from 'react';
 import { ArrowRight, ArrowLeft } from 'lucide-react';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+import HighlightLetter from './ui/HighlightLetter';
 
 const CardExtractedText = ({ extractedText }) => {
   const [pages, setPages] = useState([]);
   const [currentPage, setCurrentPage] = useState(0);
 
-  // Dividir el texto en páginas según "-- x of x --"
+
+  // 🔥 USAR DIRECTAMENTE LAS PÁGINAS DEL BACKEND
   useEffect(() => {
-    if (!extractedText || extractedText.length === 0) return;
+    if (!extractedText || !extractedText.pages) return;
 
-    const fullText = extractedText.map(item => item.text).join('\n');
-    const splitPages = fullText
-      .split(/--\s*\d+\s*of\s*\d+\s*--/)
-      .map(p => p.trim())
-      .filter(p => p.length > 0);
+    const backendPages = extractedText.pages.map(p => p.text);
 
-    setPages(splitPages);
+    setPages(backendPages);
     setCurrentPage(0);
   }, [extractedText]);
 
-  const handlePrev = () => setCurrentPage(prev => Math.max(prev - 1, 0));
-  const handleNext = () => setCurrentPage(prev => Math.min(prev + 1, pages.length - 1));
+  const handlePrev = () => setCurrentPage(p => Math.max(p - 1, 0));
+  const handleNext = () => setCurrentPage(p => Math.min(p + 1, pages.length - 1));
 
-  if (!pages || pages.length === 0) {
+  if (pages.length === 0) {
     return (
       <div className="w-full box-border">
-        <div className="max-h-96 overflow-y-auto p-5 rounded-lg bg-pastelVeryLightYellow dark:bg-[#1a1a1a] shadow-[0px_8px_11px_-6px_#5c5c5c]">
+        <div className="max-h-96 overflow-y-auto p-5 rounded-lg bg-pastelVeryLightYellow dark:bg-[#1a1a1a] shadow">
           No hay texto extraído para mostrar.
         </div>
       </div>
     );
   }
 
+  // 🔥 Helpers seguros para HighlightLetter
+  const safeText = (children) =>
+    Array.isArray(children)
+      ? children.join(" ")
+      : typeof children === "string"
+      ? children
+      : "";
+
+  // 🔥 Renderers con colores rotativos por párrafo
+  const renderers = {
+    p: ({ children }) => {
+      const text = safeText(children);
+      const paragraphs = text.split("\n").filter(p => p.trim() !== "");
+
+      console.log(extractedText)
+
+      return (
+        <>
+          {paragraphs.map((para, idx) => (
+            <p
+              key={idx}
+              className="text-lg leading-relaxed mb-8 tracking-more-wide text-gray-700 dark:text-gray-300"
+              style={{ fontFamily: 'OpenDyslexic' }}
+            >
+              <HighlightLetter color='blue'>
+                {para}
+              </HighlightLetter>
+            </p>
+          ))}
+        </>
+      );
+    },
+
+    h1: ({ children }) => (
+      <h1
+        className="font-bold mb-8 tracking-more-wide text-gray-900 dark:text-gray-100"
+        style={{ fontFamily: 'OpenDyslexic' }}
+      >
+        <HighlightLetter size='text-4xl' color="green">
+          {safeText(children)}
+        </HighlightLetter>
+      </h1>
+    ),
+    h2: ({ children }) => (
+      <h2
+        className="text-3xl font-bold mb-8 tracking-more-wide text-gray-900 dark:text-gray-100"
+        style={{ fontFamily: 'OpenDyslexic' }}
+      >
+        <HighlightLetter color="red">
+          {safeText(children)}
+        </HighlightLetter>
+      </h2>
+    ),
+    h3: ({ children }) => (
+      <h3
+        className="text-2xl font-bold mb-8 tracking-more-wide text-gray-900 dark:text-gray-100"
+        style={{ fontFamily: 'OpenDyslexic' }}
+      >
+        <HighlightLetter color="blue">
+          {safeText(children)}
+        </HighlightLetter>
+      </h3>
+    ),
+
+    li: ({ children }) => (
+      <li
+        className="text-lg mb-8 tracking-more-wide text-gray-700 dark:text-gray-300"
+        style={{ fontFamily: 'OpenDyslexic' }}
+      >
+        <HighlightLetter color="red">
+          • {safeText(children)}
+        </HighlightLetter>
+      </li>
+    ),
+  };
+
   return (
     <div className="w-full box-border flex flex-col h-full">
-      {/* Contenedor fijo para el header */}
+
+      {/* Header */}
       <div className="p-5 rounded-t-lg bg-yellow-200 dark:bg-yellow-800 shadow-inner">
-        <h2 className="text-2xl font-bold text-gray-900 dark:text-white" style={{ fontFamily: 'OpenDyslexic' }}>
+        <h2
+          className="text-2xl font-bold text-gray-900 dark:text-white"
+          style={{ fontFamily: 'OpenDyslexic' }}
+        >
           Contenido Extraído
         </h2>
       </div>
 
-      {/* Contenedor con scroll y animación de deslizamiento */}
-      <div className="relative max-h-96 overflow-hidden bg-pastelVeryLightYellow dark:bg-[#1a1a1a] rounded-b-lg shadow-[0px_8px_11px_-6px_#5c5c5c]">
+      {/* Slide de páginas */}
+      <div className="relative h-96 overflow-hidden bg-pastelVeryLightYellow dark:bg-[#1a1a1a] rounded-b-lg shadow">
         <div
           className="flex transition-transform duration-500 ease-in-out"
           style={{ transform: `translateX(-${currentPage * 100}%)` }}
         >
-          {pages.map((page, index) => (
-            <div key={index} className="w-full p-5 flex-shrink-0">
-              {page.split('\n').map((line, i) => (
-                <p
-                  key={i}
-                  className="text-lg leading-relaxed text-gray-700 dark:text-gray-300 mb-2"
-                  style={{ fontFamily: 'OpenDyslexic' }}
-                >
-                  {line}
-                </p>
-              ))}
+          {pages.map((page, i) => (
+            <div key={i} className="w-full p-5 flex-shrink-0 overflow-y-auto h-96">
+
+              <ReactMarkdown
+                children={page}
+                remarkPlugins={[remarkGfm]}
+                components={renderers}
+              />
+
             </div>
           ))}
         </div>
@@ -85,6 +163,7 @@ const CardExtractedText = ({ extractedText }) => {
           <ArrowRight size={25} />
         </button>
       </div>
+
     </div>
   );
 };

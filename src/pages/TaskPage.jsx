@@ -229,6 +229,8 @@ function TaskPage({ tasks: initialTasks }) {
     };
   });
 
+  console.log("taskpage", extractedText);
+
   return (
     <div className="container mx-auto p-6">
       {isLoading ? (
@@ -762,7 +764,13 @@ function TaskPage({ tasks: initialTasks }) {
                   {/* Texto extraído */}
                   {extractedText && extractedText.length > 0 && (
                     <div className="col-span-6 row-start-2 row-span-4">
-                      <CardExtractedText extractedText={extractedText} />
+                      <CardExtractedText
+                        extractedText={
+                          Array.isArray(extractedText)
+                            ? extractedText[0]
+                            : extractedText
+                        }
+                      />
                     </div>
                   )}
                 </>
