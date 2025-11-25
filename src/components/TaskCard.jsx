@@ -72,7 +72,7 @@ function TaskCard({ tasks: initialTasks }) {
   });
 
   const handleSelectTask = (taskId) => {
-    navigate(`/course/${classId}/task/${taskId}`);
+    navigate(`/courses/${classId}/task/${taskId}`);
   };
 
   const handleDeleteTask = async (classId, taskId) => {

@@ -29,7 +29,7 @@ function CommentsBox() {
   const navigate = useNavigate();
 
   const handleSelectTask = (commentId) => {
-    navigate(`/course/${classId}/post/${commentId}`);
+    navigate(`/courses/${classId}/post/${commentId}`);
   };
 
   useEffect(() => {

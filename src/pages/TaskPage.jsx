@@ -106,7 +106,7 @@ function TaskPage({ tasks: initialTasks }) {
       // I DO NOT see `const navigate = useNavigate();`. I need to add it.
       // For now I will use window.location.href as a fallback or assume I will add navigate.
       // Wait, I see `import { useParams } from "react-router-dom";` in line 2. I need to add useNavigate to imports and component.
-      navigate(`/course/${classId}/tasks`);
+      navigate(`/courses/${classId}/tasks`);
     }
   });
 
