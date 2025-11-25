@@ -1,18 +1,19 @@
-import React, { useEffect, useState } from 'react';
-import { usePost } from '../context/PostContext';
-import { useAuth } from '../context/AuthContext';
-import { useParams } from 'react-router-dom';
-import Loading from '../components/ui/Loading';
-import { Riple } from 'react-loading-indicators';
-import DropDown from '../components/ui/DropDownButton';
-import { LuSend } from 'react-icons/lu';
-import dayjs from 'dayjs';
-import { FaCalendarAlt } from 'react-icons/fa';
-import { MdOutlineComment } from 'react-icons/md';
-import HighlightLetter from '../components/ui/HighlightLetter';
-import { FaUser } from 'react-icons/fa';
-import { div } from 'framer-motion/client';
-import { useRealTimeUpdates } from '../hooks/useRealTimeUpdates';
+import React, { useEffect, useState } from "react";
+import { usePost } from "../context/PostContext";
+import { useAuth } from "../context/AuthContext";
+import { useParams } from "react-router-dom";
+import Loading from "../components/ui/Loading";
+import { Riple } from "react-loading-indicators";
+import DropDown from "../components/ui/DropDownButton";
+import { LuSend } from "react-icons/lu";
+import dayjs from "dayjs";
+import { FaCalendarAlt } from "react-icons/fa";
+import { MdOutlineComment } from "react-icons/md";
+import HighlightLetter from "../components/ui/HighlightLetter";
+import { FaUser } from "react-icons/fa";
+import { div } from "framer-motion/client";
+import { useRealTimeUpdates } from "../hooks/useRealTimeUpdates";
+import { motion, AnimatePresence } from "framer-motion";
 
 export default function CommentsPage({ posts: initialPosts }) {
   const { profile, user } = useAuth();
@@ -27,13 +28,13 @@ export default function CommentsPage({ posts: initialPosts }) {
 
   const [post, setPost] = useState(initialPosts);
   const [loading, setLoading] = useState(true);
-  const [comment, setComment] = useState('');
+  const [comment, setComment] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
   const [comments, setComments] = useState([]);
 
   // 👇 estados para paginación
   const [currentPage, setCurrentPage] = useState(1);
-  const commentsPerPage = 5;
+  const commentsPerPage = 3;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -48,7 +49,7 @@ export default function CommentsPage({ posts: initialPosts }) {
         }
         setComments(commentsByPost[commentId] || []);
       } catch (error) {
-        console.error('Error fetching data:', error);
+        console.error("Error fetching data:", error);
       } finally {
         setLoading(false);
       }
@@ -58,27 +59,27 @@ export default function CommentsPage({ posts: initialPosts }) {
 
   // Real-time updates
   // Real-time updates
-  useRealTimeUpdates('comment_created', (data) => {
-    // Check if comment belongs to this post (commentId is actually postId in params)
-    console.log('New comment data received:', data);
+  useRealTimeUpdates("comment_created", async (data) => {
     if (String(data.postId) === String(commentId)) {
-      setComments((prev) => {
-        // Avoid duplicates
-        if (prev.some((c) => c.id === data.id)) return prev;
-        return [data, ...prev];
-      });
+      try {
+        // Refresca los comentarios para que tengan toda la info del usuario
+        await getComments(classId, commentId);
+        setComments(commentsByPost[commentId] || []);
+      } catch (error) {
+        console.error("Error refreshing comments:", error);
+      }
     }
   });
 
-  useRealTimeUpdates('comment_deleted', (data) => {
+  useRealTimeUpdates("comment_deleted", (data) => {
     const deletedId = data.commentId || data.id || data;
     setComments((prev) => prev.filter((c) => c.id !== deletedId));
   });
 
-  useRealTimeUpdates('comment_updated', (data) => {
+  useRealTimeUpdates("comment_updated", (data) => {
     if (String(data.postId) === String(commentId)) {
       setComments((prev) =>
-        prev.map((c) => (c.id === data.comment.id ? data : c))
+        prev.map((c) => (c.id === data.comment.id ? data : c)),
       );
     }
   });
@@ -89,12 +90,12 @@ export default function CommentsPage({ posts: initialPosts }) {
     setIsProcessing(true);
     try {
       await createComment(classId, commentId, comment);
-      setComment('');
+      setComment("");
       await getComments(classId, commentId);
       setComments(commentsByPost[commentId] || []);
       setCurrentPage(1); // volver a la primera página al crear nuevo
     } catch (error) {
-      console.error('Error creating comment:', error);
+      console.error("Error creating comment:", error);
     } finally {
       setIsProcessing(false);
     }
@@ -105,10 +106,10 @@ export default function CommentsPage({ posts: initialPosts }) {
     try {
       await deleteComment(classId, commentId, deletedCommentId);
       setComments((prevComments) =>
-        prevComments.filter((cmt) => cmt.id !== deletedCommentId)
+        prevComments.filter((cmt) => cmt.id !== deletedCommentId),
       );
     } catch (error) {
-      console.error('Error deleting comment:', error);
+      console.error("Error deleting comment:", error);
     } finally {
       setIsProcessing(false);
     }
@@ -119,7 +120,7 @@ export default function CommentsPage({ posts: initialPosts }) {
   const indexOfFirstComment = indexOfLastComment - commentsPerPage;
   const currentComments = comments.slice(
     indexOfFirstComment,
-    indexOfLastComment
+    indexOfLastComment,
   );
   const totalPages = Math.ceil(comments.length / commentsPerPage);
 
@@ -127,7 +128,7 @@ export default function CommentsPage({ posts: initialPosts }) {
     <div className="grid grid-cols-8  gap-4 p-4">
       {loading ? (
         <div className="h-[500px] flex justify-center items-center col-span-8">
-          {Loading('Cargando anuncio...')}
+          {Loading("Cargando anuncio...")}
         </div>
       ) : post ? (
         <>
@@ -141,19 +142,19 @@ export default function CommentsPage({ posts: initialPosts }) {
                     size="text-xl"
                     color="blue"
                   >
-                    {post.user?.people?.first_name || 'Usuario'}
+                    {post.user?.people?.first_name || "Usuario"}
                   </HighlightLetter>
                   <HighlightLetter
                     className="font-opendyslexic"
                     size="text-xl"
                     color="blue"
                   >
-                    {post.user?.people?.last_name || ''}
+                    {post.user?.people?.last_name || ""}
                   </HighlightLetter>
                 </div>
                 <p className="text-gray-400 flex items-center gap-1">
                   <FaCalendarAlt />
-                  {dayjs(post.createdAt).format('DD/MM/YYYY HH:mm')}
+                  {dayjs(post.createdAt).format("DD/MM/YYYY HH:mm")}
                 </p>
               </div>
               <div className="bg-pastelVeryLightYellow m-2 mb-4 shadow-[0_3px_8px_0px_rgba(0,0,0,0.2)] rounded-lg p-2 flex flex-col">
@@ -191,7 +192,7 @@ export default function CommentsPage({ posts: initialPosts }) {
             >
               {profile?.avatar ? (
                 <img
-                  src={profile.avatar}
+                  src={profile.avatar.file_url}
                   alt="Tu avatar"
                   className="w-12 h-12 rounded-full object-cover border border-gray-700"
                 />
@@ -237,7 +238,7 @@ export default function CommentsPage({ posts: initialPosts }) {
                     disabled={isProcessing}
                   >
                     <LuSend />
-                    {isProcessing ? 'Enviando...' : 'Enviar Comentario'}
+                    {isProcessing ? "Enviando..." : "Enviar Comentario"}
                   </button>
                 </div>
               </div>
@@ -249,150 +250,174 @@ export default function CommentsPage({ posts: initialPosts }) {
                 <Riple color="#cec702" size="large" />
               </div>
             ) : (
-              <>
-                {user && user.rol === 'student' ? (
-                  <>
-                    {currentComments.length > 0 ? (
-                      currentComments.map((cmt) => (
-                        <div
-                          className="grid grid-cols-[60px_repeat(11,minmax(0,1fr))] grid-rows-[120px] ml-4"
-                          key={cmt.id}
-                        >
-                          {cmt.user?.userFiles?.length > 0 ? (
-                            <img
-                              src={cmt.user?.userFiles[0]?.file_url}
-                              alt="Avatar"
-                              className="w-12 h-12 rounded-full object-cover border border-gray-700 col-start-1 row-start-1 self-start mt-2"
-                            />
-                          ) : (
-                            <FaUser className="w-10 h-10 p-1 text-gray-700 border-2 border-gray-700 rounded-full col-start-1 row-start-1 self-start mt-2" />
-                          )}
-                          <div
+              <AnimatePresence>
+                <>
+                  {user && user.rol === "student" ? (
+                    <>
+                      {currentComments.length > 0 ? (
+                        currentComments.map((cmt) => (
+                          <motion.div
                             key={cmt.id}
-                            className="mb-5 col-start-2 col-span-10 row-span-1 bg-pastelVeryLightYellow rounded-md shadow-[0_3px_8px_0px_rgba(0,0,0,0.3)]"
+                            initial={{ opacity: 0, y: 15 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -15 }}
+                            transition={{ duration: 0.3 }}
                           >
-                            <div className="bg-gradient-to-r from-yellow-300 to-amber-400 rounded-t-md p-2 col-span-8 mb-2 flex justify-between">
-                              <div className="md:col-span-4 md:row-start-1 md:col-start-2 flex items-center flex-wrap">
-                                <HighlightLetter
-                                  className="mx-1 font-opendyslexic truncate"
-                                  size="text-xl"
-                                  color="green"
-                                >
-                                  {cmt.user?.people?.first_name || 'Usuario'}
-                                </HighlightLetter>
-                                <HighlightLetter
-                                  className="mx-1 font-opendyslexic truncate"
-                                  size="text-xl"
-                                  color="red"
-                                >
-                                  {cmt.user?.people?.last_name || ''}
-                                </HighlightLetter>
-                                <p className="mx-2 italic text-gray-500">
-                                  {dayjs(cmt.createdAt).format(
-                                    'DD/MM/YYYY HH:mm'
-                                  )}
-                                </p>
-                              </div>
-                              {user.id === cmt.user.id && (
-                                <div className="">
-                                  <DropDown
-                                    onAbandonClass={() => handleDelete(cmt.id)}
-                                    classId={classId}
-                                    additionalParam={cmt.id}
-                                    msg="Eliminar comentario"
-                                  />
-                                </div>
-                              )}
-                            </div>
-
-                            <HighlightLetter
-                              className="m-2 font-opendyslexic"
-                              size="text-lg"
-                              color="blue"
+                            <div
+                              className="grid grid-cols-[60px_repeat(11,minmax(0,1fr))] grid-rows-[120px] ml-4"
+                              key={cmt.id}
                             >
-                              {cmt.content}
-                            </HighlightLetter>
-                          </div>
-                        </div>
-                      ))
-                    ) : (
-                      <p className="text-gray-500">
-                        No hay comentarios aún. ¡Sé el primero en comentar!
-                      </p>
-                    )}
-                  </>
-                ) : (
-                  <>
-                    {/*DOCENTE*/}
-                    {currentComments.length > 0 ? (
-                      currentComments.map((cmt) => (
-                        <div
-                          key={cmt.id}
-                          className="border-l-4 border-yellow-300 mb-5 m-4 grid grid-cols-[50px,150px,auto] grid-rows-2 md:grid-rows-2 dark:bg-[#1a1a1a] bg-white rounded-md shadow-lg dark:border-gray-500"
-                        >
-                          <div className="p-2 bg-gradient-to-r from-yellow-300 to-amber-400 rounded-t col-span-8 flex justify-between">
-                            <div className="flex items-center gap-2">
                               {cmt.user?.userFiles?.length > 0 ? (
                                 <img
                                   src={cmt.user?.userFiles[0]?.file_url}
                                   alt="Avatar"
-                                  className="w-12 h-12 rounded-full object-cover border border-gray-500 col-start-1 row-start-1 self-start mt-2"
+                                  className="w-12 h-12 rounded-full object-cover border border-gray-700 col-start-1 row-start-1 self-start mt-2"
                                 />
                               ) : (
-                                <FaUser className="w-10 h-10 rounded-full border border-gray-700 text-gray-700 p-1" />
+                                <FaUser className="w-10 h-10 p-1 text-gray-700 border-2 border-gray-700 rounded-full col-start-1 row-start-1 self-start mt-2" />
                               )}
-
-                              <div className="flex items-center flex-wrap">
-                                <HighlightLetter
-                                  className="mx-1 dark:text-white text-gray-800 truncate font-opendyslexic"
-                                  size="text-lg"
-                                  color="green"
-                                >
-                                  {cmt.user?.people?.first_name || 'Usuario'}
-                                </HighlightLetter>
-                                <HighlightLetter
-                                  className="mx-1 dark:text-white text-gray-800 truncate font-opendyslexic"
-                                  size="text-lg"
-                                  color="red"
-                                >
-                                  {cmt.user?.people?.last_name || ''}
-                                </HighlightLetter>
-                                <p className="mx-2 italic text-gray-500">
-                                  {dayjs(cmt.createdAt).format(
-                                    'DD/MM/YYYY HH:mm'
+                              <div
+                                key={cmt.id}
+                                className="mb-5 col-start-2 col-span-10 row-span-1 bg-pastelVeryLightYellow rounded-md shadow-[0_3px_8px_0px_rgba(0,0,0,0.3)]"
+                              >
+                                <div className="bg-gradient-to-r from-yellow-300 to-amber-400 rounded-t-md p-2 col-span-8 mb-2 flex justify-between">
+                                  <div className="md:col-span-4 md:row-start-1 md:col-start-2 flex items-center flex-wrap">
+                                    <HighlightLetter
+                                      className="mx-1 font-opendyslexic truncate"
+                                      size="text-xl"
+                                      color="green"
+                                    >
+                                      {cmt.user?.people?.first_name ||
+                                        "Usuario"}
+                                    </HighlightLetter>
+                                    <HighlightLetter
+                                      className="mx-1 font-opendyslexic truncate"
+                                      size="text-xl"
+                                      color="red"
+                                    >
+                                      {cmt.user?.people?.last_name || ""}
+                                    </HighlightLetter>
+                                    <p className="mx-2 italic text-gray-500">
+                                      {dayjs(cmt.createdAt).format(
+                                        "DD/MM/YYYY HH:mm",
+                                      )}
+                                    </p>
+                                  </div>
+                                  {user.id === cmt.id && (
+                                    <div className="">
+                                      <DropDown
+                                        onAbandonClass={() =>
+                                          handleDelete(cmt.id)
+                                        }
+                                        classId={classId}
+                                        additionalParam={cmt.id}
+                                        msg="Eliminar comentario"
+                                      />
+                                    </div>
                                   )}
-                                </p>
+                                </div>
+
+                                <HighlightLetter
+                                  className="m-2 font-opendyslexic"
+                                  size="text-lg"
+                                  color="blue"
+                                >
+                                  {cmt.content}
+                                </HighlightLetter>
                               </div>
                             </div>
-                            <div>
-                              <DropDown
-                                onAbandonClass={() => handleDelete(cmt.id)}
-                                classId={classId}
-                                additionalParam={cmt.id}
-                                msg="Eliminar comentario"
-                              />
-                            </div>
-                          </div>
-
-                          <div className="m-3 col-span-8 bg-pastelYellow p-4 rounded">
-                            <HighlightLetter
-                              className="mt-2 dark:text-white text-gray-800 font-opendyslexic"
-                              size="text-md"
-                              color="blue"
+                          </motion.div>
+                        ))
+                      ) : (
+                        <p className="text-gray-500">
+                          No hay comentarios aún. ¡Sé el primero en comentar!
+                        </p>
+                      )}
+                    </>
+                  ) : (
+                    <>
+                      {/*DOCENTE*/}
+                      {currentComments.length > 0 ? (
+                        currentComments.map((cmt) => (
+                          <motion.div
+                            key={cmt.id}
+                            initial={{ opacity: 0, y: 15 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -15 }}
+                            transition={{ duration: 0.3 }}
+                          >
+                            <div
+                              className="grid grid-cols-[60px_repeat(11,minmax(0,1fr))] grid-rows-[120px] ml-4"
+                              key={cmt.id}
                             >
-                              {cmt.content}
-                            </HighlightLetter>
-                          </div>
-                        </div>
-                      ))
-                    ) : (
-                      <p className="text-gray-500">
-                        No hay comentarios aún. ¡Sé el primero en comentar!
-                      </p>
-                    )}
-                  </>
-                )}
-              </>
+                              {cmt.user?.userFiles?.length > 0 ? (
+                                <img
+                                  src={cmt.user?.userFiles[0]?.file_url}
+                                  alt="Avatar"
+                                  className="w-12 h-12 rounded-full object-cover border border-gray-700 col-start-1 row-start-1 self-start mt-2"
+                                />
+                              ) : (
+                                <FaUser className="w-10 h-10 p-1 text-gray-700 border-2 border-gray-700 rounded-full col-start-1 row-start-1 self-start mt-2" />
+                              )}
+                              <div
+                                key={cmt.id}
+                                className="mb-5 col-start-2 col-span-10 row-span-1 bg-pastelVeryLightYellow rounded-md shadow-[0_3px_8px_0px_rgba(0,0,0,0.3)]"
+                              >
+                                <div className="bg-gradient-to-r from-yellow-300 to-amber-400 rounded-t-md p-2 col-span-8 mb-2 flex justify-between">
+                                  <div className="md:col-span-4 md:row-start-1 md:col-start-2 flex items-center flex-wrap">
+                                    <HighlightLetter
+                                      className="mx-1 font-opendyslexic truncate"
+                                      size="text-xl"
+                                      color="green"
+                                    >
+                                      {cmt.user?.people?.first_name ||
+                                        "Usuario"}
+                                    </HighlightLetter>
+                                    <HighlightLetter
+                                      className="mx-1 font-opendyslexic truncate"
+                                      size="text-xl"
+                                      color="red"
+                                    >
+                                      {cmt.user?.people?.last_name || ""}
+                                    </HighlightLetter>
+                                    <p className="mx-2 italic text-gray-500">
+                                      {dayjs(cmt.createdAt).format(
+                                        "DD/MM/YYYY HH:mm",
+                                      )}
+                                    </p>
+                                  </div>
+                                  <div className="">
+                                    <DropDown
+                                      onAbandonClass={() =>
+                                        handleDelete(cmt.id)
+                                      }
+                                      classId={classId}
+                                      additionalParam={cmt.id}
+                                      msg="Eliminar comentario"
+                                    />
+                                  </div>
+                                </div>
+
+                                <HighlightLetter
+                                  className="m-2 font-opendyslexic"
+                                  size="text-lg"
+                                  color="blue"
+                                >
+                                  {cmt.content}
+                                </HighlightLetter>
+                              </div>
+                            </div>
+                          </motion.div>
+                        ))
+                      ) : (
+                        <p className="text-gray-500">
+                          No hay comentarios aún. ¡Sé el primero en comentar!
+                        </p>
+                      )}
+                    </>
+                  )}
+                </>
+              </AnimatePresence>
             )}
 
             {/* 👇 Paginado */}

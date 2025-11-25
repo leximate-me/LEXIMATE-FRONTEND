@@ -100,6 +100,7 @@ function CommentsBox() {
   const indexOfLastPost = currentPage * postsPerPage;
   const indexOfFirstPost = indexOfLastPost - postsPerPage;
   const currentPosts = posts?.slice(indexOfFirstPost, indexOfLastPost);
+  
 
   return (
     <div className="bg-pastelVeryLightYellow p-5 rounded-lg shadow-md w-full h-[390px] border-l-4 border-yellow-400 overflow-y-auto">
