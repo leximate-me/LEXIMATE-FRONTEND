@@ -30,7 +30,7 @@ export const WebSocketProvider = ({ children }) => {
 
     // Determine WebSocket URL based on environment
     const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-    const host = 'localhost:8080';
+    const host = window.location.host;
     const wsUrl = `${protocol}//${host}/ws`;
 
     console.log('🔌 Connecting to WebSocket:', wsUrl);
