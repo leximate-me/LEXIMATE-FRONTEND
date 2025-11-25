@@ -14,7 +14,12 @@ export const chatService = {
     return response.data;
   },
   sendMessage: async (chatId, content) => {
-    const response = await axios.post(`/chat/${chatId}/messages`, { content });
-    return response.data;
+    try {
+      const response = await axios.post(`/chat/${chatId}/messages`, { content });
+      return response.data;
+    } catch (error) {
+      console.error('Error sending message:', error);
+      throw error;
+    }
   }
 };

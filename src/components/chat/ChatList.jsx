@@ -1,9 +1,13 @@
 import { formatDistanceToNow } from "date-fns";
-import { es } from "date-fns/locale";
+import { es, id } from "date-fns/locale";
 import { User } from "lucide-react";
+import { useAuth } from "../../context/AuthContext";
 import HighlightLetter from "../ui/HighlightLetter";
 
 const ChatList = ({ chats, activeChat, onSelectChat, loading }) => {
+
+  const { user } = useAuth();
+
   if (loading) {
     return (
       <div className="flex flex-col items-center justify-center h-full text-gray-500">
@@ -28,7 +32,7 @@ const ChatList = ({ chats, activeChat, onSelectChat, loading }) => {
   return (
     <div className="flex-1 overflow-y-auto p-3">
       {chats.map((chat) => {
-        const currentUserId = chat.users[0].id;
+        const currentUserId = user.id;
         const otherUser = chat.otherUser || { name: "Usuario", avatar: null };
         const lastMessage = chat.messages[chat.messages.length - 1];
 
