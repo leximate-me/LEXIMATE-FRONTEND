@@ -55,9 +55,9 @@ function TaskPage({ tasks: initialTasks }) {
 
   // Derived state
   const pendingCount = students.filter(
-    (s) => !submittedTasks.some((sub) => sub.user.id === s.id),
+    (s) => !submittedTasks.some((sub) => sub.user?.id === s.id),
   ).length;
-  const mySubmission = submittedTasks.find((sub) => sub.user.id === user.id);
+  const mySubmission = submittedTasks.find((sub) => sub.user?.id === user.id);
 
   useRealTimeUpdates("task_submitted", (data) => {
     console.log("🔔 Real-time submission received:", data);
@@ -242,7 +242,7 @@ function TaskPage({ tasks: initialTasks }) {
   // Crear array combinado de entregas y estudiantes
   const studentsWithSubmissions = students.map((student) => {
     const submission =
-      submittedTasks.find((sub) => sub.user.id === student.id) || null;
+      submittedTasks.find((sub) => sub.user?.id === student.id) || null;
     return {
       student,
       submission,
@@ -307,7 +307,7 @@ function TaskPage({ tasks: initialTasks }) {
                               className="flex flex-col items-center gap-2"
                             >
                               <a
-                                href={`http://localhost:8080${file.file_url}`}
+                                href={file.file_url}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="flex flex-col items-center gap-1"
@@ -356,7 +356,7 @@ function TaskPage({ tasks: initialTasks }) {
                                 >
                                   {sub.submissionFiles.length > 0 ? (
                                     <a
-                                      href={`http://localhost:8080${sub.submissionFiles[0]?.file_url}`}
+                                      href={sub.submissionFiles[0]?.file_url}
                                       target="_blank"
                                       rel="noopener noreferrer"
                                       className="flex flex-col items-center gap-1"
@@ -507,7 +507,7 @@ function TaskPage({ tasks: initialTasks }) {
                               >
                                 {sub.submissionFiles.length > 0 ? (
                                   <a
-                                    href={`http://localhost:8080${sub.submissionFiles[0]?.file_url}`}
+                                    href={sub.submissionFiles[0]?.file_url}
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className="flex flex-col items-center gap-1"
@@ -657,7 +657,7 @@ function TaskPage({ tasks: initialTasks }) {
                             >
                               {sub.submissionFiles.length > 0 ? (
                                 <a
-                                  href={`http://localhost:8080${sub.submissionFiles[0]?.file_url}`}
+                                  href={sub.submissionFiles[0]?.file_url}
                                   target="_blank"
                                   rel="noopener noreferrer"
                                   className="flex flex-col items-center gap-1"
@@ -870,7 +870,7 @@ function TaskPage({ tasks: initialTasks }) {
                               <div className="flex gap-2">
                                 {submission ? (
                                   <a
-                                    href={`http://localhost:8080${submission.submissionFiles[0]?.file_url}`}
+                                    href={`http://localhost${submission.submissionFiles[0]?.file_url}`}
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className="self-center border-2 border-[#2d4654] hover:bg-[#2d4654] hover:text-white transition-all  p-2 rounded-2xl"
