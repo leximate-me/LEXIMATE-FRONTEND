@@ -57,6 +57,8 @@ function TaskPage() {
     getTasks(classId);
   });
 
+
+
   const renderContent = () => {
     switch (selectedView) {
       case 'tasks':
@@ -69,6 +71,13 @@ function TaskPage() {
         return null;
     }
   };
+
+  useEffect(() => {
+    if (classes && selectedClassId) {
+      const foundClass = classes.find(c => String(c.id) === String(selectedClassId));
+      setCurrentClass(foundClass || null);
+    }
+  }, [classes, selectedClassId]);
 
   return (
     <div className="grid grid-cols-8 grid-rows-[150px_40px,390px] gap-4 p-4">
