@@ -44,6 +44,7 @@ const deletePostRequest = async (classId, postId) => {
 const getCommentsRequest = async (classId, postId) => {
   try {
     const response = await axios.get(`course/${classId}/post/${postId}/comment`);
+    console.log(response)
     return response;
   } catch (error) {
     console.error('Error during get comments request:', error);

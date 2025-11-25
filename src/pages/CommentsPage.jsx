@@ -14,6 +14,7 @@ import { FaUser } from "react-icons/fa";
 import { div } from "framer-motion/client";
 import { useRealTimeUpdates } from "../hooks/useRealTimeUpdates";
 import { motion, AnimatePresence } from "framer-motion";
+import { getDate } from "../utils/getDate";
 
 export default function CommentsPage({ posts: initialPosts }) {
   const { profile, user } = useAuth();
@@ -38,31 +39,28 @@ export default function CommentsPage({ posts: initialPosts }) {
 
   useEffect(() => {
     const fetchData = async () => {
-      // Only set loading if we don't have data yet
-      if (!post || !commentsByPost[commentId]) {
-        setLoading(true);
-      }
+      setLoading(true);
+
       try {
-        if (!commentsByPost[commentId]) {
-          await getComments(classId, commentId);
-        }
-        if (!post) {
-          const fetchedPost = await getPostById(classId, commentId);
-          setPost(fetchedPost);
-        }
+        const fetchedPost = await getPostById(classId, commentId);
+        await getComments(classId, commentId);
+
+        setPost(fetchedPost);
+        setComments(commentsByPost[commentId] || []);
+        setCurrentPage(1); // reset paginación al cambiar de URL
       } catch (error) {
-        console.error("Error fetching data:", error);
+        console.error("Error loading post/comments:", error);
       } finally {
         setLoading(false);
       }
     };
+
     fetchData();
-  }, [classId, commentId, getComments, getPostById]); // Removed commentsByPost and post from dependencies to avoid loop/re-fetch
+  }, [classId, commentId]); // SOLO si cambia la URL
 
   // Sync comments when commentsByPost changes
   useEffect(() => {
     if (commentsByPost[commentId]) {
-      console.log("CommentsPage: Syncing comments from Context", commentsByPost[commentId]);
       setComments(commentsByPost[commentId]);
     }
   }, [commentsByPost, commentId]);
@@ -71,11 +69,11 @@ export default function CommentsPage({ posts: initialPosts }) {
   // Real-time updates
   useRealTimeUpdates("comment_created", (payload) => {
     console.log("CommentsPage: comment_created event received (handled by PostContext)", payload);
-    
+
     // Show loading state to hide the "Usuario" glitch (missing avatar)
     // This replaces the list with the Riple loader temporarily
     setIsProcessing(true);
-    
+
     // Short delay to ensure backend consistency before fetching full data
     setTimeout(async () => {
       console.log("CommentsPage: Fetching updated comments (delayed) to get avatars...");
@@ -169,7 +167,7 @@ export default function CommentsPage({ posts: initialPosts }) {
                 </div>
                 <p className="text-gray-400 flex items-center gap-1">
                   <FaCalendarAlt />
-                  {dayjs(post.createdAt).format("DD/MM/YYYY HH:mm")}
+                  {dayjs(getDate(post)).format("DD/MM/YYYY HH:mm")}
                 </p>
               </div>
               <div className="bg-pastelVeryLightYellow m-2 mb-4 shadow-[0_3px_8px_0px_rgba(0,0,0,0.2)] rounded-lg p-2 flex flex-col">
@@ -313,9 +311,7 @@ export default function CommentsPage({ posts: initialPosts }) {
                                       {cmt.user?.people?.last_name || ""}
                                     </HighlightLetter>
                                     <p className="mx-2 italic text-gray-500">
-                                      {dayjs(cmt.createdAt).format(
-                                        "DD/MM/YYYY HH:mm",
-                                      )}
+                                      {dayjs(getDate(cmt)).format("DD/MM/YYYY HH:mm")}
                                     </p>
                                   </div>
                                   {user.id === cmt.id && (
@@ -396,9 +392,7 @@ export default function CommentsPage({ posts: initialPosts }) {
                                       {cmt.user?.people?.last_name || ""}
                                     </HighlightLetter>
                                     <p className="mx-2 italic text-gray-500">
-                                      {dayjs(cmt.createdAt).format(
-                                        "DD/MM/YYYY HH:mm",
-                                      )}
+                                      {dayjs(getDate(cmt)).format("DD/MM/YYYY HH:mm")}
                                     </p>
                                   </div>
                                   <div className="">

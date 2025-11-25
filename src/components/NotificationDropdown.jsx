@@ -34,11 +34,9 @@ export default function NotificationDropdown({ onClose }) {
   }, [onClose]);
 
   const handleNotificationClick = (notification) => {
-    console.log(notification)
     if (!notification.read) markAsRead(notification.id);
 
     if (notification.data.url) {
-      console.log(notification.data.url)
       navigate(`${notification.data.url}`);
     } 
 
