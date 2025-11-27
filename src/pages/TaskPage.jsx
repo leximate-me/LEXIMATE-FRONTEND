@@ -251,6 +251,21 @@ function TaskPage({ tasks: initialTasks }) {
 
   console.log("taskpage", extractedText);
 
+  // Helper para obtener la URL completa del archivo
+  const getFileUrl = (url) => {
+    if (!url) return "#";
+    if (url.startsWith("http")) return url;
+    
+    // Obtener la URL base del backend (eliminar /api si existe)
+    const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:4000";
+    const baseUrl = apiUrl.replace(/\/api$/, "");
+    
+    // Asegurar que la url relativa empiece con / si no lo tiene (aunque usualmente viene como public/...)
+    const relativeUrl = url.startsWith("/") ? url : `/${url}`;
+    
+    return `${baseUrl}${relativeUrl}`;
+  };
+
   return (
     <div className="container mx-auto p-6">
       {isLoading ? (
@@ -307,7 +322,7 @@ function TaskPage({ tasks: initialTasks }) {
                               className="flex flex-col items-center gap-2"
                             >
                               <a
-                                href={file.file_url}
+                                href={getFileUrl(file.file_url)}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="flex flex-col items-center gap-1"
@@ -356,7 +371,7 @@ function TaskPage({ tasks: initialTasks }) {
                                 >
                                   {sub.submissionFiles.length > 0 ? (
                                     <a
-                                      href={sub.submissionFiles[0]?.file_url}
+                                      href={getFileUrl(sub.submissionFiles[0]?.file_url)}
                                       target="_blank"
                                       rel="noopener noreferrer"
                                       className="flex flex-col items-center gap-1"
@@ -507,7 +522,7 @@ function TaskPage({ tasks: initialTasks }) {
                               >
                                 {sub.submissionFiles.length > 0 ? (
                                   <a
-                                    href={sub.submissionFiles[0]?.file_url}
+                                    href={getFileUrl(sub.submissionFiles[0]?.file_url)}
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className="flex flex-col items-center gap-1"
