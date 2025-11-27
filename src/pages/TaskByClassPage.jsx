@@ -1,6 +1,5 @@
 import { useTask } from '../context/TasksContext';
 import { useClass } from '../context/ClassContext';
-import { useLocation } from "react-router-dom";
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import TaskCard from '../components/TaskCard';
@@ -16,7 +15,6 @@ import People from '../components/People';
 import { MdOutlineSchool } from "react-icons/md";
 import HighlightLetter from '../components/ui/HighlightLetter';
 import { useRealTimeUpdates } from '../hooks/useRealTimeUpdates';
-import { use } from 'react';
 
 function TaskPage() {
   const { courseId: classId } = useParams();

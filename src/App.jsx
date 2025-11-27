@@ -19,6 +19,7 @@ import ProfilePage from './pages/AccountSettingsPage';
 import TaskPage from './pages/TaskPage';
 import CommentsPage from './pages/CommentsPage';
 import { ToolProvider } from './context/ToolContext';
+import AdminDashboard from './pages/AdminDashboard';
 import ModalVerification from './components/ui/ModalVerification';
 import ChatWindow from './components/chat/ChatWindow';
 
@@ -44,6 +45,7 @@ function AppContent() {
               <Route path="/profile" element={<ProfilePage />} />
               <Route path="/courses/:courseId/task/:taskId" element={<TaskPage />} />
               <Route path="/courses/:courseId/post/:commentId" element={<CommentsPage />} />
+              <Route path="/admin-dashboard" element={<AdminDashboard />} />
             </Route>
           </Routes>
         </div>

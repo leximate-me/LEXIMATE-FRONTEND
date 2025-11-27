@@ -1,4 +1,4 @@
-import { get } from 'react-hook-form';
+import { get, set } from 'react-hook-form';
 import {
   registerRequest,
   loginRequest,
@@ -7,6 +7,8 @@ import {
   verifyEmailRequest,
   getProfileRequest,
   updateUserRequest,
+  assignRoleRequest,
+  getUnverifiedUsersRequest
 } from '../api/auth';
 import { createContext, useState, useContext, useEffect } from 'react';
 
@@ -28,6 +30,7 @@ const AuthProvider = ({ children }) => {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
   const [profile, setProfile] = useState(null);
+  const [unverifiedUsers, setUnverifiedUsers] = useState([]);
 
   const signUp = async (user) => {
     try {
@@ -52,7 +55,7 @@ const AuthProvider = ({ children }) => {
       await getProfile();
       setError(null);
     } catch (error) {
-      const backendErrorCode= error?.status;
+      const backendErrorCode = error?.status;
 
       // Si el backend dice "Invalid credentials"
       if (backendErrorCode === 401 || backendErrorCode === 400) {
@@ -133,6 +136,37 @@ const AuthProvider = ({ children }) => {
     return profile;
   };
 
+  const assignRole = async (data) => {
+    try {
+      const res = await assignRoleRequest(data);
+
+      // Si el backend respondió bien, devolvemos true
+      return res?.status === 200;
+    } catch (error) {
+      console.log(error);
+      return false;
+    }
+  };
+
+  const getUnverifiedUsers = async () => {
+    try {
+      const res = await getUnverifiedUsersRequest();
+      console.log('Unverified users after assignRole:', res.data);
+
+      // Asegurar que siempre haya un array válido
+      const users = Array.isArray(res.data) ? res.data : [];
+
+      setUnverifiedUsers(users);
+
+      return users;
+    } catch (error) {
+      console.log(error);
+      setUnverifiedUsers([]); // evita crasheos
+      return [];
+    }
+  };
+
+
   useEffect(() => {
     updateUserFromToken();
   }, []);
@@ -152,6 +186,10 @@ const AuthProvider = ({ children }) => {
         getProfile,
         profile,
         updateUser,
+        assignRole,
+        getUnverifiedUsers,
+        unverifiedUsers,
+        setUnverifiedUsers
       }}
     >
       {children}

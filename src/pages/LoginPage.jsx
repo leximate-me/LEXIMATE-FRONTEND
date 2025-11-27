@@ -14,7 +14,7 @@ function LoginPage() {
     handleSubmit,
     formState: { errors },
   } = useForm();
-  const { signIn, isAuthenticated, error, clearError } = useAuth();
+  const { signIn, isAuthenticated, error, clearError, user } = useAuth();
   const navigate = useNavigate();
 
   const [isLoading, setIsLoading] = useState(false);
@@ -26,10 +26,15 @@ function LoginPage() {
   });
 
   useEffect(() => {
-    if (isAuthenticated) {
-      navigate('/courses');
+    if (isAuthenticated && user) {
+      if (user.rol === "admin") {
+        navigate("/admin-dashboard");
+      } else {
+        navigate("/courses");
+      }
     }
-  }, [isAuthenticated, navigate]);
+  }, [isAuthenticated, user, navigate]);
+
 
   return (
     <>
