@@ -40,7 +40,7 @@ const ChatList = ({ chats, activeChat, onSelectChat, loading }) => {
           <div
             key={chat.id}
             onClick={() => onSelectChat(chat)}
-            className={`bg-pastelVeryLightYellow rounded-lg shadow-md flex items-center gap-3 p-3 cursor-pointer transition-colors border-b hover:bg-pastelYellow`}
+            className={`bg-pastelVeryLightYellow rounded-lg shadow-md flex items-center gap-3 p-3 cursor-pointer transition-colors border-b hover:bg-pastelYellow relative`}
           >
             <div className="relative flex-shrink-0">
               {otherUser.avatar ? (
@@ -54,7 +54,6 @@ const ChatList = ({ chats, activeChat, onSelectChat, loading }) => {
                   <User className="w-6 h-6 text-gray-500 dark:text-gray-300" />
                 </div>
               )}
-              {/* Online status indicator could go here */}
             </div>
 
             <div className="flex-1 min-w-0">
@@ -71,15 +70,19 @@ const ChatList = ({ chats, activeChat, onSelectChat, loading }) => {
                   </span>
                 )}
               </div>
-              <div className="flex">
+              <div className="flex justify-between items-center">
                 {currentUserId === lastMessage?.senderId ? (
-                  <p className="text-sm italic text-gray-600 dark:text-gray-400 mr-2">
+                  <p className="text-sm italic text-gray-600 dark:text-gray-400 mr-2 truncate">
                     Tu: {lastMessage ? lastMessage.content : "Iniciar conversación"}
                   </p>
                 ) : (
-                  <p className="text-sm text-black dark:text-gray-400 truncate">
+                  <p className={`text-sm truncate ${chat.unreadCount > 0 ? 'font-bold text-gray-900 dark:text-white' : 'text-gray-600 dark:text-gray-400'}`}>
                     {lastMessage ? lastMessage.content : "Iniciar conversación"}
                   </p>
+                )}
+
+                {chat.unreadCount > 0 && (
+                  <span className="bg-red-500 rounded-full w-3 h-3 ml-2"></span>
                 )}
               </div>
             </div>

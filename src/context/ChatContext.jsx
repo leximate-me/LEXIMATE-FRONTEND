@@ -49,11 +49,11 @@ export const ChatProvider = ({ children }) => {
           ...chat,
           otherUser: other
             ? {
-                id: other.id,
-                name:
-                  `${firstName} ${lastName}`.trim() || "Usuario Desconocido",
-                avatar,
-              }
+              id: other.id,
+              name:
+                `${firstName} ${lastName}`.trim() || "Usuario Desconocido",
+              avatar,
+            }
             : { id: null, name: "Usuario Desconocido", avatar: null },
         };
       });
@@ -125,7 +125,7 @@ export const ChatProvider = ({ children }) => {
         );
 
         if (existingChat) {
-          setActiveChat(existingChat);
+          handleSelectChat(existingChat);
           return existingChat;
         }
 
@@ -133,7 +133,7 @@ export const ChatProvider = ({ children }) => {
 
         const processedChat = processChats([chat])[0];
 
-        setActiveChat(processedChat);
+        handleSelectChat(processedChat);
         setChats((prev) => [...(prev || []), processedChat]);
 
         return processedChat;
@@ -144,8 +144,27 @@ export const ChatProvider = ({ children }) => {
     [chats, fetchChats, processChats]
   );
 
+  // Wrapper for setActiveChat to handle markAsRead
+  const handleSelectChat = async (chat) => {
+    setActiveChat(chat);
+    if (chat && chat.unreadCount > 0) {
+      // Optimistic update
+      setChats(prev => prev.map(c =>
+        c.id === chat.id ? { ...c, unreadCount: 0 } : c
+      ));
+
+      try {
+        await chatService.markAsRead(chat.id);
+      } catch (error) {
+        console.error("Error marking chat as read:", error);
+        // Revert if error? For now, keep optimistic
+      }
+    }
+  };
+
   useEffect(() => {
     const handleIncomingMessage = (message) => {
+      // If chat is active, append message
       if (activeChat && activeChat.id === message.chatId) {
         setMessages((prevMessages) => {
           if (prevMessages.some((m) => m.id === message.id)) {
@@ -153,6 +172,15 @@ export const ChatProvider = ({ children }) => {
           }
           return [...prevMessages, message];
         });
+        // Mark as read immediately if active
+        chatService.markAsRead(message.chatId).catch(console.error);
+      } else {
+        // If not active, increment unread count in chat list
+        setChats(prev => prev.map(c =>
+          c.id === message.chatId
+            ? { ...c, unreadCount: (c.unreadCount || 0) + 1, messages: [...c.messages, message] }
+            : c
+        ));
       }
     };
 
@@ -163,12 +191,15 @@ export const ChatProvider = ({ children }) => {
     };
   }, [activeChat, on, off, setMessages]);
 
+  const totalUnreadCount = chats.reduce((acc, chat) => acc + (chat.unreadCount || 0), 0);
+
   const value = {
     isOpen,
     activeChat,
-    setActiveChat,
+    setActiveChat: handleSelectChat, // Use our wrapper
     chats,
     loadingChats,
+    totalUnreadCount, // Expose total unread count
     fetchChats,
     toggleChat,
     openChat,

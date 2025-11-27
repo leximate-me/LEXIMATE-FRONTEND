@@ -15,7 +15,7 @@ function NavBar() {
   const { isAuthenticated, logOut, user, getProfile, profile } = useAuth();
   const location = useLocation();
   const { unreadCount } = useNotifications();
-  const { toggleChat } = useChat();
+  const { toggleChat, totalUnreadCount } = useChat();
 
   const [isOpen, setIsOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
@@ -132,6 +132,9 @@ function NavBar() {
                       <button onClick={toggleChat}>
                         <Send className="w-11 h-11 text-gray-700 border border-gray-700 rounded-full p-2 hover:bg-gray-700 hover:text-white transition duration-300" />
                       </button>
+                      {totalUnreadCount > 0 && (
+                        <span className="absolute top-0 right-0 transform translate-x-[-2px] -translate-y-[-2px] bg-red-600 rounded-full h-3 w-3 border-2 border-white"></span>
+                      )}
                     </div>
                   )}
 

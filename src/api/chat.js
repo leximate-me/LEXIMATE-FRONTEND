@@ -21,5 +21,9 @@ export const chatService = {
       console.error('Error sending message:', error);
       throw error;
     }
+  },
+  markAsRead: async (chatId) => {
+    const response = await axios.patch(`/chat/${chatId}/read`);
+    return response.data;
   }
 };
