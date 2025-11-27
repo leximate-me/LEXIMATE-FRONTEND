@@ -16,6 +16,7 @@ const ChatWindow = () => {
     chats,
     loadingChats,
     fetchChats,
+    onlineUsers,
   } = useChat();
 
   useEffect(() => {
@@ -66,6 +67,7 @@ const ChatWindow = () => {
               activeChat={activeChat}
               onSelectChat={setActiveChat}
               loading={loadingChats}
+              onlineUsers={onlineUsers}
             />
           )}
         </div>

@@ -24,6 +24,7 @@ export const ChatProvider = ({ children }) => {
   const [activeChat, setActiveChat] = useState(null);
   const [chats, setChats] = useState([]);
   const [loadingChats, setLoadingChats] = useState(false);
+  const [onlineUsers, setOnlineUsers] = useState([]); // New state for online users
   const { user } = useAuth();
   const { on, off } = useWebSocketContext();
 
@@ -184,10 +185,31 @@ export const ChatProvider = ({ children }) => {
       }
     };
 
+    const handleUserOnline = ({ userId }) => {
+      console.log("🟢 User Online Event:", userId);
+      setOnlineUsers(prev => [...new Set([...prev, String(userId)])]);
+    };
+
+    const handleUserOffline = ({ userId }) => {
+      console.log("🔴 User Offline Event:", userId);
+      setOnlineUsers(prev => prev.filter(id => id !== String(userId)));
+    };
+
+    const handleOnlineUsers = ({ userIds }) => {
+      console.log("👥 Initial Online Users:", userIds);
+      setOnlineUsers(userIds.map(id => String(id)));
+    };
+
     on("chat_message", handleIncomingMessage);
+    on("user_online", handleUserOnline);
+    on("user_offline", handleUserOffline);
+    on("online_users", handleOnlineUsers);
 
     return () => {
       off("chat_message", handleIncomingMessage);
+      off("user_online", handleUserOnline);
+      off("user_offline", handleUserOffline);
+      off("online_users", handleOnlineUsers);
     };
   }, [activeChat, on, off, setMessages]);
 
@@ -199,6 +221,7 @@ export const ChatProvider = ({ children }) => {
     setActiveChat: handleSelectChat, // Use our wrapper
     chats,
     loadingChats,
+    onlineUsers, // Expose online users
     totalUnreadCount, // Expose total unread count
     fetchChats,
     toggleChat,

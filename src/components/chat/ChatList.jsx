@@ -4,7 +4,7 @@ import { User } from "lucide-react";
 import { useAuth } from "../../context/AuthContext";
 import HighlightLetter from "../ui/HighlightLetter";
 
-const ChatList = ({ chats, activeChat, onSelectChat, loading }) => {
+const ChatList = ({ chats, activeChat, onSelectChat, loading, onlineUsers = [] }) => {
 
   const { user } = useAuth();
 
@@ -35,6 +35,7 @@ const ChatList = ({ chats, activeChat, onSelectChat, loading }) => {
         const currentUserId = user.id;
         const otherUser = chat.otherUser || { name: "Usuario", avatar: null };
         const lastMessage = chat.messages[chat.messages.length - 1];
+        const isOnline = onlineUsers.includes(String(otherUser.id));
 
         return (
           <div
