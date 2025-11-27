@@ -34,6 +34,13 @@ function TaskPage() {
     getClasses();
   }, [classId]);
 
+  useEffect(() => {
+    if (classes.length > 0) {
+      const foundClass = classes.find((c) => String(c.id) === String(classId));
+      setCurrentClass(foundClass);
+    }
+  }, [classes, classId]);
+
   const toggleSidebar = () => {
     setIsSidebarOpen((prev) => !prev);
   };
