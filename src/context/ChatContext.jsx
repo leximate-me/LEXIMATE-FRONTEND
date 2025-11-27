@@ -46,8 +46,13 @@ export const ChatProvider = ({ children }) => {
         const avatar =
           other?.userFiles?.[0]?.file_url || other?.avatar?.file_url || null;
 
+        const messages = (chat.messages || []).sort((a, b) =>
+          new Date(a.createdAt) - new Date(b.createdAt)
+        );
+
         return {
           ...chat,
+          messages,
           otherUser: other
             ? {
               id: other.id,
