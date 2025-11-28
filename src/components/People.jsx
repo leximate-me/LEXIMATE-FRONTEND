@@ -43,6 +43,9 @@ function People() {
     startChatWithUser(userId); // Ahora abrirá el chat y cargará mensajes si existen
   };
 
+  const teachers = people?.filter(p => p.role.name === "teacher") || [];
+  const students = people?.filter(p => p.role.name === "student") || [];
+
   return (
     <div className="mx-5 md:mx-0">
       {isLoading ? (
@@ -54,20 +57,24 @@ function People() {
           {people?.length === 0 ? (
             <p className="dark:text-white">No hay usuarios en esta clase.</p>
           ) : (
-            <ul className="bg-white rounded-lg p-5 shadow-md">
-              {people?.map((person) => {
-                const isMe = person.id === currentUser.id;
-                return (
-                  <React.Fragment key={person.id}>
-                    {person.role.name === "teacher" ? (
-                      <>
-                        <HighlightLetter
-                          className="font-opendyslexic font-semibold"
-                          size="text-lg"
+            <div className="bg-white rounded-lg p-5 shadow-md space-y-6 h-[390px] overflow-y-auto">
+              {/* Profesores */}
+              {teachers.length > 0 && (
+                <div className="bg-pastelVeryLightYellow p-2 rounded-lg shadow-md">
+                  <HighlightLetter
+                    className="font-opendyslexic font-semibold"
+                    size="text-lg"
+                  >
+                    Docente/s:
+                  </HighlightLetter>
+                  <ul className="mt-2 space-y-2">
+                    {teachers.map((person) => {
+                      const isMe = person.id === currentUser.id;
+                      return (
+                        <li
+                          key={person.id}
+                          className="mb-4 p-4 rounded-lg shadow-md bg-white flex justify-between items-center"
                         >
-                          Docente/s:
-                        </HighlightLetter>
-                        <li className="mb-4 p-4 rounded-lg shadow-sm bg-pastelYellow flex justify-between items-center">
                           <p className="dark:text-white font-semibold">
                             {person.people.first_name} {person.people.last_name}
                           </p>
@@ -81,20 +88,33 @@ function People() {
                             </button>
                           )}
                         </li>
-                      </>
-                    ) : (
-                      <>
-                        <HighlightLetter
-                          className="font-opendyslexic font-semibold"
-                          size="text-lg"
+                      );
+                    })}
+                  </ul>
+                </div>
+              )}
+
+              {/* Estudiantes */}
+              {students.length > 0 ? (
+                <div className="bg-pastelVeryLightYellow shadow-md rounded-lg p-2">
+                  <HighlightLetter
+                    className="font-opendyslexic font-semibold"
+                    size="text-lg"
+                  >
+                    Estudiantes:
+                  </HighlightLetter>
+                  <ul className="mt-2 space-y-2">
+                    {students.map((person) => {
+                      const isMe = person.id === currentUser.id;
+                      return (
+                        <li
+                          key={person.id}
+                          className="mb-4 p-4 rounded-lg shadow-md bg-white flex justify-between items-center"
                         >
-                          Estudiantes:
-                        </HighlightLetter>
-                        <li className="mb-4 p-4 rounded-lg shadow-sm bg-pastelYellow flex justify-between items-center">
                           <p className="dark:text-white font-semibold">
                             {person.people.first_name} {person.people.last_name}
                           </p>
-                          {!isMe && (
+                          {!isMe && person.role.name !== 'student' && (
                             <button
                               onClick={() => handleChatClick(person.id)}
                               className="p-2 bg-blue-100 hover:bg-blue-200 text-blue-600 rounded-full transition-colors"
@@ -104,12 +124,14 @@ function People() {
                             </button>
                           )}
                         </li>
-                      </>
-                    )}
-                  </React.Fragment>
-                );
-              })}
-            </ul>
+                      );
+                    })}
+                  </ul>
+                </div>
+              ) : (
+                <h1>Aún no hay estudiantes</h1>
+              )}
+            </div>
           )}
         </>
       )}

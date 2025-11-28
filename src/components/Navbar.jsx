@@ -82,7 +82,7 @@ function NavBar() {
     }
   };
 
-
+  console.log('navbar', user)
 
   return (
     <>
@@ -117,17 +117,23 @@ function NavBar() {
         {isAuthenticated && (
           <div className="flex flex-col-reverse items-center md:flex-row flex-1 md:justify-end">
             <div className={`md:absolute w-full flex flex-col justify-center gap-8 md:gap-20 md:flex-row items-center order-2 md:order-1 ${isOpen ? "flex" : "hidden"} md:flex`}>
-              <Link to="/courses">
-                <button className="px-3 py-2 text-[#2d4654] rounded-2xl hover:bg-[#2d4654] hover:text-white transition-all">
-                  <HighlightLetter color="lightGreen" className="font-opendyslexic font-bold" size="text-xl">Clases</HighlightLetter>
-                </button>
-              </Link>
+
+              {user.rol !== "guest" && user.rol !== "admin" && (
+                <>
+                  <Link to="/courses">
+                    <button className="px-3 py-2 text-[#2d4654] rounded-2xl hover:bg-[#2d4654] hover:text-white transition-all">
+                      <HighlightLetter color="lightGreen" className="font-opendyslexic font-bold" size="text-xl">Clases</HighlightLetter>
+                    </button>
+                  </Link>
+                </>
+              )}
             </div>
 
             <div className={`z-50 flex-col-reverse md:flex-row items-center gap-5 order-1 md:order-2 mt-3 md:m-0 ${isOpen ? "flex" : "hidden"} md:flex px-5`}>
               <div className="flex flex-col gap-5 md:flex-row items-center">
                 <div className="flex gap-2 px-3">
-                  {user.rol !== "guest" && (
+
+                  {user.rol !== "guest" && user.rol !== "admin" && (
                     <div className="w-fit h-fit relative rounded-full cursor-pointer">
                       <button onClick={toggleChat}>
                         <Send className="w-11 h-11 text-gray-700 border border-gray-700 rounded-full p-2 hover:bg-gray-700 hover:text-white transition duration-300" />
@@ -138,7 +144,7 @@ function NavBar() {
                     </div>
                   )}
 
-                  {user.rol !== "guest" && (
+                  {user.rol !== "guest" && user.rol !== "admin" && (
                     <div className="w-fit h-fit relative rounded-full cursor-pointer">
                       <button onClick={handleNotificationsToggle}>
                         <BellIcon className="w-11 h-11 text-gray-700 border border-gray-700 rounded-full p-2 hover:bg-gray-700 hover:text-white transition duration-300" />
@@ -149,7 +155,7 @@ function NavBar() {
                     </div>
                   )}
 
-                  {user.rol !== "guest" && (
+                  {user.rol !== "guest" && user.rol !== "admin" && (
                     <div className="w-fit h-fit relative rounded-full cursor-pointer">
                       <button onClick={() => setShowChatbot(!showChatbot)}>
                         <Bot className="w-11 h-11 text-gray-700 border border-gray-700 rounded-full p-2 hover:bg-gray-700 hover:text-white transition duration-300" />

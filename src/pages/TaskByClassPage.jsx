@@ -150,7 +150,7 @@ function TaskPage() {
           </div>
 
           {/* Botón crear tarea */}
-          {user && user.rol === 'teacher' && (
+          {user && user.rol === 'teacher' && selectedView === 'tasks' && (
             <div className="fixed bottom-8 right-8">
               <button
                 onClick={() => setShowModal(true)}

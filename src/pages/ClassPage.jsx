@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import ClassCardTeacher from '../components/ClassCardTeacher';
 import ClassCardStudent from '../components/ClassCardStudent';
 import { useClass } from '../context/ClassContext';
@@ -17,6 +17,8 @@ function ClassPage() {
   const { getClasses, classes, isLoading, setClasses, isCreating } = useClass();
   const [showModal, setShowModal] = useState(false);
   const [showJoinModal, setShowJoinModal] = useState(false);
+  const [showOptions, setShowOptions] = useState(false);
+  const dropdownRef = useRef(null);
   const { user } = useAuth();
 
   // PAGINACIÓN
@@ -68,6 +70,19 @@ function ClassPage() {
     setClasses((prev) => prev.map((c) => (c.id === data.course.id ? data.course : c)));
   });
 
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setShowOptions(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
   return (
     <div className="flex flex-col justify-center items-center h-[calc(100vh-80px)] p-2">
       {isLoading || isCreating ? (
@@ -117,21 +132,42 @@ function ClassPage() {
                 </AnimatePresence>
               </div>
 
-              {/* BOTÓN CREAR */}
-              <div className="fixed bottom-8 right-8">
-                <button
-                  onClick={() => setShowModal(true)}
-                  className="relative w-14 h-14 bg-blue-600 text-white rounded-full p-4 hover:bg-blue-700 transition duration-200 group"
-                >
-                  <FaPlus className="absolute left-5 bottom-5" />
-                  <span className="absolute bottom-full mb-2 w-20 left-1/2 -translate-x-1/2 bg-gray-800 text-white text-xs rounded py-1 px-2 opacity-0 transition-opacity duration-200 pointer-events-none group-hover:opacity-100">
-                    Crear una clase
-                  </span>
-                </button>
+              {/* BOTÓN CREAR/UNIRSE */}
+              <div className="fixed bottom-8 right-8" ref={dropdownRef}>
+                <div className="relative">
+                  <button
+                    onClick={() => setShowOptions(prev => !prev)}
+                    className="relative w-14 h-14 bg-blue-600 text-white rounded-full p-4 hover:bg-blue-700 transition duration-200 flex items-center justify-center"
+                  >
+                    <FaPlus className="text-xl" />
+                  </button>
+
+                  {/* Dropdown de opciones */}
+                  {showOptions && (
+                    <div className="absolute bottom-full mb-2 right-0 flex flex-col gap-2 shadow-lg rounded-md overflow-hidden z-50 w-56">
+                      <button
+                        onClick={() => { setShowModal(true); setShowOptions(false); }}
+                        className="px-4 py-2 bg-gray-200 hover:bg-blue-600 hover:text-white transition rounded animate-fadeIn shadow-md"
+                      >
+                        Crear clase
+                      </button>
+                      <button
+                        onClick={() => { setShowJoinModal(true); setShowOptions(false); }}
+                        className="px-4 py-2 bg-gray-200 hover:bg-blue-600 hover:text-white transition rounded animate-fadeIn shadow-md"
+                      >
+                        Unirse a clase
+                      </button>
+                    </div>
+                  )}
+                </div>
               </div>
               <CreateClassModal
                 isOpen={showModal}
                 onClose={() => setShowModal(false)}
+              />
+              <JoinClassModal
+                isOpen={showJoinModal}
+                onClose={() => setShowJoinModal(false)}
               />
             </>
           ) : user && user.rol === 'student' ? (
