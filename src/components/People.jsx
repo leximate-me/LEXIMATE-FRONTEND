@@ -46,6 +46,8 @@ function People() {
   const teachers = people?.filter(p => p.role.name === "teacher") || [];
   const students = people?.filter(p => p.role.name === "student") || [];
 
+  console.log(currentUser)
+
   return (
     <div className="mx-5 md:mx-0">
       {isLoading ? (
@@ -95,7 +97,8 @@ function People() {
               )}
 
               {/* Estudiantes */}
-              {students.length > 0 ? (
+              {/* Estudiantes */}
+              {students.length > 0 && (
                 <div className="bg-pastelVeryLightYellow shadow-md rounded-lg p-2">
                   <HighlightLetter
                     className="font-opendyslexic font-semibold"
@@ -106,6 +109,13 @@ function People() {
                   <ul className="mt-2 space-y-2">
                     {students.map((person) => {
                       const isMe = person.id === currentUser.id;
+
+                      // Mostrar botón solo si:
+                      // - Current user es docente
+                      // - Current user no es la misma persona
+                      const canMessage =
+                        !isMe && currentUser.rol === 'teacher';
+
                       return (
                         <li
                           key={person.id}
@@ -114,7 +124,7 @@ function People() {
                           <p className="dark:text-white font-semibold">
                             {person.people.first_name} {person.people.last_name}
                           </p>
-                          {!isMe && person.role.name !== 'student' && (
+                          {canMessage && (
                             <button
                               onClick={() => handleChatClick(person.id)}
                               className="p-2 bg-blue-100 hover:bg-blue-200 text-blue-600 rounded-full transition-colors"
@@ -128,8 +138,6 @@ function People() {
                     })}
                   </ul>
                 </div>
-              ) : (
-                <h1>Aún no hay estudiantes</h1>
               )}
             </div>
           )}
