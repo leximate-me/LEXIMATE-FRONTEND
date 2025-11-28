@@ -247,22 +247,23 @@ function TaskPage({ tasks: initialTasks }) {
       student,
       submission,
     };
-  });
 
-  console.log("taskpage", extractedText);
+  });
+  console.log("studentsWithSubmissions", studentsWithSubmissions);
+
 
   // Helper para obtener la URL completa del archivo
   const getFileUrl = (url) => {
     if (!url) return "#";
     if (url.startsWith("http")) return url;
-    
+
     // Obtener la URL base del backend (eliminar /api si existe)
     const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:4000";
     const baseUrl = apiUrl.replace(/\/api$/, "");
-    
+
     // Asegurar que la url relativa empiece con / si no lo tiene (aunque usualmente viene como public/...)
     const relativeUrl = url.startsWith("/") ? url : `/${url}`;
-    
+
     return `${baseUrl}${relativeUrl}`;
   };
 
@@ -883,7 +884,7 @@ function TaskPage({ tasks: initialTasks }) {
                                 </p>
                               </div>
                               <div className="flex gap-2">
-                                {submission ? (
+                                {submission?.submissionFiles?.length > 0 ? (
                                   <a
                                     href={`http://localhost${submission.submissionFiles[0]?.file_url}`}
                                     target="_blank"
@@ -920,19 +921,24 @@ function TaskPage({ tasks: initialTasks }) {
                                   </>
                                 )}
 
-                                {(!submission ||
-                                  submission.qualification === null) && (
-                                  <button
-                                    className="px-3 py-2 text-white bg-[#2d4654] rounded-2xl hover:bg-[#22343f] transition-all"
-                                    onClick={() => {
-                                      setSelectedSubmission(
-                                        submission || { user: student },
-                                      );
-                                      setQualifyModalOpen(true);
-                                    }}
-                                  >
-                                    Calificar
-                                  </button>
+                                {!isPastDue() ? (
+                                  null
+                                ) : (
+                                  <>
+                                    {(!submission || submission.qualification === null && isPastDue()) && (
+                                      <button
+                                        className="px-3 py-2 text-white bg-[#2d4654] rounded-2xl hover:bg-[#22343f] transition-all"
+                                        onClick={() => {
+                                          setSelectedSubmission(
+                                            submission || { user: student },
+                                          );
+                                          setQualifyModalOpen(true);
+                                        }}
+                                      >
+                                        Calificar
+                                      </button>
+                                    )}
+                                  </>
                                 )}
 
                                 {submission &&

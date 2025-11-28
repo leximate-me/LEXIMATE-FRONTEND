@@ -26,6 +26,7 @@ export default function QualifyTaskModal({ open, onClose, onSubmit }) {
             onChange={(e) => setRating(Number(e.target.value))}
             className="border rounded-lg p-2 anitame-fadeIn"
           >
+            <option value={0} disabled>Seleccione una nota</option>
             <option value={1}>1</option>
             <option value={2}>2</option>
             <option value={3}>3</option>

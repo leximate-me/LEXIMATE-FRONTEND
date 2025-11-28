@@ -82,7 +82,6 @@ function NavBar() {
     }
   };
 
-  console.log('navbar', user)
 
   return (
     <>
