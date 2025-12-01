@@ -46,7 +46,8 @@ function TaskPage() {
   // Real-time updates
   useRealTimeUpdates('task_created', (data) => {
     // The payload uses courseId, not classId
-    const incomingClassId = data.courseId || data.classId;
+    const newTask = data.task || data;
+    const incomingClassId = newTask.courseId || newTask.classId;
     if (String(incomingClassId) === String(classId)) {
       getTasks(classId);
     }

@@ -52,12 +52,12 @@ function ClassPage() {
   // Real-time updates
   // Real-time updates
   useRealTimeUpdates('course_created', (data) => {
-    // Check if the user is involved (e.g. teacher created it, or student added?)
-    // For simplicity, if we receive the event, we assume we should see it 
-    // (backend should filter who receives the event)
+    // The data received is the course object itself because websocket service unwraps it
+    const newCourse = data.course || data;
+
     setClasses((prev) => {
-      if (prev.some(c => c.id === data.course.id)) return prev;
-      return [data.course, ...prev];
+      if (prev.some(c => c.id === newCourse.id)) return prev;
+      return [newCourse, ...prev];
     });
   });
 
@@ -67,7 +67,8 @@ function ClassPage() {
   });
 
   useRealTimeUpdates('course_updated', (data) => {
-    setClasses((prev) => prev.map((c) => (c.id === data.course.id ? data.course : c)));
+    const updatedCourse = data.course || data;
+    setClasses((prev) => prev.map((c) => (c.id === updatedCourse.id ? updatedCourse : c)));
   });
 
   useEffect(() => {

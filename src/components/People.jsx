@@ -34,7 +34,8 @@ function People() {
   }, [classId, getUsersByClass]);
 
   useRealTimeUpdates("course_updated", (data) => {
-    if (String(data.course.id) === String(classId)) {
+    const updatedCourse = data.course || data;
+    if (String(updatedCourse.id) === String(classId)) {
       fetchUsers();
     }
   });
