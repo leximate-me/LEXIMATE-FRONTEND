@@ -82,6 +82,14 @@ export const ChatProvider = ({ children }) => {
     }
   }, [processChats]);
 
+  // <--- MODIFICACIÓN 5: AÑADIR este useEffect para la carga inicial de chats
+  useEffect(() => {
+    if (user && user.id) {
+      fetchChats();
+    }
+  }, [user?.id, fetchChats]);
+  // NOTA: fetchChats es una dependencia porque es una función de dependencia de useCallback
+
   const setMessages = (updater) => {
     setActiveChat((prev) => {
       if (!prev) return prev;

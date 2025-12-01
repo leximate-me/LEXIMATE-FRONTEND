@@ -1,13 +1,15 @@
-import { useState, useEffect, useCallback } from 'react';
-import { useWebSocket } from './useWebSocket';
-import { notificationService } from '../api/notification';
+import { useState, useEffect, useCallback } from "react";
+import { useWebSocket } from "./useWebSocket";
+import { notificationService } from "../api/notification";
+import { useAuth } from "../context/AuthContext"; // <--- MODIFICACIÓN 1: Importar useAuth
 
 /**
  * Custom hook for managing notifications with real-time updates
  * @returns {Object} Notifications state and methods
  */
 export const useNotifications = () => {
-  const { on, off, connected } = useWebSocket();
+  const { on, off } = useWebSocket();
+  const { user } = useAuth(); // <--- MODIFICACIÓN 2: Obtener el objeto user
   const [notifications, setNotifications] = useState([]);
   const [unreadCount, setUnreadCount] = useState(0);
   const [loading, setLoading] = useState(true);
@@ -24,89 +26,88 @@ export const useNotifications = () => {
         setNotifications(notifs);
         setUnreadCount(count.count || 0);
       } catch (error) {
-        console.error('Error fetching notifications:', error);
+        console.error("Error fetching notifications:", error);
       } finally {
         setLoading(false);
       }
     };
 
-    if (connected) {
+    // <--- MODIFICACIÓN 3: Cambiar la condición a dependencia del usuario
+    if (user && user.id) {
       fetchNotifications();
     }
-  }, [connected]);
+    // <--- MODIFICACIÓN 4: Cambiar la dependencia a user?.id
+  }, [user?.id]);
 
   // Listen for real-time notifications
   useEffect(() => {
     const handleNewNotification = (notification) => {
-      console.log('🔔 New notification received:', notification);
-      
+      console.log("🔔 New notification received:", notification);
+
       // Add to top of list
       setNotifications((prev) => [notification, ...prev]);
-      
+
       // Increment unread count if not read
       if (!notification.read) {
         setUnreadCount((prev) => prev + 1);
       }
     };
 
-    on('notification', handleNewNotification);
+    on("notification", handleNewNotification);
 
     return () => {
-      off('notification', handleNewNotification);
+      off("notification", handleNewNotification);
     };
   }, [on, off]);
 
   const markAsRead = useCallback(async (notificationId) => {
     try {
       await notificationService.markAsRead(notificationId);
-      
+
       // Update local state
       setNotifications((prev) =>
-        prev.map((n) =>
-          n.id === notificationId ? { ...n, read: true } : n
-        )
+        prev.map((n) => (n.id === notificationId ? { ...n, read: true } : n)),
       );
-      
+
       // Decrement unread count
       setUnreadCount((prev) => Math.max(0, prev - 1));
     } catch (error) {
-      console.error('Error marking notification as read:', error);
+      console.error("Error marking notification as read:", error);
     }
   }, []);
 
   const markAllAsRead = useCallback(async () => {
     try {
       await notificationService.markAllAsRead();
-      
+
       // Update local state
-      setNotifications((prev) =>
-        prev.map((n) => ({ ...n, read: true }))
-      );
-      
+      setNotifications((prev) => prev.map((n) => ({ ...n, read: true })));
+
       setUnreadCount(0);
     } catch (error) {
-      console.error('Error marking all notifications as read:', error);
+      console.error("Error marking all notifications as read:", error);
     }
   }, []);
 
-  const deleteNotification = useCallback(async (notificationId) => {
-    try {
-      await notificationService.delete(notificationId);
-      
-      // Remove from local state
-      const deleted = notifications.find((n) => n.id === notificationId);
-      setNotifications((prev) =>
-        prev.filter((n) => n.id !== notificationId)
-      );
-      
-      // Decrement unread count if was unread
-      if (deleted && !deleted.read) {
-        setUnreadCount((prev) => Math.max(0, prev - 1));
+  const deleteNotification = useCallback(
+    async (notificationId) => {
+      try {
+        await notificationService.delete(notificationId);
+
+        // Remove from local state
+        const deleted = notifications.find((n) => n.id === notificationId);
+        setNotifications((prev) => prev.filter((n) => n.id !== notificationId));
+
+        // Decrement unread count if was unread
+        if (deleted && !deleted.read) {
+          setUnreadCount((prev) => Math.max(0, prev - 1));
+        }
+      } catch (error) {
+        console.error("Error deleting notification:", error);
       }
-    } catch (error) {
-      console.error('Error deleting notification:', error);
-    }
-  }, [notifications]);
+    },
+    [notifications],
+  );
 
   return {
     notifications,
