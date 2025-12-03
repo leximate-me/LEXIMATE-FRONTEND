@@ -885,14 +885,27 @@ function TaskPage({ tasks: initialTasks }) {
                               </div>
                               <div className="flex gap-2">
                                 {submission?.submissionFiles?.length > 0 ? (
-                                  <a
-                                    href={`http://localhost${submission.submissionFiles[0]?.file_url}`}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="self-center border-2 border-[#2d4654] hover:bg-[#2d4654] hover:text-white transition-all  p-2 rounded-2xl"
-                                  >
-                                    Ver archivo
-                                  </a>
+                                  <>
+                                    <a
+                                      href={`http://localhost:8080${submission.submissionFiles[0]?.file_url}`}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      className="self-center border-2 border-[#2d4654] hover:bg-[#2d4654] hover:text-white transition-all  p-2 rounded-2xl"
+                                    >
+                                      Ver archivo
+                                    </a>
+                                    <button
+                                      className="px-3 py-2 text-white bg-[#2d4654] rounded-2xl hover:bg-[#22343f] transition-all"
+                                      onClick={() => {
+                                        setSelectedSubmission(
+                                          submission || { user: student },
+                                        );
+                                        setQualifyModalOpen(true);
+                                      }}
+                                    >
+                                      Calificar
+                                    </button>
+                                  </>
                                 ) : (
                                   <>
                                     {isPastDue() ? (
@@ -905,6 +918,17 @@ function TaskPage({ tasks: initialTasks }) {
                                           No entregado
                                         </HighlightLetter>
                                         <IoWarningOutline className="text-lg text-red-600" />
+                                        <button
+                                          className="px-3 py-2 text-white bg-[#2d4654] rounded-2xl hover:bg-[#22343f] transition-all"
+                                          onClick={() => {
+                                            setSelectedSubmission(
+                                              submission || { user: student },
+                                            );
+                                            setQualifyModalOpen(true);
+                                          }}
+                                        >
+                                          Calificar
+                                        </button>
                                       </div>
                                     ) : (
                                       <div className="flex gap-2 border-2 border-green-600 items-center p-2 rounded-2xl">
@@ -917,26 +941,6 @@ function TaskPage({ tasks: initialTasks }) {
                                         </HighlightLetter>
                                         <FaRegClock className="text-lg text-green-600" />
                                       </div>
-                                    )}
-                                  </>
-                                )}
-
-                                {!isPastDue() ? (
-                                  null
-                                ) : (
-                                  <>
-                                    {(!submission || submission.qualification === null && isPastDue()) && (
-                                      <button
-                                        className="px-3 py-2 text-white bg-[#2d4654] rounded-2xl hover:bg-[#22343f] transition-all"
-                                        onClick={() => {
-                                          setSelectedSubmission(
-                                            submission || { user: student },
-                                          );
-                                          setQualifyModalOpen(true);
-                                        }}
-                                      >
-                                        Calificar
-                                      </button>
                                     )}
                                   </>
                                 )}
