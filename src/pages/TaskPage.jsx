@@ -803,6 +803,17 @@ function TaskPage({ tasks: initialTasks }) {
                       </div>
                     )}
                   </div>
+                  {extractedText && extractedText.length > 0 && (
+                    <div className="col-span-6 row-start-2 row-span-4">
+                      <CardExtractedText
+                        extractedText={
+                          Array.isArray(extractedText)
+                            ? extractedText[0]
+                            : extractedText
+                        }
+                      />
+                    </div>
+                  )}
                 </>
               ) : (
                 <>
