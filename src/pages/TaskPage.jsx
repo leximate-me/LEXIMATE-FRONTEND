@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import { useParams } from "react-router-dom";
 import { useTask } from "../context/TasksContext";
 import { useClass } from "../context/ClassContext";
@@ -57,22 +57,30 @@ function TaskPage({ tasks: initialTasks }) {
   const pendingCount = students.filter(
     (s) => !submittedTasks.some((sub) => sub.user?.id === s.id),
   ).length;
-  const mySubmission = submittedTasks.find((sub) => sub.user?.id === user.id);
+
+  // ✅ CORRECCIÓN: Usar useMemo para la sincronización de estado clave
+  const mySubmission = useMemo(() => {
+    return submittedTasks.find((sub) => sub.user?.id === user.id);
+  }, [submittedTasks, user.id]);
 
   useRealTimeUpdates("task_submitted", (data) => {
     console.log("🔔 Real-time submission received:", data);
-    if (String(data.submission.taskId) === String(taskId)) {
+    // ✅ CORRECCIÓN: Acceder a data.taskId directamente (solución al TypeError 1)
+    if (String(data.taskId) === String(taskId)) {
       setSubmittedTasks((prev) => {
-        if (prev.some((s) => s.id === data.submission.id)) return prev;
-        return [...prev, data.submission];
+        // ✅ CORRECCIÓN: Agregar el objeto 'data' directamente
+        if (prev.some((s) => s.id === data.id)) return prev;
+        return [...prev, data];
       });
     }
+    console.log('taskpage', submittedTasks)
   });
 
   useRealTimeUpdates("submission_qualified", (data) => {
     if (String(data.taskId) === String(taskId)) {
       setSubmittedTasks((prev) =>
-        prev.map((s) => (s.id === data.id ? data : s)),
+        // ✅ Refuerzo para fusionar los datos
+        prev.map((s) => (s.id === data.id ? { ...s, ...data } : s)),
       );
     }
   });
@@ -101,7 +109,6 @@ function TaskPage({ tasks: initialTasks }) {
     if (String(deletedId) === String(taskId)) {
       alert("Esta tarea ha sido eliminada.");
       // We need to navigate away. navigate is not defined in this scope yet, I need to check if I added it.
-      // I added it in a previous step but the file view shows it might be missing or I need to check imports.
       // In the file view, I see `const { classId, taskId } = useParams();` and `const { user } = useAuth();`.
       // I DO NOT see `const navigate = useNavigate();`. I need to add it.
       // For now I will use window.location.href as a fallback or assume I will add navigate.
@@ -226,7 +233,7 @@ function TaskPage({ tasks: initialTasks }) {
   const isPastDue = () => {
     if (!task?.due_date) return false;
 
-    // Tomamos solo la fecha sin hora para comparar
+    // Tomamos solo la parte de la fecha sin hora para comparar
     const due = new Date(task.due_date);
     const today = new Date();
 
@@ -370,7 +377,7 @@ function TaskPage({ tasks: initialTasks }) {
                                   key={sub.id}
                                   className="flex flex-col items-center gap-2"
                                 >
-                                  {sub.submissionFiles.length > 0 ? (
+                                  {sub.submissionFiles && sub.submissionFiles.length > 0 ? (
                                     <a
                                       href={getFileUrl(sub.submissionFiles[0]?.file_url)}
                                       target="_blank"
@@ -671,7 +678,7 @@ function TaskPage({ tasks: initialTasks }) {
                               key={sub.id}
                               className="flex flex-col items-center gap-2"
                             >
-                              {sub.submissionFiles.length > 0 ? (
+                              {sub.submissionFiles && sub.submissionFiles.length > 0 ? (
                                 <a
                                   href={sub.submissionFiles[0]?.file_url}
                                   target="_blank"
@@ -796,19 +803,6 @@ function TaskPage({ tasks: initialTasks }) {
                       </div>
                     )}
                   </div>
-
-                  {/* Texto extraído */}
-                  {extractedText && extractedText.length > 0 && (
-                    <div className="col-span-6 row-start-2 row-span-4">
-                      <CardExtractedText
-                        extractedText={
-                          Array.isArray(extractedText)
-                            ? extractedText[0]
-                            : extractedText
-                        }
-                      />
-                    </div>
-                  )}
                 </>
               ) : (
                 <>
@@ -887,24 +881,27 @@ function TaskPage({ tasks: initialTasks }) {
                                 {submission?.submissionFiles?.length > 0 ? (
                                   <>
                                     <a
-                                      href={`http://localhost:8080${submission.submissionFiles[0]?.file_url}`}
+                                      // ✅ CORRECCIÓN: Usar getFileUrl para consistencia y solucionar TypeError 2
+                                      href={getFileUrl(submission.submissionFiles[0]?.file_url)}
                                       target="_blank"
                                       rel="noopener noreferrer"
-                                      className="self-center border-2 border-[#2d4654] hover:bg-[#2d4654] hover:text-white transition-all  p-2 rounded-2xl"
+                                      className="self-center border-2 border-[#2d4654] hover:bg-[#2d4654] hover:text-white transition-all  p-2 rounded-2xl"
                                     >
                                       Ver archivo
-                                    </a>
-                                    <button
-                                      className="px-3 py-2 text-white bg-[#2d4654] rounded-2xl hover:bg-[#22343f] transition-all"
-                                      onClick={() => {
-                                        setSelectedSubmission(
-                                          submission || { user: student },
-                                        );
-                                        setQualifyModalOpen(true);
-                                      }}
-                                    >
-                                      Calificar
-                                    </button>
+                                    </a >
+                                    {submission.qualification === null && (
+                                      <button
+                                        className="px-3 py-2 text-white bg-[#2d4654] rounded-2xl hover:bg-[#22343f] transition-all"
+                                        onClick={() => {
+                                          setSelectedSubmission(
+                                            submission || { user: student },
+                                          );
+                                          setQualifyModalOpen(true);
+                                        }}
+                                      >
+                                        Calificar
+                                      </button>
+                                    )}
                                   </>
                                 ) : (
                                   <>
@@ -918,17 +915,19 @@ function TaskPage({ tasks: initialTasks }) {
                                           No entregado
                                         </HighlightLetter>
                                         <IoWarningOutline className="text-lg text-red-600" />
-                                        <button
-                                          className="px-3 py-2 text-white bg-[#2d4654] rounded-2xl hover:bg-[#22343f] transition-all"
-                                          onClick={() => {
-                                            setSelectedSubmission(
-                                              submission || { user: student },
-                                            );
-                                            setQualifyModalOpen(true);
-                                          }}
-                                        >
-                                          Calificar
-                                        </button>
+                                        {submission?.qualification === null && (
+                                          <button
+                                            className="px-3 py-2 text-white bg-[#2d4654] rounded-2xl hover:bg-[#22343f] transition-all"
+                                            onClick={() => {
+                                              setSelectedSubmission(
+                                                submission || { user: student },
+                                              );
+                                              setQualifyModalOpen(true);
+                                            }}
+                                          >
+                                            Calificar
+                                          </button>
+                                        )}
                                       </div>
                                     ) : (
                                       <div className="flex gap-2 border-2 border-green-600 items-center p-2 rounded-2xl">

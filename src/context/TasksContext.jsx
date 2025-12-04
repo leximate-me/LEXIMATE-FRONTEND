@@ -24,6 +24,8 @@ const TaskProvider = ({ children }) => {
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isCreating, setIsCreating] = useState(false);
+  // ✅ Nuevo estado de carga dedicado para la calificación
+  const [isQualifying, setIsQualifying] = useState(false);
 
   const clearError = useCallback(() => {
     setError(null);
@@ -111,14 +113,15 @@ const TaskProvider = ({ children }) => {
   }, []);
 
   const qualifyTask = useCallback(async (classId, taskId, userId, data) => {
-    setIsLoading(true);
+    // ✅ Usar el estado de carga dedicado (isQualifying)
+    setIsQualifying(true);
     try {
       const res = await qualifySubmittedTaskRequest(classId, taskId, userId, data);
       return res.data;
     } catch (error) {
       setError(error.response?.data);
     } finally {
-      setIsLoading(false);
+      setIsQualifying(false); // ✅ Restablecer el estado dedicado
     }
   }, []);
 
@@ -145,13 +148,13 @@ const TaskProvider = ({ children }) => {
         deleteTask,
         isLoading,
         isCreating,
+        isQualifying, // ✅ Exportar el nuevo estado
         clearError,
         error,
         submitTask,
         getSubmittedTasks,
         qualifyTask,
         deleteSubmittedTask,
-        isLoading
       }}
     >
       {children}
